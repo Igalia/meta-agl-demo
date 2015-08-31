@@ -35,14 +35,14 @@ URI: git://git.openembedded.org/meta-openembedded
 
 URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
 > branch:   master
-> revision: 56eb51bfe05a1dd7c3c49cb7465ed83b0a072c78
+> revision: 4d71b6fbe454ff51342ab1eb6791fad66ba98c3e
 > (or later)
 
 ## The Renesas R-Car Gen2 (Porter) board depends in addition on: ##
 
 URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
 > branch:   agl-1.0-bsp-1.8.0
-> revision: 13a2551505942808752a1721c9a27ce7d35cec33
+> revision: bf30de66badcac7ef82d3758aa44c116ee791a28
 > (or later)
 
 Packagegroups
@@ -145,15 +145,15 @@ NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.g
         $ cd -
         $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
         $ cd meta-agl
-        $ git checkout 56eb51bfe05a1dd7c3c49cb7465ed83b0a072c78
+        $ git checkout 4d71b6fbe454ff51342ab1eb6791fad66ba98c3e
         $ cd -
         $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
         $ cd meta-renesas
-        $ git checkout c28172567a6325f5692e5d33b1ae1c1e64e59ddf
+        $ git checkout bf30de66badcac7ef82d3758aa44c116ee791a28
         $ cd -
         $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
 
-#### Obtain and Install Renesas Graphics Drivers
+#### Obtain and Install Renesas Graphics/Multimedia Drivers
 
 1. Download packages from Renesas
 
@@ -179,20 +179,13 @@ NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.g
    * Related Linux drivers
    > R-Car_Series_Evaluation_Software_Package_of_Linux_Drivers-*.tar.gz
 
-3. Extract 2 tar archives
-        $ tar xf R-Car_Series_Evaluation_Software_Package_for_Linux-*.tar.gz
-        $ tar xf R-Car_Series_Evaluation_Software_Package_of_Linux_Drivers-*.tar.gz
+3. Copy the graphics acceleration drivers by shell script.
+        $ cd $AGL_TOP/meta-renesas/meta-rcar-gen2
+        $ ./copy_gfx_software_porter.sh ../../binary-tmp
 
-4. Copy 2 files manually
-   1. Locate `EVA_r8a7791_linux_sgx_binaries_gles2.tar.bz2` in the Multimedia and Graphics library deliverable and copy it into the BSP layer.
-          $ cd $AGL_TOP
-          $ cp <path_to_file>/EVA_r8a7791_linux_sgx_binaries_gles2.tar.bz2 \
-          meta-renesas/meta-rcar-gen2/recipes-graphics/gles-module/\
-          gles-user-module/r8a7791_linux_sgx_binaries_gles2.tar.bz2
-
-   2. Locate `SGX_KM_M2.tar.bz2` in the related linux drivers deliverable and copy it into the BSP layer.
-          $ cp <path_to_file>SGX_KM_M2.tar.bz2 \
-          $ meta-renesas/meta-rcar-gen2/recipes-kernel/gles-module/gles-kernel-module
+4. Copy the multimedia acceleration drivers by shell script.
+        $ cd $AGL_TOP/meta-renesas/meta-rcar-gen2
+        $ ./copy_mm_software_lcb.sh ../../binary-tmp
 
 #### Build from the Source code
 
@@ -201,11 +194,44 @@ You can build a R-Car2 M2 (porter) image using the following steps:
 1. Export TEMPLATECONF to pick up correct configuration for the build
         $ export TEMPLATECONF=$AGL_TOP/meta-renesas/meta-rcar-gen2/conf
 
-2. Run the following command:
+2. (Optional) If you want to use multimedia accelerations, uncomment
+   manually 4 `IMAGE_INSTALL_append_porter` in conf/local.conf.
+        #IMAGE_INSTALL_append_porter = " \
+        #    gstreamer1.0-plugins-bad-waylandsink \
+        #    "
+
+        #IMAGE_INSTALL_append_porter = " \
+        #    gstreamer1.0-plugins-base-videorate \
+        ...
+        #"
+
+        #IMAGE_INSTALL_append_porter = " \
+        #    libegl libegl-dev libgbm-dev \
+        ...
+        #    "
+
+        #IMAGE_INSTALL_append_porter = " \
+        #    packagegroup-rcar-gen2-multimedia \
+        ...
+        #    "
+
+   Also it is needed to uncomment this,
+        #MACHINE_FEATURES_append = " multimedia"
+
+   This `multimedia` enables meta-renesas's multimedia configuration.
+   The version of GStreamer1.0 which AGL distro use, will be changed
+   to 1.2.3 (meta-renesas prefers) from 1.4.1(meta-agl default) by this switch.
+
+3. Run the following command:
         $ cd $AGL_TOP
         $ source poky/oe-init-build-env
 
-3. Build the full image of AGL Demo Platform and applications
+   (Optional) If you want to use multimedia accelerations, confirm your
+   conf/bblayer.conf has a entry of `meta-openembedded/meta-multimedia`
+   in BBLAYERS because packagegroup-rcar-gen2-multimedia needs some extra
+   packages there.
+
+4. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
 ### Deployment (SDCARD)
@@ -255,3 +281,42 @@ NOTE: To boot weston on porter board, we need keyboard and mouse. (USB2.0 can be
 2. Then weston is booted automatically, and weston-terminal appears.
 
 3. Have fun! :)
+
+4. (Optional) This is how to test and play multimedia contents with acceleration.
+
+    1. Boot porter without mouse and keyboard, it avoid to boot weston automatically.
+       For now, when running weston, V4L2 deosn't work correctly, so we have to
+       stop weston first (GST plugin `waylandsink` also doesn't work correctly for now).
+
+    2. Execute these instructions:
+            $ export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:"
+
+            # Set the mixer
+            $ amixer set "LINEOUT Mixer DACL" on
+            $ amixer set "DVC Out" 10
+
+            $ modprobe -a mmngr mmngrbuf s3ctl uvcs_cmn vspm fdpm
+
+            $ media-ctl -d /dev/media0 -r
+            $ media-ctl -d /dev/media0 -l '"vsp1.2 rpf.0":1 -> "vsp1.2 uds.0":0 [1]'
+            $ media-ctl -d /dev/media0 -l '"vsp1.2 uds.0":1 -> "vsp1.2 wpf.0":0 [1]'
+            $ media-ctl -d /dev/media0 -l '"vsp1.2 wpf.0":1 -> "vsp1.2 lif":0 [1]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 rpf.0":0 [fmt:AYUV32/1920x1080]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 rpf.0":1 [fmt:AYUV32/1920x1080]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 uds.0":0 [fmt:AYUV32/1920x1080]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 uds.0":1 [fmt:AYUV32/640x480]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 wpf.0":0 [fmt:AYUV32/640x480]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 wpf.0":1 [fmt:ARGB32/640x480]'
+            $ media-ctl -d /dev/media0 -V '"vsp1.2 lif":0 [fmt:ARGB32/640x480]'
+
+            # in caes R-Car M2 (HDMI - DU1 - vspd0)
+            $ modetest -M rcar-du -s 10@8:1280x720@AR24 -d -P '8@19:640x480+100+200@XR24' &
+
+    After these command, Test pattern will show on display connected to
+    porter's HDMI port.
+
+    Then, you can play H264(MP4) movie like these,
+            $ gst-launch-1.0 filesrc location=./sample.mp4  ! qtdemux name=d d. ! \
+            queue ! omxh264dec no-copy=true ! v4l2sink device=/dev/video1 \
+            io-mode=userptr d. ! queue ! faad ! alsasink device=hw:0,0
+
