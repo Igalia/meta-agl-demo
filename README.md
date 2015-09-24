@@ -26,17 +26,21 @@ Layer Dependencies
 
 URI: git://git.yoctoproject.org/poky
 > branch:   dizzy
-> revision: 5f0d25152bac2d3798663a4ebfdd2df24060f153
+> revision: df87cb27efeaea1455f20692f9f1397c6fcab254
 
 URI: git://git.openembedded.org/meta-openembedded
 > layer:    meta-oe
 > branch:   dizzy
-> revision: 853dcfa0d618dc26bd27b3a1b49494b98d6eee97
+> revision: 9efaed99125b1c4324663d9a1b2d3319c74e7278
 
 URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
 > branch:   master
 > revision: 4d71b6fbe454ff51342ab1eb6791fad66ba98c3e
 > (or later)
+
+URI: https://github.com/meta-qt5/meta-qt5.git
+> branch:   dizzy
+> revision: adeca0db212d61a933d7952ad44ea1064cfca747
 
 ## The Renesas R-Car Gen2 (Porter) board depends in addition on: ##
 
@@ -83,6 +87,7 @@ Supposed Directory Trees of Layers to build
                 meta-agl/
                 meta-agl-demo/
                 meta-openembedded/
+                meta-qt5/
                 poky/
 
 * For R-Car M2
@@ -91,6 +96,7 @@ Supposed Directory Trees of Layers to build
                 meta-agl/
                 meta-agl-demo/
                 meta-openembedded/
+                meta-qt5/
                 meta-renesas/
                 poky/
 
@@ -137,21 +143,25 @@ NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.g
 2. Get the meta data and checkout
         $ git clone git://git.yoctoproject.org/poky
         $ cd poky
-        $ git checkout 5f0d25152bac2d3798663a4ebfdd2df24060f153
+        $ git checkout df87cb27efeaea1455f20692f9f1397c6fcab254
         $ cd -
         $ git clone git://git.openembedded.org/meta-openembedded
         $ cd meta-openembedded
-        $ git checkout 853dcfa0d618dc26bd27b3a1b49494b98d6eee97
+        $ git checkout 9efaed99125b1c4324663d9a1b2d3319c74e7278
         $ cd -
         $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
         $ cd meta-agl
         $ git checkout 4d71b6fbe454ff51342ab1eb6791fad66ba98c3e
         $ cd -
+        $ git clone https://github.com/meta-qt5/meta-qt5.git
+        $ cd meta-qt5
+        $ git checkout adeca0db212d61a933d7952ad44ea1064cfca747
+        $ cd -
         $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
         $ cd meta-renesas
         $ git checkout bf30de66badcac7ef82d3758aa44c116ee791a28
         $ cd -
-        $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
+        $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl-demo
 
 #### Obtain and Install Renesas Graphics/Multimedia Drivers
 
@@ -194,7 +204,49 @@ You can build a R-Car2 M2 (porter) image using the following steps:
 1. Export TEMPLATECONF to pick up correct configuration for the build
         $ export TEMPLATECONF=$AGL_TOP/meta-renesas/meta-rcar-gen2/conf
 
-2. (Optional) If you want to use multimedia accelerations, uncomment
+2. Run the following command:
+        $ cd $AGL_TOP
+        $ source poky/oe-init-build-env
+
+   (Optional) If you want to use multimedia accelerations, confirm your
+   conf/bblayer.conf has a entry of `meta-openembedded/meta-multimedia`
+   in BBLAYERS because packagegroup-rcar-gen2-multimedia needs some extra
+   packages there.
+
+3. Add 2 layers to bblayer.conf,
+   > meta-openembedded/meta-ruby
+   > meta-qt5
+
+   So it looks something like,
+        BBLAYERS ?= " \
+        ##OEROOT##/meta \
+        ##OEROOT##/meta-yocto \
+        ##OEROOT##/meta-yocto-bsp \
+        ##OEROOT##/../meta-agl/meta-ivi-common \
+        ##OEROOT##/../meta-agl/meta-agl \
+        ##OEROOT##/../meta-openembedded/meta-oe \
+        ##OEROOT##/../meta-openembedded/meta-multimedia \
+        ##OEROOT##/../meta-openembedded/meta-ruby \
+        ##OEROOT##/../meta-qt5 \
+        ##OEROOT##/../meta-renesas \
+        ##OEROOT##/../meta-renesas/meta-rcar-gen2 \
+        ##OEROOT##/../meta-agl-demo \
+        "
+
+4. (Optional) If you want to install various Qt5 examples, add below
+   configuration to your local.conf.
+        IMAGE_INSTALL_append = " \
+            packagegroup-agl-demo-qt-examples \
+        "
+        PACKAGECONFIG_append_pn-qtbase = " examples"
+
+   IMPORTANT NOTE:
+        To run examples with wayland-egl plugin,
+        use ``LD_PRELOAD=/usr/lib/libEGL.so <command>``.
+        If not, programs should not launch by error,
+        'EGL not available'.
+
+5. (Optional) If you want to use multimedia accelerations, uncomment
    manually 4 `IMAGE_INSTALL_append_porter` in conf/local.conf.
         #IMAGE_INSTALL_append_porter = " \
         #    gstreamer1.0-plugins-bad-waylandsink \
@@ -222,16 +274,7 @@ You can build a R-Car2 M2 (porter) image using the following steps:
    The version of GStreamer1.0 which AGL distro use, will be changed
    to 1.2.3 (meta-renesas prefers) from 1.4.1(meta-agl default) by this switch.
 
-3. Run the following command:
-        $ cd $AGL_TOP
-        $ source poky/oe-init-build-env
-
-   (Optional) If you want to use multimedia accelerations, confirm your
-   conf/bblayer.conf has a entry of `meta-openembedded/meta-multimedia`
-   in BBLAYERS because packagegroup-rcar-gen2-multimedia needs some extra
-   packages there.
-
-4. Build the full image of AGL Demo Platform and applications
+6. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
 ### Deployment (SDCARD)
@@ -251,7 +294,7 @@ NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.g
            $ sudo tar --extract --numeric-owner --preserve-permissions --preserve-order \
            --totals --directory=/media/$SDCARD_LABEL --file=agl-demo-platform-porter.tar.bz2
    3. Copy kernel and DTB into the `/boot` of the SD-Card
-           $ sudo cp uImage uImage-r8a7791-porter.dtb /media/$SDCARD_LABEL
+           $ sudo cp uImage uImage-r8a7791-porter.dtb /media/$SDCARD_LABEL/boot
 
 4. After the copy finished, unmount SD-Card and insert it into the SD-Card slot of the porter board.
 
