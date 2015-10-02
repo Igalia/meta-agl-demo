@@ -54,18 +54,38 @@ Packagegroups
 
 AGL Demo Platform's package group design:
 
-Top-level packagegroup,
-> packagegroup-agl-appfw (all packages for demo platform)
+* packagegroup-agl-demo-platform
 
-This package group can contain sub-package groups like these.
-> packagegroup-agl-appfw-graphics (for graphics subsystem)
-> packagegroup-agl-appfw-agl (for AGL App Fw subystem)
-> ...
+This is for making image 'agl-demo-platform' which is full image
+for IVI profile of AGL distro.
 
-The "packagegroups-agl-appfw-*" will contain packages for application and
-frameworks.
-> directory: meta-agl-demo/recipes-demo-platform/packagegroups
-> recipes  : packagegroup-agl-appfw-[subsystem].bb
+As meta-agl's design of packagegroups, ``agl-demo-platform.bb`` contains
+only ``packagegroup-agl-demo-platform`` and packages of DEMO apps.
+
+``packagegroup-agl-demo-platform`` has 4 packagegroups in it,
+``packagegroup-agl-core``, ``packagegroup-agl-ivi``,
+``packagegroup-agl-ivi-common-core``, and ``packagegroup-agl-appfw``.
+
+* packagegroup-agl-appfw*
+
+These packagegroups contains packages for application framework of AGL Distro.
+Subsystem should maintain ``packagegroup-agl-appfw-[subsystem].bb`` which
+should hold sufficient packages for application framework of AGL Distro.
+
+Subsystems also can maintain thier own packagegroups under appropriate
+``recipes-*/``.
+
+For example, Qt5 has 2 packagegroups in ``meta-agl-demo``,
+``packagegroup-agl-appfw-native-qt5`` and ``pacakgegroup-agl-demo-qt-examples``
+which are under ``recipes-qt/``.
+
+The ``packagegroup-agl-appfw-native-qt5`` is included by
+``pacakgegroup-agl-appfw-native`` because Qt5 belongs to native application
+framework of AGL Distro.
+
+The ``pacakgegroup-agl-demo-qt-examples`` is added to local.conf if needed
+because they are not mandatory for AGL application framework and AGL Demo
+Platform.
 
 Supported Machine
 -----------------

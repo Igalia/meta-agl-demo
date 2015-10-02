@@ -11,8 +11,8 @@ IMAGE_FEATURES_append = " \
 IMAGE_INSTALL_append = " \
     packagegroup-agl-core \
     packagegroup-agl-ivi \
-    packagegroup-agl-appfw \
-    packagegroup-ivi-common \
+    packagegroup-ivi-common-core \
+    packagegroup-agl-demo-platform \
     "
 
 # for Renesas R-Car2 M2 Porter
