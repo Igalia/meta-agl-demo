@@ -1,0 +1,46 @@
+diff -Naur old/ivi-input-api/test/CMakeLists.txt new/ivi-input-api/test/CMakeLists.txt
+--- old/ivi-input-api/test/CMakeLists.txt	2015-10-20 00:25:36.000000000 +1000
++++ new/ivi-input-api/test/CMakeLists.txt	2015-10-20 17:57:45.000000000 +1000
+@@ -66,14 +66,15 @@
+     ADD_DEPENDENCIES(${PROJECT_NAME} ${LIBS})
+ 
+     IF(INSTALL_ILM_API_TESTS)
+-        INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
++        INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test)
++        INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test/ivi-input-api)
+     ENDIF()
+ 
+     # use CTest
+     ENABLE_TESTING()
+-    ADD_TEST(ilmCommon  ${PROJECT_NAME})
+-    ADD_TEST(ilmClient  ${PROJECT_NAME})
+-    ADD_TEST(ilmControl ${PROJECT_NAME})
+-    ADD_TEST(ilmInput ${PROJECT_NAME})
++    ADD_TEST(ilmCommon  ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmClient  ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmControl ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmInput ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
+ 
+ ENDIF()
+diff -Naur old/ivi-layermanagement-api/test/CMakeLists.txt new/ivi-layermanagement-api/test/CMakeLists.txt
+--- old/ivi-layermanagement-api/test/CMakeLists.txt	2015-10-20 00:25:36.000000000 +1000
++++ new/ivi-layermanagement-api/test/CMakeLists.txt	2015-10-20 17:57:24.000000000 +1000
+@@ -64,13 +64,14 @@
+     ADD_DEPENDENCIES(${PROJECT_NAME} ${LIBS})
+ 
+     IF(INSTALL_ILM_API_TESTS)
+-        INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
++        INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test)
++        INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test/ivi-layermanagement-api)
+     ENDIF()
+ 
+     # use CTest
+     ENABLE_TESTING()
+-    ADD_TEST(ilmCommon  ${PROJECT_NAME})
+-    ADD_TEST(ilmClient  ${PROJECT_NAME})
+-    ADD_TEST(ilmControl ${PROJECT_NAME})
++    ADD_TEST(ilmCommon  ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmClient  ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmControl ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
+ 
+ ENDIF() 
