@@ -120,68 +120,49 @@ Supposed Directory Trees of Layers to build
                 meta-renesas/
                 poky/
 
+Downloading the Source
+--------------------
+You can use repo tool to get all layers which are needed to build AGL Distribution.
+
+1. Installing Repo. Make sure you have a bin/ in your $HOME and it's included in your $PATH.
+        $ mkdir ~/bin
+        $ export PATH=~/bin:$PATH
+
+   Download the repo tool.
+        $ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        $ chmod a+x ~/bin/repo
+
+2. Preparing download. Create an empty directory to hold all recipes and build environment. You can make it as any name you like.
+        $ mkdir WORKING-DIRECTORY
+        $ cd WORKING-DIRECTORY
+
+3. Getting all layers.
+        $ repo init -u https://gerrit.automotivelinux.org/gerrit/AGL/AGL-repo
+        $ repo sync
+
 Build a QEMU image
 ------------------
 
 You can build a QEMU image using the following steps:
 
-1. Export TEMPLATECONF to pick up correct configuration for the build
-        $ export TEMPLATECONF=/full/path/to/meta-agl-demo/conf
+1. Set up environment: You can specify any name for directory which storing all stuffs to build.
+        $ source meta-agl/scripts/envsetup.sh qemux86-64 [BUILD_DIR]
 
-2. Run the following command:
-        $ source poky/oe-init-build-env
-
-3. Build the full image of AGL Demo Platform and applications
+2. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
-4. Run the emulator
-        $ cd $BUILD_DIR/tmp/deploy/images/qemex86-64
-        $ PATH_TO_POKY/poky/scripts/runqemu qemux86-64 bzImage-qemux86-64.bin \
-        agl-demo-platform-qemux86-64.ext3
+3. Run the emulator. The path for the emulator (runqemu) was added during the envsetup.
+        $ cd tmp/deploy/images/qemex86-64
+        $ runqemu bzImage-qemux86-64.bin agl-demo-platform-qemux86-64.ext3
 
    For large screen:
-        $ PATH_TO_POKY/poky/scripts/runqemu qemux86-64 bzImage-qemux86-64.bin \
-        agl-demo-platform-qemux86-64.ext3 \
+        $ runqemu bzImage-qemux86-64.bin agl-demo-platform-qemux86-64.ext3 \
         bootparams="uvesafb.mode_option=1280x720-32"
 
 5. Some weston samples are available from weston terminal.
 
 Build a R-Car M2 (porter) image
 -------------------------------
-
-### Software setup
-
-NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.genivi.org/index.php/Hardware_Setup_and_Software_Installation/koelsch%26porter). If these didn't work correctly especially around Renesas Binary Packages, please check there and updated instructions.
-
-#### Getting Source Code and Build image
-
-1. Create a directory for working, then go to there.
-        $ mkdir -p $HOME/ANYWHERE_YOU_WANT_TO_WORK_THERE
-        $ cd $HOME/ANYWHERE_YOU_WANT_TO_WORK_THERE
-        $ export AGL_TOP=`pwd`
-
-2. Get the meta data and checkout
-        $ git clone git://git.yoctoproject.org/poky
-        $ cd poky
-        $ git checkout df87cb27efeaea1455f20692f9f1397c6fcab254
-        $ cd -
-        $ git clone git://git.openembedded.org/meta-openembedded
-        $ cd meta-openembedded
-        $ git checkout 9efaed99125b1c4324663d9a1b2d3319c74e7278
-        $ cd -
-        $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
-        $ cd meta-agl
-        $ git checkout 4d71b6fbe454ff51342ab1eb6791fad66ba98c3e
-        $ cd -
-        $ git clone https://github.com/meta-qt5/meta-qt5.git
-        $ cd meta-qt5
-        $ git checkout adeca0db212d61a933d7952ad44ea1064cfca747
-        $ cd -
-        $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
-        $ cd meta-renesas
-        $ git checkout bf30de66badcac7ef82d3758aa44c116ee791a28
-        $ cd -
-        $ git clone https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl-demo
 
 #### Obtain and Install Renesas Graphics/Multimedia Drivers
 
@@ -196,64 +177,16 @@ NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.g
     * Related Linux drivers
     > r-car_series_evaluation_software_package_of_linux_drivers-*.zip
 
-2. Unzip the two downloads into a temporary directory.
-        $ cd $AGL_TOP
-        $ mkdir binary-tmp
-        $ cd binary-tmp
-        $ unzip PATH_TO_DOWNLOAD/r-car_series_evaluation_software_package_for_linux-*.zip
-        $ unzip PATH_TO_DOWNLOAD/r-car_series_evaluation_software_package_of_linux_drivers-*.zip
-
-   After this step there should be two files in binary-tmp:
-   * Multimedia and Graphics library
-   > R-Car_Series_Evaluation_Software_Package_for_Linux-*.tar.gz
-   * Related Linux drivers
-   > R-Car_Series_Evaluation_Software_Package_of_Linux_Drivers-*.tar.gz
-
-3. Copy the graphics acceleration drivers by shell script.
-        $ cd $AGL_TOP/meta-renesas/meta-rcar-gen2
-        $ ./copy_gfx_software_porter.sh ../../binary-tmp
-
-4. Copy the multimedia acceleration drivers by shell script.
-        $ cd $AGL_TOP/meta-renesas/meta-rcar-gen2
-        $ ./copy_mm_software_lcb.sh ../../binary-tmp
+  These 2 files from Renesas should be store in your download directory in $HOME. (e.g. $HOME/Downloads) If not, envsetup.sh in below will stop and show some instruction, then please follow it.
 
 #### Build from the Source code
 
 You can build a R-Car2 M2 (porter) image using the following steps:
 
-1. Export TEMPLATECONF to pick up correct configuration for the build
-        $ export TEMPLATECONF=$AGL_TOP/meta-renesas/meta-rcar-gen2/conf
+1. Set up environment: You can specify any name for directory which storing all stuffs to build.
+        $ source meta-agl/scripts/envsetup.sh porter [BUILD_DIR]
 
-2. Run the following command:
-        $ cd $AGL_TOP
-        $ source poky/oe-init-build-env
-
-   (Optional) If you want to use multimedia accelerations, confirm your
-   conf/bblayer.conf has a entry of `meta-openembedded/meta-multimedia`
-   in BBLAYERS because packagegroup-rcar-gen2-multimedia needs some extra
-   packages there.
-
-3. Add 2 layers to bblayer.conf,
-   > meta-openembedded/meta-ruby
-   > meta-qt5
-
-   So it looks something like,
-        BBLAYERS ?= " \
-        ##OEROOT##/meta \
-        ##OEROOT##/meta-yocto \
-        ##OEROOT##/meta-yocto-bsp \
-        ##OEROOT##/../meta-agl/meta-ivi-common \
-        ##OEROOT##/../meta-agl/meta-agl \
-        ##OEROOT##/../meta-openembedded/meta-oe \
-        ##OEROOT##/../meta-openembedded/meta-multimedia \
-        ##OEROOT##/../meta-openembedded/meta-ruby \
-        ##OEROOT##/../meta-qt5 \
-        ##OEROOT##/../meta-renesas \
-        ##OEROOT##/../meta-renesas/meta-rcar-gen2 \
-        ##OEROOT##/../meta-agl-demo \
-        "
-
-4. (Optional) If you want to install various Qt5 examples, add below
+2. (Optional) If you want to install various Qt5 examples, add below
    configuration to your local.conf.
         IMAGE_INSTALL_append = " \
             packagegroup-agl-demo-qt-examples \
@@ -266,7 +199,7 @@ You can build a R-Car2 M2 (porter) image using the following steps:
         If not, programs should not launch by error,
         'EGL not available'.
 
-5. (Optional) If you want to use multimedia accelerations, uncomment
+3. (Optional) If you want to use multimedia accelerations, uncomment
    manually 4 `IMAGE_INSTALL_append_porter` in conf/local.conf.
         #IMAGE_INSTALL_append_porter = " \
         #    gstreamer1.0-plugins-bad-waylandsink \
@@ -294,7 +227,7 @@ You can build a R-Car2 M2 (porter) image using the following steps:
    The version of GStreamer1.0 which AGL distro use, will be changed
    to 1.2.3 (meta-renesas prefers) from 1.4.1(meta-agl default) by this switch.
 
-6. Build the full image of AGL Demo Platform and applications
+4. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
 ### Deployment (SDCARD)
