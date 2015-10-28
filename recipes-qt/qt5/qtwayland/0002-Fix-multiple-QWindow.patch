@@ -1,0 +1,62 @@
+From 23534d35587a8b62c945fef1adb29109e5c01bfa Mon Sep 17 00:00:00 2001
+From: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+Date: Fri, 6 Nov 2015 09:59:48 +0900
+Subject: [PATCH 2/2] Fix multiple QWindow
+
+Signed-off-by: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+---
+ .../ivi-shell/qwaylandivishellintegration.cpp            | 16 ++++++++++------
+ .../ivi-shell/qwaylandivishellintegration.h              |  1 +
+ 2 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp
+index 763fafb..c42f283 100644
+--- a/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp
++++ b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp
+@@ -58,6 +58,7 @@ namespace QtWaylandClient {
+
+ QWaylandIviShellIntegration::QWaylandIviShellIntegration()
+     : m_iviApplication(Q_NULLPTR)
++    , m_surfaceId(0)
+ {
+ }
+
+@@ -79,15 +80,18 @@ QWaylandShellSurface *QWaylandIviShellIntegration::createShellSurface(QWaylandWi
+     if (!m_iviApplication)
+         return Q_NULLPTR;
+
+-    uint32_t id = 0;
+-    QVariant value = window->property("IVI-Surface-ID");
+-    if (value.isValid()) {
+-        id = value.toUInt();
++    if (m_surfaceId == 0) {
++        QVariant value = window->property("IVI-Surface-ID");
++        if (value.isValid()) {
++            m_surfaceId = value.toUInt();
++        } else {
++            m_surfaceId = IVI_SURFACE_ID + getpid();
++        }
+     } else {
+-        id = IVI_SURFACE_ID + getpid();
++        m_surfaceId++;
+     }
+
+-    struct ivi_surface *surface = m_iviApplication->surface_create(id, window->object());
++    struct ivi_surface *surface = m_iviApplication->surface_create(m_surfaceId, window->object());
+
+     return new QWaylandIviSurface(surface, window);
+ }
+diff --git a/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h
+index 4856ec6..1d10e91 100644
+--- a/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h
++++ b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h
+@@ -70,6 +70,7 @@ private:
+
+ private:
+     QtWayland::ivi_application *m_iviApplication;
++    uint32_t m_surfaceId;
+ };
+
+ }
+--
+1.8.3.1

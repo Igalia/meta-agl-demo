@@ -1,0 +1,693 @@
+From f41ceb82b1adb1bae15d36a426bf39ea0e75cb68 Mon Sep 17 00:00:00 2001
+From: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+Date: Thu, 5 Nov 2015 20:13:26 +0900
+Subject: [PATCH 1/2] Implement initial IVI-shell support with shell
+ integration.
+
+QApplication can set numeric surface ID to its surface by
+following steps
+-------------------------------------------------------
+#include <QApplication>
+#include <QQuickView>
+
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+    QQuickView view(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    view.setProperty("IVI-Surface-ID", 8000);
+    view.show();
+    return app.exec();
+}
+-------------------------------------------------------
+
+If QApplication doesn't set the surface ID by itself, the ID is
+automatically assigned by qtwayland from 8000. When the application creates
+several surfaces, the ID is incremented like 8001,8002,,,,.
+
+Additionally, qtwayland now supports shell integration Framework. So
+The enviromental value QT_WAYLAND_SHELL_INTEGRATION=ivi-shell are required for
+Qt application.
+
+Signed-off-by: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+---
+ .gitignore                                         |   6 ++
+ src/3rdparty/protocol/ivi-application.xml          |  99 +++++++++++++++++++
+ src/client/client.pro                              |   3 +-
+ src/plugins/plugins.pro                            |   3 +-
+ .../shellintegration/ivi-shell/ivi-shell.json      |   3 +
+ .../shellintegration/ivi-shell/ivi-shell.pro       |  30 ++++++
+ src/plugins/shellintegration/ivi-shell/main.cpp    |  69 +++++++++++++
+ .../ivi-shell/qwaylandivishellintegration.cpp      | 109 +++++++++++++++++++++
+ .../ivi-shell/qwaylandivishellintegration.h        |  79 +++++++++++++++
+ .../ivi-shell/qwaylandivisurface.cpp               |  71 ++++++++++++++
+ .../ivi-shell/qwaylandivisurface_p.h               |  76 ++++++++++++++
+ src/plugins/shellintegration/shellintegration.pro  |   3 +
+ 12 files changed, 549 insertions(+), 2 deletions(-)
+ create mode 100644 src/3rdparty/protocol/ivi-application.xml
+ create mode 100644 src/plugins/shellintegration/ivi-shell/ivi-shell.json
+ create mode 100644 src/plugins/shellintegration/ivi-shell/ivi-shell.pro
+ create mode 100644 src/plugins/shellintegration/ivi-shell/main.cpp
+ create mode 100644 src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp
+ create mode 100644 src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h
+ create mode 100644 src/plugins/shellintegration/ivi-shell/qwaylandivisurface.cpp
+ create mode 100644 src/plugins/shellintegration/ivi-shell/qwaylandivisurface_p.h
+ create mode 100644 src/plugins/shellintegration/shellintegration.pro
+
+diff --git a/.gitignore b/.gitignore
+index b33ca90..924afb2 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -61,6 +61,12 @@ src/plugins/hardwareintegration/*/*/qwayland*.h
+ src/plugins/hardwareintegration/*/*/*-server-protocol.h
+ src/plugins/hardwareintegration/*/*/*-client-protocol.h
+ src/plugins/hardwareintegration/*/*/*-protocol.c
++src/plugins/shellintegration/ivi-shell/qwayland-ivi-application.h
++src/plugins/shellintegration/ivi-shell/qwayland-ivi-application.cpp
++src/plugins/shellintegration/ivi-shell/qwayland-ivi-controller.h
++src/plugins/shellintegration/ivi-shell/qwayland-ivi-controller.cpp
++src/plugins/shellintegration/*/*-client-protocol.h
++src/plugins/shellintegration/*/*-protocol.c
+ tests/auto/client/tst_client
+ tests/auto/compositor/tst_compositor
+ *~
+diff --git a/src/3rdparty/protocol/ivi-application.xml b/src/3rdparty/protocol/ivi-application.xml
+new file mode 100644
+index 0000000..61ec7d2
+--- /dev/null
++++ b/src/3rdparty/protocol/ivi-application.xml
+@@ -0,0 +1,99 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<protocol name="ivi_application">
++
++  <copyright>
++    Copyright (C) 2013 DENSO CORPORATION
++    Copyright (c) 2013 BMW Car IT GmbH
++
++    Permission to use, copy, modify, distribute, and sell this software and
++    its documentation for any purpose is hereby granted without fee, provided
++    that the above copyright notice appear in all copies and that both that
++    copyright notice and this permission notice appear in supporting
++    documentation, and that the name of the copyright holders not be used in
++    advertising or publicity pertaining to distribution of the software
++    without specific, written prior permission.  The copyright holders make
++    no representations about the suitability of this software for any
++    purpose.  It is provided "as is" without express or implied warranty.
++
++    THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
++    SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
++    FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
++    SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
++    RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
++    CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
++    CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++  </copyright>
++
++  <interface name="ivi_surface" version="1">
++    <description summary="application interface to surface in ivi compositor"/>
++
++    <request name="destroy" type="destructor">
++      <description summary="destroy ivi_surface">
++        This removes link from ivi_id to wl_surface and destroys ivi_surface.
++        The ID, ivi_id, is free and can be used for surface_create again.
++      </description>
++    </request>
++
++    <event name="configure">
++      <description summary="suggest resize">
++        The configure event asks the client to resize its surface.
++
++        The size is a hint, in the sense that the client is free to
++        ignore it if it doesn't resize, pick a smaller size (to
++        satisfy aspect ratio or resize in steps of NxM pixels).
++
++        The client is free to dismiss all but the last configure
++        event it received.
++
++        The width and height arguments specify the size of the window
++        in surface local coordinates.
++      </description>
++      <arg name="width" type="int"/>
++      <arg name="height" type="int"/>
++    </event>
++  </interface>
++
++  <interface name="ivi_application" version="1">
++    <description summary="create ivi-style surfaces">
++      This interface is exposed as a global singleton.
++      This interface is implemented by servers that provide IVI-style user interfaces.
++      It allows clients to associate a ivi_surface with wl_surface.
++    </description>
++
++    <enum name="error">
++      <entry name="role" value="0" summary="given wl_surface has another role"/>
++      <entry name="ivi_id" value="1" summary="given ivi_id is assigned to another wl_surface"/>
++    </enum>
++
++    <request name="surface_create">
++      <description summary="create ivi_surface with numeric ID in ivi compositor">
++        This request gives the wl_surface the role of an IVI Surface. Creating more than
++        one ivi_surface for a wl_surface is not allowed. Note, that this still allows the
++        following example:
++
++         1. create a wl_surface
++         2. create ivi_surface for the wl_surface
++         3. destroy the ivi_surface
++         4. create ivi_surface for the wl_surface (with the same or another ivi_id as before)
++
++        surface_create will create a interface:ivi_surface with numeric ID; ivi_id in
++        ivi compositor. These ivi_ids are defined as unique in the system to identify
++        it inside of ivi compositor. The ivi compositor implements business logic how to
++        set properties of the surface with ivi_id according to status of the system.
++        E.g. a unique ID for Car Navigation application is used for implementing special
++        logic of the application about where it shall be located.
++        The server regards following cases as protocol errors and disconnects the client.
++         - wl_surface already has an nother role.
++         - ivi_id is already assigned to an another wl_surface.
++
++        If client destroys ivi_surface or wl_surface which is assigne to the ivi_surface,
++        ivi_id which is assigned to the ivi_surface is free for reuse.
++      </description>
++      <arg name="ivi_id" type="uint"/>
++      <arg name="surface" type="object" interface="wl_surface"/>
++      <arg name="id" type="new_id" interface="ivi_surface"/>
++    </request>
++
++  </interface>
++
++</protocol>
+diff --git a/src/client/client.pro b/src/client/client.pro
+index 0c13a4a..ca48cce 100644
+--- a/src/client/client.pro
++++ b/src/client/client.pro
+@@ -6,7 +6,8 @@ MODULE=waylandclient
+ MODULE_PLUGIN_TYPES = \
+             wayland-graphics-integration-client \
+             wayland-inputdevice-integration \
+-            wayland-decoration-client
++            wayland-decoration-client \
++            wayland-shell-integration
+
+ CONFIG += generated_privates
+
+diff --git a/src/plugins/plugins.pro b/src/plugins/plugins.pro
+index a1a8a5b..9b66b85 100644
+--- a/src/plugins/plugins.pro
++++ b/src/plugins/plugins.pro
+@@ -2,4 +2,5 @@ TEMPLATE=subdirs
+ SUBDIRS += \
+     platforms \
+     hardwareintegration \
+-    decorations
++    decorations \
++    shellintegration
+diff --git a/src/plugins/shellintegration/ivi-shell/ivi-shell.json b/src/plugins/shellintegration/ivi-shell/ivi-shell.json
+new file mode 100644
+index 0000000..c48528e
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/ivi-shell.json
+@@ -0,0 +1,3 @@
++{
++    "Keys":[ "ivi-shell" ]
++}
+diff --git a/src/plugins/shellintegration/ivi-shell/ivi-shell.pro b/src/plugins/shellintegration/ivi-shell/ivi-shell.pro
+new file mode 100644
+index 0000000..ac12858
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/ivi-shell.pro
+@@ -0,0 +1,30 @@
++PLUGIN_TYPE = wayland-shell-integration
++load(qt_plugin)
++
++QT += waylandclient-private
++CONFIG += wayland-scanner
++
++!contains(QT_CONFIG, no-pkg-config) {
++    PKGCONFIG += wayland-client wayland-cursor
++    CONFIG += link_pkgconfig
++    contains(QT_CONFIG, glib): PKGCONFIG_PRIVATE += glib-2.0
++} else {
++    LIBS += -lwayland-client -lwayland-cursor $$QT_LIBS_GLIB
++}
++
++WAYLANDCLIENTSOURCES += \
++    ../../../3rdparty/protocol/ivi-application.xml
++
++include(../../../../include/QtWaylandClient/headers.pri)
++
++HEADERS += \
++    qwaylandivishellintegration.h \
++    qwaylandivisurface_p.h
++
++SOURCES += \
++    main.cpp \
++    qwaylandivishellintegration.cpp \
++    qwaylandivisurface.cpp
++
++OTHER_FILES += \
++    ivi-shell.json
+diff --git a/src/plugins/shellintegration/ivi-shell/main.cpp b/src/plugins/shellintegration/ivi-shell/main.cpp
+new file mode 100644
+index 0000000..2382ff7
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/main.cpp
+@@ -0,0 +1,69 @@
++/****************************************************************************
++**
++** Copyright (C) 2015 ITAGE Corporation, author: <yusuke.binsaki@itage.co.jp>
++** Contact: http://www.qt-project.org/legal
++**
++** This file is part of the config.tests of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Digia.  For licensing terms and
++** conditions see http://qt.digia.com/licensing.  For further information
++** use the contact form at http://qt.digia.com/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Digia gives you certain additional
++** rights.  These rights are described in the Digia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include <QtWaylandClient/private/qwaylandshellintegrationplugin_p.h>
++#include "qwaylandivishellintegration.h"
++
++QT_BEGIN_NAMESPACE
++
++namespace QtWaylandClient {
++
++class QWaylandIviShellIntegrationPlugin : public QWaylandShellIntegrationPlugin
++{
++    Q_OBJECT
++    Q_PLUGIN_METADATA(IID QWaylandShellIntegrationFactoryInterface_iid FILE "ivi-shell.json")
++
++public:
++    virtual QWaylandShellIntegration *create(const QString &key, const QStringList &paramList) Q_DECL_OVERRIDE;
++};
++
++QWaylandShellIntegration *QWaylandIviShellIntegrationPlugin::create(const QString &key, const QStringList &paramList)
++{
++    Q_UNUSED(key);
++    Q_UNUSED(paramList);
++    return new QWaylandIviShellIntegration();
++}
++
++}
++
++QT_END_NAMESPACE
++
++#include "main.moc"
+diff --git a/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp
+new file mode 100644
+index 0000000..763fafb
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.cpp
+@@ -0,0 +1,109 @@
++/****************************************************************************
++**
++** Copyright (C) 2015 ITAGE Corporation, author: <yusuke.binsaki@itage.co.jp>
++** Contact: http://www.qt-project.org/legal
++**
++** This file is part of the config.tests of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Digia.  For licensing terms and
++** conditions see http://qt.digia.com/licensing.  For further information
++** use the contact form at http://qt.digia.com/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Digia gives you certain additional
++** rights.  These rights are described in the Digia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include <sys/types.h>
++#include <unistd.h>
++#include <stdint.h>
++#include <stdlib.h>
++
++#include <QtWaylandClient/private/qwayland-wayland.h>
++#include <QtWaylandClient/private/qwaylanddisplay_p.h>
++#include <QtWaylandClient/private/qwaylandwindow_p.h>
++#include <QtWaylandClient/private/qwaylandabstractdecoration_p.h>
++#include "qwaylandivishellintegration.h"
++#include "qwaylandivisurface_p.h"
++#include "qwayland-ivi-application.h"
++
++QT_BEGIN_NAMESPACE
++
++namespace QtWaylandClient {
++
++QWaylandIviShellIntegration::QWaylandIviShellIntegration()
++    : m_iviApplication(Q_NULLPTR)
++{
++}
++
++QWaylandIviShellIntegration::~QWaylandIviShellIntegration()
++{
++    delete m_iviApplication;
++}
++
++bool QWaylandIviShellIntegration::initialize(QWaylandDisplay *display)
++{
++    display->addRegistryListener(registryIvi, this);
++
++    return true;
++}
++
++QWaylandShellSurface *QWaylandIviShellIntegration::createShellSurface(QWaylandWindow *window)
++{
++    const int IVI_SURFACE_ID = 8000;
++    if (!m_iviApplication)
++        return Q_NULLPTR;
++
++    uint32_t id = 0;
++    QVariant value = window->property("IVI-Surface-ID");
++    if (value.isValid()) {
++        id = value.toUInt();
++    } else {
++        id = IVI_SURFACE_ID + getpid();
++    }
++
++    struct ivi_surface *surface = m_iviApplication->surface_create(id, window->object());
++
++    return new QWaylandIviSurface(surface, window);
++}
++
++void QWaylandIviShellIntegration::registryIvi(void *data,
++                                              struct wl_registry *registry,
++                                              uint32_t id,
++                                              const QString &interface,
++                                              uint32_t version)
++{
++    QWaylandIviShellIntegration *shell = static_cast<QWaylandIviShellIntegration *>(data);
++
++    if (interface == QStringLiteral("ivi_application"))
++        shell->m_iviApplication = new QtWayland::ivi_application(registry, id, version);
++}
++
++}
++
++QT_END_NAMESPACE
+diff --git a/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h
+new file mode 100644
+index 0000000..4856ec6
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/qwaylandivishellintegration.h
+@@ -0,0 +1,79 @@
++/****************************************************************************
++**
++** Copyright (C) 2015 ITAGE Corporation, author: <yusuke.binsaki@itage.co.jp>
++** Contact: http://www.qt-project.org/legal
++**
++** This file is part of the config.tests of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Digia.  For licensing terms and
++** conditions see http://qt.digia.com/licensing.  For further information
++** use the contact form at http://qt.digia.com/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Digia gives you certain additional
++** rights.  These rights are described in the Digia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QWAYLANDIVIINTEGRATION_H
++#define QWAYLANDIVIINTEGRATION_H
++
++#include <QtWaylandClient/private/qwaylandshellintegration_p.h>
++
++QT_BEGIN_NAMESPACE
++
++namespace QtWayland {
++    struct wl_registry;
++    class ivi_application;
++}
++
++namespace QtWaylandClient {
++
++class QWaylandWindow;
++class QWaylandDisplay;
++
++class Q_WAYLAND_CLIENT_EXPORT QWaylandIviShellIntegration : public QWaylandShellIntegration
++{
++public:
++    QWaylandIviShellIntegration();
++    ~QWaylandIviShellIntegration();
++    bool initialize(QWaylandDisplay *display);
++    QWaylandShellSurface *createShellSurface(QWaylandWindow *window);
++
++private:
++    static void registryIvi(void *data, struct wl_registry *registry
++                            , uint32_t id, const QString &interface, uint32_t version);
++
++private:
++    QtWayland::ivi_application *m_iviApplication;
++};
++
++}
++
++QT_END_NAMESPACE
++
++#endif //  QWAYLANDIVIINTEGRATION_H
+diff --git a/src/plugins/shellintegration/ivi-shell/qwaylandivisurface.cpp b/src/plugins/shellintegration/ivi-shell/qwaylandivisurface.cpp
+new file mode 100644
+index 0000000..3ce3b4e
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/qwaylandivisurface.cpp
+@@ -0,0 +1,71 @@
++/****************************************************************************
++**
++** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
++** Contact: http://www.qt-project.org/legal
++**
++** This file is part of the config.tests of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Digia.  For licensing terms and
++** conditions see http://qt.digia.com/licensing.  For further information
++** use the contact form at http://qt.digia.com/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Digia gives you certain additional
++** rights.  These rights are described in the Digia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include <QtWaylandClient/private/qwaylanddisplay_p.h>
++#include <QtWaylandClient/private/qwaylandwindow_p.h>
++#include <QtWaylandClient/private/qwaylandinputdevice_p.h>
++#include <QtWaylandClient/private/qwaylandscreen_p.h>
++#include "qwaylandivisurface_p.h"
++
++QT_BEGIN_NAMESPACE
++
++namespace QtWaylandClient {
++
++QWaylandIviSurface::QWaylandIviSurface(struct ::ivi_surface *ivi_surface, QWaylandWindow *window)
++    : QtWayland::ivi_surface(ivi_surface)
++    , QWaylandShellSurface(window)
++    , m_window(window)
++{
++}
++
++QWaylandIviSurface::~QWaylandIviSurface()
++{
++    ivi_surface::destroy();
++}
++
++void QWaylandIviSurface::ivi_surface_configure(int32_t width, int32_t height)
++{
++    this->m_window->configure(0, width, height);
++}
++
++}
++
++QT_END_NAMESPACE
+diff --git a/src/plugins/shellintegration/ivi-shell/qwaylandivisurface_p.h b/src/plugins/shellintegration/ivi-shell/qwaylandivisurface_p.h
+new file mode 100644
+index 0000000..d8331c5
+--- /dev/null
++++ b/src/plugins/shellintegration/ivi-shell/qwaylandivisurface_p.h
+@@ -0,0 +1,76 @@
++/****************************************************************************
++**
++** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
++** Contact: http://www.qt-project.org/legal
++**
++** This file is part of the config.tests of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Digia.  For licensing terms and
++** conditions see http://qt.digia.com/licensing.  For further information
++** use the contact form at http://qt.digia.com/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Digia gives you certain additional
++** rights.  These rights are described in the Digia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QWAYLANDIVISURFACE_H
++#define QWAYLANDIVISURFACE_H
++
++#include <wayland-client.h>
++
++#include <QtWaylandClient/private/qwaylandclientexport_p.h>
++#include <QtWaylandClient/private/qwaylandshellsurface_p.h>
++#include "qwayland-ivi-application.h"
++
++QT_BEGIN_NAMESPACE
++
++namespace QtWaylandClient {
++
++class QWaylandWindow;
++
++class Q_WAYLAND_CLIENT_EXPORT QWaylandIviSurface : public QtWayland::ivi_surface
++        , public QWaylandShellSurface
++{
++public:
++    QWaylandIviSurface(struct ::ivi_surface *shell_surface, QWaylandWindow *window);
++    virtual ~QWaylandIviSurface();
++
++private:
++    virtual void ivi_surface_configure(int32_t width, int32_t height);
++
++    QWaylandWindow *m_window;
++
++    friend class QWaylandWindow;
++};
++
++}
++
++QT_END_NAMESPACE
++
++#endif // QWAYLANDIVISURFACE_H
+diff --git a/src/plugins/shellintegration/shellintegration.pro b/src/plugins/shellintegration/shellintegration.pro
+new file mode 100644
+index 0000000..7abd6cc
+--- /dev/null
++++ b/src/plugins/shellintegration/shellintegration.pro
+@@ -0,0 +1,3 @@
++TEMPLATE=subdirs
++
++SUBDIRS += ivi-shell
+--
+1.8.3.1
