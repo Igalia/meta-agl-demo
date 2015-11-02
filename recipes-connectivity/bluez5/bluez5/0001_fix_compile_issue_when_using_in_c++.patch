@@ -1,0 +1,23 @@
+diff -urN bluez-5.22.orig/lib/bluetooth.h bluez-5.22/lib/bluetooth.h
+--- bluez-5.22.orig/lib/bluetooth.h	2013-12-10 15:59:06.000000000 +0900
++++ bluez-5.22/lib/bluetooth.h	2015-10-28 13:34:25.749335768 +0900
+@@ -158,16 +158,16 @@
+ #define bt_get_unaligned(ptr)			\
+ ({						\
+ 	struct __attribute__((packed)) {	\
+-		typeof(*(ptr)) __v;		\
+-	} *__p = (typeof(__p)) (ptr);		\
++		__typeof__(*(ptr)) __v;		\
++	} *__p = (__typeof__(__p)) (ptr);		\
+ 	__p->__v;				\
+ })
+ 
+ #define bt_put_unaligned(val, ptr)		\
+ do {						\
+ 	struct __attribute__((packed)) {	\
+-		typeof(*(ptr)) __v;		\
+-	} *__p = (typeof(__p)) (ptr);		\
++		__typeof__(*(ptr)) __v;		\
++	} *__p = (__typeof__(__p)) (ptr);		\
+ 	__p->__v = (val);			\
+ } while(0)
