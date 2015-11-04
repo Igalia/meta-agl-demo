@@ -72,18 +72,18 @@ These packagegroups contains packages for application framework of AGL Distro.
 Subsystem should maintain ``packagegroup-agl-appfw-[subsystem].bb`` which
 should hold sufficient packages for application framework of AGL Distro.
 
-Subsystems also can maintain thier own packagegroups under appropriate
+Subsystems also can maintain their own packagegroups under appropriate
 ``recipes-*/``.
 
 For example, Qt5 has 2 packagegroups in ``meta-agl-demo``,
-``packagegroup-agl-appfw-native-qt5`` and ``pacakgegroup-agl-demo-qt-examples``
+``packagegroup-agl-appfw-native-qt5`` and ``packagegroup-agl-demo-qt-examples``
 which are under ``recipes-qt/``.
 
 The ``packagegroup-agl-appfw-native-qt5`` is included by
-``pacakgegroup-agl-appfw-native`` because Qt5 belongs to native application
+``packagegroup-agl-appfw-native`` because Qt5 belongs to native application
 framework of AGL Distro.
 
-The ``pacakgegroup-agl-demo-qt-examples`` is added to local.conf if needed
+The ``packagegroup-agl-demo-qt-examples`` is added to local.conf if needed
 because they are not mandatory for AGL application framework and AGL Demo
 Platform.
 
@@ -151,7 +151,15 @@ You can build a QEMU image using the following steps:
 2. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
-3. Run the emulator. The path for the emulator (runqemu) was added during the envsetup.
+3. The Weston IVI-Shell always gets built ; it will not be started, however, unless you specify the following in your "conf/local.conf" file :
+
+IMAGE_INSTALL_append = " \
+    weston-ivi-shell-config \
+    "
+
+or you manually overwrites the "/etc/xdg/weston/weston.ini" file with a correct one.
+
+4. Run the emulator. The path for the emulator (runqemu) was added during the envsetup.
         $ cd tmp/deploy/images/qemex86-64
         $ runqemu bzImage-qemux86-64.bin agl-demo-platform-qemux86-64.ext3
 
@@ -160,6 +168,7 @@ You can build a QEMU image using the following steps:
         bootparams="uvesafb.mode_option=1280x720-32"
 
 5. Some weston samples are available from weston terminal.
+
 
 Build a R-Car M2 (porter) image
 -------------------------------
