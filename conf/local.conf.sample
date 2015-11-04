@@ -225,6 +225,25 @@ PACKAGECONFIG_append_pn-qemu-native = " sdl"
 PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
 ASSUME_PROVIDED += "libsdl-native"
 
+###############
+#
+# AGL specifics
+#
+###############
+
+# AGL includes all kernel modules here for ease-of-use during development.
+# Comment this out to be able to select the kernel modules yourself.
+IMAGE_INSTALL_append = " kernel-modules"
+
+# Likewise as we included all kernel modules by default in the filesystem,
+# we do not need a separate tarball stored.
+# Comment this out to receive the separate modules tarbal again.
+MODULE_TARBALL_DEPLOY ?= "0"
+
+###############
+# /END AGL
+###############
+
 
 # CONF_VERSION is increased each time build/conf/ changes incompatibly and is used to
 # track the version of this file when it was generated. This can safely be ignored if
