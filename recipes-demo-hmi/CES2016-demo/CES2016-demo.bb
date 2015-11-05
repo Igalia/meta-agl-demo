@@ -10,7 +10,11 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 SRC_URI     = "git://git.automotivelinux.org/gerrit/AGL/DemoApps/CES2016;protocol=http"
 SRCREV      = "AUTOINC"
 
-RDEPENDS_${PN}_append = "qtmultimedia qtquickcontrols"
+RDEPENDS_${PN} += " \
+    qtmultimedia-qmlplugins \
+    qtquickcontrols-qmlplugins \
+    qtsvg-plugins \
+    "
 
 # custom configure and install as these are just qml files
 
