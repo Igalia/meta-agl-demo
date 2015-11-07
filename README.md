@@ -151,15 +151,20 @@ You can build a QEMU image using the following steps:
 2. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
-3. The Weston IVI-Shell always gets built ; it will not be started, however, unless you specify the following in your "conf/local.conf" file :
+  2a. Specifically If you are building the CES2016 demos you will want to add the following to your "conf/local.conf" file to install the demo code in the image:
+IMAGE_INSTALL_append = " CES2016-demo"
+
+  2b. If you want to run QEMU directly as VM in Virtual Box or your other favorite VM software then add this line to your "conf/local.conf" file. 
+IMAGE_FSTYPES += "vmdk"
+
+  2c. The Weston IVI-Shell always gets built ; it will not be started, however, unless you specify the following in your "conf/local.conf" file :
 
 IMAGE_INSTALL_append = " \
     weston-ivi-shell-config \
     "
+      or you manually overwrite the "/etc/xdg/weston/weston.ini" file with a correct one.
 
-or you manually overwrites the "/etc/xdg/weston/weston.ini" file with a correct one.
-
-4. Run the emulator. The path for the emulator (runqemu) was added during the envsetup.
+3. Run the emulator. The path for the emulator (runqemu) was added during the envsetup.
         $ cd tmp/deploy/images/qemex86-64
         $ runqemu bzImage-qemux86-64.bin agl-demo-platform-qemux86-64.ext3
 
@@ -167,7 +172,15 @@ or you manually overwrites the "/etc/xdg/weston/weston.ini" file with a correct 
         $ runqemu bzImage-qemux86-64.bin agl-demo-platform-qemux86-64.ext3 \
         bootparams="uvesafb.mode_option=1280x720-32"
 
-5. Some weston samples are available from weston terminal.
+   To extend the amount of memory, add to runqemu:
+        qemuparams="-m 512"
+
+   or use the virtual disk in Virtual Box from this location:
+	tmp/deploy/images/qemux86-64/agl-demo-platform-qemux86-64.vmdk 
+
+4. Some weston samples are available from weston terminal.
+
+
 
 
 Build a R-Car M2 (porter) image
