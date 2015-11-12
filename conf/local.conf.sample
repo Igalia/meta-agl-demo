@@ -1,3 +1,6 @@
+# Commnet out below if want to use QtWebkit
+PACKAGECONFIG_remove_pn-qtquick1 = "webkit"
+
 #
 # This file is your local configuration file and is where all local user settings
 # are placed. The comments in this file give some guide to the options a new user

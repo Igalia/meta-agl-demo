@@ -34,7 +34,8 @@ RDEPENDS_${PN} += "\
     qtwayland-examples \
     qtwayland-plugins \
     qtwayland-tools \
-    qtwebkit \
-    qtwebkit-qmlplugins \
     qtgraphicaleffects-qmlplugins \
     "
+
+# qtwebkit
+# qtwebkit-qmlplugins
