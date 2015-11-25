@@ -39,7 +39,7 @@ URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
 > (or later)
 
 URI: https://github.com/meta-qt5/meta-qt5.git
-> branch:   dizzy
+> branch:   jethro (b/c of qt-5.5.x)
 > revision: adeca0db212d61a933d7952ad44ea1064cfca747
 
 ## The Renesas R-Car Gen2 (Porter) board depends in addition on: ##
