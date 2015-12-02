@@ -35,6 +35,7 @@ RDEPENDS_${PN} += "\
     qtwayland-plugins \
     qtwayland-tools \
     qtgraphicaleffects-qmlplugins \
+    qml-radio-plugin \
     "
 
 # qtwebkit
