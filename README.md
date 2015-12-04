@@ -273,7 +273,7 @@ NOTE: These instructions are based on GENIVI wiki, [here](http://wiki.projects.g
 
 4. After the copy finished, unmount SD-Card and insert it into the SD-Card slot of the porter board.
 
-#### Instructions on the host
+#### Instructions on the target board
 
 NOTE: There is details about porter board [here](http://elinux.org/R-Car/Boards/Porter).
 
@@ -338,3 +338,76 @@ NOTE: To boot weston on porter board, we need keyboard and mouse. (USB2.0 can be
             queue ! omxh264dec no-copy=true ! v4l2sink device=/dev/video1 \
             io-mode=userptr d. ! queue ! faad ! alsasink device=hw:0,0
 
+### Deployment (TFTP/NFS)
+
+NOTE: These instructions are based on Embedded Linux Wiki, [here](http://www.elinux.org/R-Car/Boards/Yocto#Loading_kernel_via_TFTP_and_rootfs_via_NFS). And a Debian (wheezy, ip: 192.168.30.70) is used as the host for this instructions.
+
+#### Instructions on the host
+1. Setup a TFTP server
+   1. Install necessary packages
+           $ sudo apt-get install tftp tftpd-hpa
+   2. Go to build directory, and copy kernel and DTB into TFTP server root (default server dir: /srv/tftp)
+           $ cd $AGL_TOP/build/tmp/deploy/images/porter
+           $ sudo cp uImage uImage-r8a7791-porter.dtb /srv/tftp
+   3. Verify TFTP server is working
+           $ ls uImage
+           ls: cannot access uImage: No such file or directory
+           $ cd /tmp/
+           $ tftp 192.168.30.70
+           tftp> get uImage
+           Received 3583604 bytes in 0.2 seconds
+           tftp> q
+           $ ls uImage
+           uImage
+
+2. set NFS server
+   1. Install necessary packages
+           $ sudo apt-get install nfs-kernel-server nfs-common
+   2. Go to build directory, and extract the root file system into a dedicated directory (here we use /nfs/porter)
+           $ cd $AGL_TOP/build/tmp/deploy/images/porter
+           $ sudo mkdir -p /nfs/porter
+           $ sudo tar --extract --numeric-owner --preserve-permissions --preserve-order \
+           --totals --directory=/nfs/porter --file=agl-demo-platform-porter.tar.bz2
+   3. Edit /etc/exports
+           $ sudo vi /etc/exports
+      Add
+           /nfs/porter	*(rw,no_subtree_check,sync,no_root_squash,no_all_squash)
+      Save the file and exit.
+   4. Restart nfs service
+           $ sudo service nfs-kernel-server restart
+   5. Verify NFS server is working
+           $ sudo mount -t nfs 192.168.30.70:/nfs/porter /tmp/
+           $ ls /tmp
+           bin  boot  dev  etc  home  lib  media  mnt  proc  run  sbin  sh-thd-430987335390  sys  tmp  usr  var
+
+#### Instructions on the target board
+
+NOTE: There is details about porter board [here](http://elinux.org/R-Car/Boards/Porter).
+
+NOTE: To boot weston on porter board, we need keyboard and mouse. (USB2.0 can be use for this)
+
+##### Change U-Boot parameters to boot from TFTP/NFS
+
+1. Power up the board and, using your preferred terminal emulator, stop the board's autoboot by hitting any key.
+
+  > Debug serial settings are 38400 8N1. Any standard terminal emulator program can be used.
+
+2. Set the follow environment variables and save them
+        => setenv ipaddr <board-ip>
+        => setenv serverip <host-ip>
+        => setenv bootargs_console console=ttySC6,${baudrate}
+        => setenv bootargs_video vmalloc=384M video=HDMI-A-1:1024x768-32@60
+        => setenv bootcmd_net 'tftp 0x40007fc0 uImage; tftp 0x40f00000 uImage-r8a7791-porter.dtb'
+        => setenv bootcmd 'setenv bootargs ${bootargs_console} ${bootargs_video} ip=${ipaddr} root=/dev/nfs nfsroot=${serverip}:/nfs/porter,vers=3;run bootcmd_net;bootm 0x40007fc0 - 0x40f00000'
+        => saveenv
+
+    Replace <board-ip> with a proper IP address for the board, like 192.168.30.60.
+    Replace <host-ip> with the IP address of the host, here we use 192.168.30.70.
+
+##### Boot from TFTP/NFS
+
+1. After board reset, U-Boot is started and after a countdown, ...
+   Linux boot message should be displayed. Please wait a moment.
+2. Then weston is booted automatically, and weston-terminal appears.
+
+3. Have fun! :)
