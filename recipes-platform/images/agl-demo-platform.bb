@@ -15,10 +15,11 @@ IMAGE_INSTALL_append = " \
     packagegroup-agl-demo-platform \
     "
 
-# for Renesas R-Car2 M2 Porter
-IMAGE_INSTALL_append_porter = " \
-    gles-kernel-module \
-    libegl \
-    libgbm-dev \
+# add packages for CES2016 demo
+IMAGE_INSTALL_append = " \
+    CES2016-demo \
+    can-utils iproute2 \
+    python-curses \
+    dhcp-client \
+    climatecontrolplugin \
     "
-
