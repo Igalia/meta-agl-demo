@@ -175,8 +175,12 @@ IMAGE_INSTALL_append = " \
    To extend the amount of memory, add to runqemu:
         qemuparams="-m 512"
 
+   To separate console from VGA screen (to avoid corrupt screen while booting),
+   add to runqemu:
+        serial
+
    or use the virtual disk in Virtual Box from this location:
-	tmp/deploy/images/qemux86-64/agl-demo-platform-qemux86-64.vmdk 
+	tmp/deploy/images/qemux86-64/agl-demo-platform-qemux86-64.vmdk
 
 4. Some weston samples are available from weston terminal.
 
