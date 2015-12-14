@@ -1,0 +1,208 @@
+From affd6eb25a08a3f10f2c7010c3205e930ceb4ec0 Mon Sep 17 00:00:00 2001
+From: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+Date: Thu, 10 Dec 2015 16:07:20 +0900
+Subject: [PATCH] ivi-shell: Temporary fix: Send keyboard events to clients who binds
+ wl_keyboard.
+
+This is a temporary solution to send keyboard events to clients for CES2016 demo.
+This shall be resolved by using ilm keyboard focus later.
+
+Signed-off-by: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+
+---
+ ivi-shell/ivi-layout-private.h |  2 ++
+ ivi-shell/ivi-layout.c         | 65 ++++++++++++++++++++++++++++++++++++++++++
+ ivi-shell/ivi-shell.c          | 45 +++++++++++++++++++++++++++++
+ ivi-shell/ivi-shell.h          |  4 +++
+ 4 files changed, 116 insertions(+)
+
+diff --git a/ivi-shell/ivi-layout-private.h b/ivi-shell/ivi-layout-private.h
+index ee945a6..a75d9b0 100644
+--- a/ivi-shell/ivi-layout-private.h
++++ b/ivi-shell/ivi-layout-private.h
+@@ -112,6 +112,8 @@ struct ivi_layout {
+
+	struct ivi_layout_transition_set *transitions;
+	struct wl_list pending_transition_list;
++
++	struct weston_keyboard_grab keyboard_grab;
+ };
+
+ struct ivi_layout *get_instance(void);
+diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
+index dbe1010..75404c8 100644
+--- a/ivi-shell/ivi-layout.c
++++ b/ivi-shell/ivi-layout.c
+@@ -124,6 +124,8 @@ struct ivi_rectangle
+ static void
+ remove_notification(struct wl_list *listener_list, void *callback, void *userdata);
+
++static const struct weston_keyboard_grab_interface ivi_layout_keyboard_grab_interface;
++
+ static struct ivi_layout ivilayout = {0};
+
+ struct ivi_layout *
+@@ -2854,6 +2856,9 @@ ivi_layout_init_with_compositor(struct weston_compositor *ec)
+
+	layout->transitions = ivi_layout_transition_set_create(ec);
+	wl_list_init(&layout->pending_transition_list);
++
++	layout->keyboard_grab.interface = &ivi_layout_keyboard_grab_interface;
++	layout->keyboard_grab.keyboard = NULL;
+ }
+
+
+@@ -2904,6 +2909,66 @@ ivi_layout_surface_is_forced_configure_event(struct ivi_layout_surface *ivisurf)
+        return ivisurf->prop.is_forced_configure_event;
+ }
+
++static void
++ivi_layout_grab_keyboard_key(struct weston_keyboard_grab *grab,
++			     uint32_t time, uint32_t key, uint32_t state)
++{
++	struct weston_keyboard *keyboard = grab->keyboard;
++	struct wl_display *display = keyboard->seat->compositor->wl_display;
++	uint32_t serial;
++	struct wl_resource *resource;
++
++	wl_resource_for_each(resource, &keyboard->focus_resource_list) {
++		serial = wl_display_next_serial(display);
++		wl_keyboard_send_key(resource,
++		                     serial,
++		                     time,
++		                     key,
++		                     state);
++	}
++
++	wl_resource_for_each(resource, &keyboard->resource_list) {
++		serial = wl_display_next_serial(display);
++		wl_keyboard_send_key(resource,
++		                     serial,
++		                     time,
++		                     key,
++		                     state);
++	}
++}
++
++static void
++ivi_layout_grab_keyboard_modifier(struct weston_keyboard_grab *grab,
++				  uint32_t serial, uint32_t mods_depressed,
++				  uint32_t mods_latched, uint32_t mods_locked,
++				  uint32_t group)
++{
++	struct wl_resource *resource;
++	struct weston_keyboard *keyboard = grab->keyboard;
++
++	wl_resource_for_each(resource, &keyboard->focus_resource_list) {
++		wl_keyboard_send_modifiers(resource, serial, mods_depressed,
++					   mods_latched, mods_locked, group);
++	}
++
++	wl_resource_for_each(resource, &keyboard->resource_list) {
++		wl_keyboard_send_modifiers(resource, serial, mods_depressed,
++					   mods_latched, mods_locked, group);
++	}
++}
++
++static void
++ivi_layout_grab_keyboard_cancel(struct weston_keyboard_grab *grab)
++{
++	(void)grab; /* no op */
++}
++
++static const struct weston_keyboard_grab_interface ivi_layout_keyboard_grab_interface = {
++	ivi_layout_grab_keyboard_key,
++	ivi_layout_grab_keyboard_modifier,
++	ivi_layout_grab_keyboard_cancel
++};
++
+ static struct ivi_controller_interface ivi_controller_interface = {
+	/**
+	 * commit all changes
+diff --git a/ivi-shell/ivi-shell.c b/ivi-shell/ivi-shell.c
+index 3b6c82f..43f48cc 100644
+--- a/ivi-shell/ivi-shell.c
++++ b/ivi-shell/ivi-shell.c
+@@ -423,6 +423,43 @@ ivi_shell_setting_create(struct ivi_shell_setting *dest,
+	return result;
+ }
+
++static void
++handle_seat_destroy(struct wl_listener *listener, void *data)
++{
++	struct weston_seat *seat = data;
++
++	if (seat->keyboard) {
++		weston_keyboard_end_grab(seat->keyboard);
++	}
++}
++
++static void
++handle_seat_updated_caps(struct wl_listener *listener, void *data)
++{
++	struct weston_seat *seat = data;
++
++	if ((seat->keyboard_device_count > 0) && seat->keyboard) {
++		weston_keyboard_start_grab(seat->keyboard,
++					   &(get_instance()->keyboard_grab));
++	}
++}
++
++static void
++handle_seat_created(struct wl_listener *listener, void *data)
++{
++	struct weston_seat *seat = data;
++	struct ivi_shell *shell =
++		container_of(listener, struct ivi_shell, seat_created_listener);
++
++	shell->seat_destroy_listener.notify = handle_seat_destroy;
++	wl_signal_add(&seat->destroy_signal, &shell->seat_destroy_listener);
++
++	shell->seat_updated_caps_listener.notify = handle_seat_updated_caps;
++	wl_signal_add(&seat->updated_caps_signal, &shell->seat_updated_caps_listener);
++
++	handle_seat_updated_caps(&shell->seat_updated_caps_listener, seat);
++}
++
+ /*
+  * Initialization of ivi-shell.
+  */
+@@ -432,6 +469,7 @@ module_init(struct weston_compositor *compositor,
+ {
+	struct ivi_shell *shell;
+	struct ivi_shell_setting setting = { };
++	struct weston_seat *seat;
+	int retval = -1;
+
+	shell = zalloc(sizeof *shell);
+@@ -458,6 +496,13 @@ module_init(struct weston_compositor *compositor,
+
+	ivi_layout_init_with_compositor(compositor);
+
++	shell->seat_created_listener.notify = handle_seat_created;
++	wl_signal_add(&compositor->seat_created_signal, &shell->seat_created_listener);
++
++	wl_list_for_each(seat, &compositor->seat_list, link) {
++		handle_seat_created(&shell->seat_created_listener, seat);
++	}
++
+	/* Call module_init of ivi-modules which are defined in weston.ini */
+	if (load_controller_modules(compositor, setting.ivi_module,
+				    argc, argv) < 0)
+diff --git a/ivi-shell/ivi-shell.h b/ivi-shell/ivi-shell.h
+index 9a05eb2..dc1d85a 100644
+--- a/ivi-shell/ivi-shell.h
++++ b/ivi-shell/ivi-shell.h
+@@ -41,6 +41,10 @@ struct ivi_shell
+	struct wl_listener hide_input_panel_listener;
+	struct wl_listener update_input_panel_listener;
+
++	struct wl_listener seat_created_listener;
++	struct wl_listener seat_updated_caps_listener;
++	struct wl_listener seat_destroy_listener;
++
+	struct weston_layer input_panel_layer;
+
+	bool locked;
+--
+1.8.3.1
