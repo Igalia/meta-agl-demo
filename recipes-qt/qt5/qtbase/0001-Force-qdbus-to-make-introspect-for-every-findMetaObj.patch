@@ -1,0 +1,30 @@
+From a4943bb5c7fdf5eb297223d2c3bb02d2271bea48 Mon Sep 17 00:00:00 2001
+From: Risto Avila <risto.avila@theqtcompany.com>
+Date: Thu, 17 Dec 2015 04:22:53 +0200
+Subject: [PATCH] Force qdbus to make introspect for every findMetaObject
+
+---
+ src/dbus/qdbusintegrator.cpp | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/dbus/qdbusintegrator.cpp b/src/dbus/qdbusintegrator.cpp
+index cce8b9c..ae2a9dc 100644
+--- a/src/dbus/qdbusintegrator.cpp
++++ b/src/dbus/qdbusintegrator.cpp
+@@ -2512,8 +2512,11 @@ QDBusConnectionPrivate::findMetaObject(const QString &service, const QString &pa
+     if (!interface.isEmpty()) {
+         QDBusReadLocker locker(FindMetaObject1Action, this);
+         QDBusMetaObject *mo = cachedMetaObjects.value(interface, 0);
+-        if (mo)
+-            return mo;
++        if (mo) {
++            // service is not unique. Remove cached object to force introspect
++            cachedMetaObjects.remove(interface);
++            delete mo;
++        }
+     }
+ 
+     // introspect the target object
+-- 
+1.9.1
+
