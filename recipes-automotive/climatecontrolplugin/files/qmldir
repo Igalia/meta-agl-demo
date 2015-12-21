@@ -1,0 +1,3 @@
+module Automotive.ClimateControl
+plugin ClimateControl
+
