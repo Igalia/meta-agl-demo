@@ -29,7 +29,7 @@ URI: git://git.yoctoproject.org/poky
 > revision: df87cb27efeaea1455f20692f9f1397c6fcab254
 
 URI: git://git.openembedded.org/meta-openembedded
-> layer:    meta-oe
+> layer:    meta-oe, meta-multimedia, meta-ruby
 > branch:   dizzy
 > revision: 9efaed99125b1c4324663d9a1b2d3319c74e7278
 
@@ -151,13 +151,10 @@ You can build a QEMU image using the following steps:
 2. Build the full image of AGL Demo Platform and applications
         $ bitbake agl-demo-platform
 
-  2a. Specifically If you are building the CES2016 demos you will want to add the following to your "conf/local.conf" file to install the demo code in the image:
-IMAGE_INSTALL_append = " CES2016-demo"
-
-  2b. If you want to run QEMU directly as VM in Virtual Box or your other favorite VM software then add this line to your "conf/local.conf" file. 
+  2a. If you want to run QEMU directly as VM in Virtual Box or your other favorite VM software then add this line to your "conf/local.conf" file. 
 IMAGE_FSTYPES += "vmdk"
 
-  2c. The Weston IVI-Shell always gets built ; it will not be started, however, unless you specify the following in your "conf/local.conf" file :
+  2b. The Weston IVI-Shell always gets built ; it will not be started, however, unless you specify the following in your "conf/local.conf" file :
 
 IMAGE_INSTALL_append = " \
     weston-ivi-shell-config \
