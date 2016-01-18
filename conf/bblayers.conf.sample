@@ -15,6 +15,7 @@ BBLAYERS ?= " \
   ##OEROOT##/../meta-openembedded/meta-oe \
   ##OEROOT##/../meta-openembedded/meta-multimedia \
   ##OEROOT##/../meta-openembedded/meta-ruby \
+  ##OEROOT##/../meta-intel \
   ##OEROOT##/../meta-agl-demo \
   ##OEROOT##/../meta-qt5 \
   "
