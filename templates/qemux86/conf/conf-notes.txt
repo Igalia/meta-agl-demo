@@ -1,7 +1,1 @@
-Common targets are:
-    agl-image-ivi
-    agl-image-ivi-crosssdk
-    agl-image-ivi-qa
-    agl-demo-platform
-    agl-demo-platform-crosssdk
-    agl-demo-platform-qa
+../../common/conf-notes.txt
