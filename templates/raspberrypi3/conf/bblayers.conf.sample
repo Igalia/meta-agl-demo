@@ -1,0 +1,30 @@
+# LAYER_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+LCONF_VERSION = "6"
+
+BBPATH = "${TOPDIR}"
+BBFILES ?= ""
+
+# AGL layers for TI vayu
+BBLAYERS ?= " \
+  ##OEROOT##/meta \
+  ##OEROOT##/meta-yocto \
+  ##OEROOT##/meta-yocto-bsp \
+  ##OEROOT##/../meta-agl/meta-ivi-common \
+  ##OEROOT##/../meta-agl/meta-agl \
+  ##OEROOT##/../meta-agl/meta-agl-bsp \
+  ##OEROOT##/../meta-openembedded/meta-oe \
+  ##OEROOT##/../meta-openembedded/meta-multimedia \
+  ##OEROOT##/../meta-openembedded/meta-efl \
+  ##OEROOT##/../meta-openembedded/meta-networking \
+  ##OEROOT##/../meta-openembedded/meta-python \
+  ##OEROOT##/../meta-raspberrypi \
+  ##OEROOT##/../meta-agl-demo \
+  ##OEROOT##/../meta-openembedded/meta-ruby \
+  ##OEROOT##/../meta-qt5 \
+  "
+BBLAYERS_NON_REMOVABLE ?= " \
+  ##OEROOT##/meta \
+  ##OEROOT##/meta-yocto \
+  ##OEROOT##/../meta-agl/meta-agl \
+  "
