@@ -15,9 +15,9 @@ EXTRA_OECONF = "--with-moc-dir=${STAGING_BINDIR_NATIVE}/qt5"
 QML_LIBDIR = "${libdir}/qt5/qml"
 
 do_install() {
-    mkdir -p ${D}/usr/lib/qt5/qml/execScript/
-    cp execScript/*.so ${D}/usr/lib/qt5/qml/execScript/
-    cp ../git/execScript/qmldir ${D}/usr/lib/qt5/qml/execScript/
+    install -d ${D}${libdir}/qt5/qml/execScript/
+    install -m 0755 execScript/*.so ${D}${libdir}/qt5/qml/execScript/
+    install -m 0644 ../git/execScript/qmldir ${D}${libdir}/qt5/qml/execScript/
 }
 
 FILES_${PN} += "${QML_LIBDIR}/execScript/libexecscriptplugin.so"

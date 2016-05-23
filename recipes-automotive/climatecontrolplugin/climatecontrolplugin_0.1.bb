@@ -18,9 +18,9 @@ RDEPENDS_${PN} = "automotive-message-broker ambdbusaccess"
 inherit qmake5
 
 do_install () {
-        mkdir -p ${D}/usr/lib/qt5/qml/Automotive/ClimateControl/
-        cp libClimateControl.so ${D}/usr/lib/qt5/qml/Automotive/ClimateControl/
-        cp qmldir ${D}/usr/lib/qt5/qml/Automotive/ClimateControl/
+        install -d ${D}${libdir}/qt5/qml/Automotive/ClimateControl/
+        install -m 0755 libClimateControl.so ${D}${libdir}/qt5/qml/Automotive/ClimateControl/
+        install -m 0644 qmldir ${D}${libdir}/qt5/qml/Automotive/ClimateControl/
 }
 
 FILES_${PN} += "${libdir}/qt5/qml/Automotive/ClimateControl/libClimateControl.so \

@@ -17,8 +17,8 @@ RPROVIDES_${PN} = "ambdbusaccess"
 inherit qmake5
 
 do_install () {
-        mkdir -p ${D}/usr/lib/qt5/qml/Automotive/
-        cp ambdbusaccess ${D}/usr/lib/qt5/qml/Automotive/
+        install -d ${D}${libdir}/qt5/qml/Automotive/
+        install -m 0755 ambdbusaccess ${D}${libdir}/qt5/qml/Automotive/
 }
 
 FILES_${PN} += "${libdir}/qt5/qml/Automotive/ambdbusaccess"
