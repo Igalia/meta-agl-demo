@@ -264,6 +264,9 @@ MODULE_TARBALL_DEPLOY ?= "0"
 # All boot message will be off
 #APPEND += "quiet"
 
+# Uncomment below if want to build WebKitForWayland:
+#IMAGE_INSTALL_append = " webkitforwayland"
+
 ###############
 # /END AGL
 ###############

@@ -250,6 +250,9 @@ IMAGE_INSTALL_append = " kernel-modules"
 # Comment this out to receive the separate modules tarbal again.
 MODULE_TARBALL_DEPLOY ?= "0"
 
+# Uncomment below if want to build WebKitForWayland:
+#IMAGE_INSTALL_append = " webkitforwayland"
+
 ###############
 # /END AGL
 ###############
