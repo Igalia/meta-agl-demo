@@ -13,6 +13,7 @@ IMAGE_INSTALL_append = " \
     packagegroup-agl-ivi \
     packagegroup-ivi-common-core \
     packagegroup-agl-demo-platform \
+	packagegroup-agl-app-framework-examples \
     "
 
 # add packages for CES2016 demo
