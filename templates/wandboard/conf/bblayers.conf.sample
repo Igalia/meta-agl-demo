@@ -18,6 +18,7 @@ BBLAYERS ?= " \
   ##OEROOT##/../meta-openembedded/meta-efl \
   ##OEROOT##/../meta-openembedded/meta-networking \
   ##OEROOT##/../meta-openembedded/meta-python \
+  ##OEROOT##/../meta-openembedded/meta-filesystems \
   ##OEROOT##/../meta-fsl-arm \
   ##OEROOT##/../meta-fsl-arm-extra \
   ##OEROOT##/../meta-agl-demo \
