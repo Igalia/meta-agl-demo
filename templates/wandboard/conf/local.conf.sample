@@ -1,6 +1,6 @@
 # Machine Selection: wandboard
 MACHINE ?= "wandboard"
-# Commnet out below if want to use QtWebkit
+# Comment out below if want to use QtWebkit
 PACKAGECONFIG_remove_pn-qtquick1 = "webkit"
 
 #

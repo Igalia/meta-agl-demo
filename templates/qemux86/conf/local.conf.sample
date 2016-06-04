@@ -1,7 +1,7 @@
 # Machine Selection: QEMUx86
 MACHINE ?= "qemux86"
 
-# Commnet out below if want to use QtWebkit
+# Comment out below if want to use QtWebkit
 PACKAGECONFIG_remove_pn-qtquick1 = "webkit"
 
 #
