@@ -22,6 +22,16 @@ EXTRA_OECONF = "--with-moc-dir=${STAGING_BINDIR_NATIVE}/qt5"
 
 QML_LIBDIR = "${libdir}/qt5/qml"
 
+do_configure_append() {
+     # when building with "security_flags.inc", libtool thinks that
+     # "-pie" means we want an executable, and links with related C
+     # runtime objects. Work around this until libtool is fixed.
+     sed -i 's/".\+Scrt1.o/"/g' ${B}/*libtool
+     sed -i 's/ .\+Scrt1.o/ /g' ${B}/*libtool
+     sed -i 's/-lgcc / /g' ${B}/*libtool
+     sed -i 's/-lgcc"/"/g' ${B}/*libtool
+}
+
 do_install_append() {
      # Remove .la files for loadable module
      rm -f ${D}/${QML_LIBDIR}/radio/*.la
