@@ -17,6 +17,7 @@ IMAGE_INSTALL_append = " \
 
 # add packages for CES2016 demo
 IMAGE_INSTALL_append = " \
+    ALS2016-demo \
     CES2016-demo \
     can-utils iproute2 \
     python-curses \
