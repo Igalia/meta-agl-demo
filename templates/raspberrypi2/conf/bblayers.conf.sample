@@ -5,7 +5,7 @@ LCONF_VERSION = "6"
 BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
-# AGL layers for Raspberry PI 2
+# AGL layers for TI vayu
 BBLAYERS ?= " \
   ##OEROOT##/meta \
   ##OEROOT##/meta-yocto \
@@ -13,10 +13,6 @@ BBLAYERS ?= " \
   ##OEROOT##/../meta-agl/meta-ivi-common \
   ##OEROOT##/../meta-agl/meta-agl \
   ##OEROOT##/../meta-agl/meta-agl-bsp \
-  ##OEROOT##/../meta-agl/meta-agl-security \
-  ##OEROOT##/../meta-agl/meta-app-framework \
-  ##OEROOT##/../meta-intel-iot-security/meta-security-smack \
-  ##OEROOT##/../meta-intel-iot-security/meta-security-framework \
   ##OEROOT##/../meta-openembedded/meta-oe \
   ##OEROOT##/../meta-openembedded/meta-multimedia \
   ##OEROOT##/../meta-openembedded/meta-efl \
