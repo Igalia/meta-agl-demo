@@ -18,9 +18,9 @@ do_compile() {
 
 do_install() {
         install -m 0755 -d ${D}${bindir} ${D}${base_dir}/home/root ${D}${docdir}/video-on-demand
-        install -m 0644 ${S}/NetworkManager ${D}${bindir}
-        install -m 0644 ${S}/VideoOnDemand ${D}${bindir}
-        install -m 0644 ${S}/vod-client ${D}${bindir}
+        install -m 0755 ${S}/NetworkManager ${D}${bindir}
+        install -m 0755 ${S}/VideoOnDemand ${D}${bindir}
+        install -m 0755 ${S}/vod-client ${D}${bindir}
 	install -m 0644 ${S}/config-agl.xml ${D}${base_dir}/home/root
 	install -m 0644 ${S}/i2c-slim-amplifier.script ${D}${base_dir}/home/root
 	install -m 0644 ${S}/i2c-uda1388-v2.script ${D}${base_dir}/home/root
