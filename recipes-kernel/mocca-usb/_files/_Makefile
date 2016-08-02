@@ -1,0 +1,42 @@
+# set your module name here
+# provide the following files
+#
+# MODULENAME.c	the driver
+# MODULENAME.h  the include file
+# MODULENAME_test.c	the driver test program
+# MODULENAME_test.sh	the driver test script
+#
+MODULENAME 	:= mocca-usb
+### should not need to change stuff below ######################
+
+
+# KDIR		:= /lib/modules/$(shell uname -r)/build
+#KDIR		:= /home/me/arm/linux-2.6.35.9/
+PWD		:= $(shell pwd)
+CC		:= ${CROSS_COMPILE}gcc -Wall
+
+ifeq ($(KERNELRELEASE),)
+all:
+	$(MAKE) V=0 -C $(KDIR) SUBDIRS=$(PWD) modules
+else
+  obj-m	:= $(MODULENAME).o
+endif
+
+
+load:	all
+	ssh root@10.0.0.3 'echo 0x46 > /sys/bus/i2c/devices/i2c-0/delete_device; rmmod /home/matrix/$(MODULENAME).ko'
+	scp $(MODULENAME).ko root@10.0.0.3:/home/matrix
+	ssh root@10.0.0.3 'insmod /home/matrix/$(MODULENAME).ko; echo k2l-i2c-0 0x46 > /sys/bus/i2c/devices/i2c-0/new_device'
+
+unload:
+	ssh root@10.0.0.3 'echo 0x46 > /sys/bus/i2c/devices/i2c-0/delete_device; rmmod /home/matrix/$(MODULENAME).ko'
+
+test:   all
+
+clean:
+	-rm -f *.o *.ko modules.order Module.symvers *.mod.c .*.cmd $(MODULENAME)_test
+	-rm -rf .tmp_versions
+
+copy:
+	scp $(MODULENAME).ko root@10.0.0.3:/home/matrix
+
