@@ -18,6 +18,6 @@ do_compile() {
 
 do_install() {
         install -m 0755 -d ${D}${bindir}
-        install -m 0644 ${S}/OptoLyzerMoccaApp ${D}${bindir}
+        install -m 0755 ${S}/OptoLyzerMoccaApp ${D}${bindir}
 }
 
