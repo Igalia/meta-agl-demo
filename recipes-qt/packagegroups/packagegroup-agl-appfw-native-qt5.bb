@@ -31,12 +31,15 @@ RDEPENDS_${PN} += "\
     qtquick1-plugins \
     qtquick1-tools \
     qtwayland \
-    qtwayland-examples \
     qtwayland-plugins \
     qtwayland-tools \
     qtgraphicaleffects-qmlplugins \
     qml-execscript-plugin \
     "
+RDEPENDS_${PN}_checkforkrogoth += "\
+    qtwayland-examples \
+    "
+
 
 # qtwebkit
 # qtwebkit-qmlplugins
