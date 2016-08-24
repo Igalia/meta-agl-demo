@@ -6,7 +6,7 @@ PR = "r0"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/most-can-demo-bin;protocol=https"
 
 S = "${WORKDIR}/git"
-SRCREV = "cd6e46d117934139efdf5fac33fbeb59b66e45b6"
+SRCREV = "70458963c48662012af856b56676260150f124c8"
 
 do_configure() {
         echo ""
