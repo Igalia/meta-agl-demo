@@ -22,10 +22,13 @@ FILESEXTRAPATHS_append := ":${THISDIR}/${PN}"
 
 SRC_URI_append = "\
     file://0010-Added-manifest-file-according-to-smack-3-domain-mode.patch \
+    "
+SRC_URI_append_checkforkrogoth = "\
     file://disable_xcomposite_egl_qt_wayland_client_buffer_integration.patch \
     file://0001-Implement-initial-IVI-shell-support-with-shell-integ.patch \
     file://0002-Fix-multiple-QWindow.patch \
     "
+
 
 DEPENDS_append_koelsch = " libegl gles-user-module"
 DEPENDS_append_porter = " libegl gles-user-module"
