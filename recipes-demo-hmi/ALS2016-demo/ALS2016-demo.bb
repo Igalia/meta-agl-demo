@@ -4,6 +4,8 @@ HOMEPAGE    = "https://git.automotivelinux.org/gerrit/#/admin/projects/AGL/DemoA
 
 SECTION     = "apps"
 
+PN = "als2016-demo"
+
 LICENSE     = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
@@ -30,7 +32,7 @@ do_configure() {
 # plain copy in own folder for now
 do_install() {
     mkdir -p ${D}/opt/AGL/ALS2016/
-    cp -ar ./* ${D}/opt/AGL/ALS2016/
+    cp -rf ./* ${D}/opt/AGL/ALS2016/
 }
 
 FILES_${PN} = "/opt/AGL/"
