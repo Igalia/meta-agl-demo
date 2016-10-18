@@ -1,0 +1,7 @@
+{
+	"name" : "hvacplugin",
+	"path" : "/usr/lib/automotive-message-broker/hvacplugin.so",
+	"delay" : "30",
+	"enabled" : true
+}
+
