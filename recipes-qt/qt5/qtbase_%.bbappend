@@ -6,7 +6,7 @@ DEPENDS_append_porter = " libegl"
 PACKAGECONFIG_WAYLAND = "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)}"
 PACKAGECONFIG_GL = "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2', '', d)}"
 PACKAGECONFIG_append = " ${PACKAGECONFIG_WAYLAND} icu accessibility"
-PACKAGECONFIG_append_rpi = " fontconfig"
+PACKAGECONFIG_append = " fontconfig"
 
 EXTRA_OECONF_append = ""
 

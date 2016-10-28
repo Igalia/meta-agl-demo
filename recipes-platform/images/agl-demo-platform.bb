@@ -15,6 +15,14 @@ IMAGE_INSTALL_append = " \
     packagegroup-agl-demo-platform \
     "
 
+# fonts
+IMAGE_TTF_FONTS = " \
+    ttf-bitstream-vera \
+    ttf-dejavu-sans \
+    ttf-dejavu-sans-mono \
+    ttf-dejavu-serif \
+    "
+
 # add packages for CES2016 demo
 IMAGE_INSTALL_append = " \
     als2016-demo \
@@ -24,4 +32,5 @@ IMAGE_INSTALL_append = " \
     dhcp-client \
     climatecontrolplugin \
     Navigation \
+    ${IMAGE_TTF_FONTS} \
     "
