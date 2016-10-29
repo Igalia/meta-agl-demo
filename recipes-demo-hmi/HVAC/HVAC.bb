@@ -25,7 +25,7 @@ do_configure() {
 
 # empty folder for now
 do_install() {
-    mkdir -p ${D}/opt/AGL/${PN}/
+    mkdir -p ${D}/usr/AGL/${PN}/
 }
 
-FILES_${PN} = "/opt/AGL/${PN}/"
+FILES_${PN} = "/usr/AGL/${PN}/"

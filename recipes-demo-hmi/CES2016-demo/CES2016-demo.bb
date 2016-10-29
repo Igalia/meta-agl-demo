@@ -31,8 +31,8 @@ do_configure() {
 
 # plain copy in own folder for now
 do_install() {
-    mkdir -p ${D}/opt/AGL/CES2016/
-    cp -rf ./* ${D}/opt/AGL/CES2016/
+    mkdir -p ${D}/usr/AGL/CES2016/
+    cp -rf ./* ${D}/usr/AGL/CES2016/
 }
 
-FILES_${PN} = "/opt/AGL/"
+FILES_${PN} = "/usr/AGL/"

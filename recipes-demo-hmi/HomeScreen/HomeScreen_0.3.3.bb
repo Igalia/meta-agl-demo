@@ -26,18 +26,18 @@ do_compile_prepend(){
 }
 
 do_install() {
-    install -d ${D}/opt/AGL/${PN}
-    install -m 0755 ${B}/HomeScreen/HomeScreen ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/SampleAppTimeDate/SampleAppTimeDate ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/HomeScreenAppFrameworkBinderTizen/HomeScreenAppFrameworkBinderTizen ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/WindowManager/WindowManager ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/InputEventManager/InputEventManager ${D}/opt/AGL/${PN}/
+    install -d ${D}/usr/AGL/${PN}
+    install -m 0755 ${B}/HomeScreen/HomeScreen ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/SampleAppTimeDate/SampleAppTimeDate ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/HomeScreenAppFrameworkBinderTizen/HomeScreenAppFrameworkBinderTizen ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/WindowManager/WindowManager ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/InputEventManager/InputEventManager ${D}/usr/AGL/${PN}/
 
 
-    install -d ${D}/opt/AGL/${PN}/colorschemes
-    cp -r ${B}/HomeScreen/colorschemes/* ${D}/opt/AGL/${PN}/colorschemes/
+    install -d ${D}/usr/AGL/${PN}/colorschemes
+    cp -r ${B}/HomeScreen/colorschemes/* ${D}/usr/AGL/${PN}/colorschemes/
 }
 
-FILES_${PN} += "/opt/AGL/${PN}/"
-FILES_${PN}-dbg += "/opt/AGL/${PN}/.debug"
+FILES_${PN} += "/usr/AGL/${PN}/"
+FILES_${PN}-dbg += "/usr/AGL/${PN}/.debug"
 
