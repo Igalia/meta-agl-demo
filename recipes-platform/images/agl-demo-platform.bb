@@ -23,10 +23,9 @@ IMAGE_TTF_FONTS = " \
     ttf-dejavu-serif \
     "
 
-# add packages for CES2016 demo
+# add packages for CES2017 demo
 IMAGE_INSTALL_append = " \
-    als2016-demo \
-    ces2016-demo \
+    ces2017-demo \
     can-utils iproute2 \
     python-curses \
     dhcp-client \
