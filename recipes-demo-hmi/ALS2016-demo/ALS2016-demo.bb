@@ -7,8 +7,8 @@ SECTION     = "apps"
 LICENSE     = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
-SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/ALS2016;protocol=http"
-SRCREV      = "02c98d910f092067655ea7599b3595020ed335e5"
+SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/ALS2016;protocol=http;branch=blowfish"
+SRCREV      = "6f7c3f8cfadb092901d854fbe23d919e04470d31"
 # for development use:
 #SRCREV      = "${AUTOREV}"
 

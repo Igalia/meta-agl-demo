@@ -8,10 +8,10 @@ inherit module
 
 PV = "0.1"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https;branch=blowfish"
 
 S = "${WORKDIR}/git/driver/${PN}"
-SRCREV = "7850efa9077fa84536e0442c65d39a36e25e39d1"
+SRCREV = "f70e1e1bab1608a2696fa5450641043dc4961ea8"
 #SRCREV = "${AUTOREV}"
 
 # The inherit of module.bbclass will automatically name module packages with
