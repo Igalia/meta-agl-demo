@@ -1,9 +1,9 @@
 SUMMARY     = "AGL Home Screen Application"
-DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFrameworkBinderTizen + WindowManager + InputEventManager"
+DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFrameworkBinderAGL + WindowManager + InputEventManager + two sample apps (QML and Qtwidget)"
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
-PV          = "0.4.0+gitr${SRCPV}"
+PV          = "0.6.0+gitr${SRCPV}"
 PR          = "r1"
 S           = "${WORKDIR}/git/"
 
@@ -11,14 +11,14 @@ inherit qmake5
 DEPENDS = " qtbase "
 
 # for HomeScreenAppFrameworkBinderTizen:
-DEPENDS += " pkgmgr-info aul "
+#DEPENDS += " pkgmgr-info aul "
 # for WindowManager:
 DEPENDS += " wayland-ivi-extension "
 # for libhomescreen
 DEPENDS += " glib-2.0 "
 
 LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "ec688535558c31989e7da221b858328b2e0766c8"
+SRCREV  = "61d3f0e1e2210d6108953b0433324a3365d9dab6"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http"
 
 
@@ -34,9 +34,11 @@ do_install() {
     cp -r ${B}/HomeScreen/colorschemes/* ${D}/opt/AGL/${PN}/colorschemes/
     install -m 0755 ${B}/SampleAppTimeDate/SampleAppTimeDate ${D}/opt/AGL/${PN}/
     install -m 0755 ${B}/SampleHomeScreenInterfaceApp/SampleHomeScreenInterfaceApp ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/HomeScreenAppFrameworkBinderTizen/HomeScreenAppFrameworkBinderTizen ${D}/opt/AGL/${PN}/
+    install -m 0755 ${B}/HomeScreenAppFrameworkBinderAGL/HomeScreenAppFrameworkBinderAGL ${D}/opt/AGL/${PN}/
     install -m 0755 ${B}/WindowManager/WindowManager ${D}/opt/AGL/${PN}/
     install -m 0755 ${B}/InputEventManager/InputEventManager ${D}/opt/AGL/${PN}/
+    install -m 0755 ${B}/SampleNavigationApp/SampleNavigationApp ${D}/opt/AGL/${PN}/
+    install -m 0755 ${B}/SampleMediaApp/SampleMediaApp ${D}/opt/AGL/${PN}/
     
     install -d ${D}/usr/lib
     install -m 0644 ${B}/libhomescreen/libhomescreen.so.1.0.0 ${D}/usr/lib/
