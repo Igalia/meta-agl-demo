@@ -3,7 +3,7 @@ DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFr
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
-PV          = "0.6.0+gitr${SRCPV}"
+PV          = "0.6.1+gitr${SRCPV}"
 PR          = "r1"
 S           = "${WORKDIR}/git/"
 
@@ -28,17 +28,17 @@ do_compile_prepend(){
 }
 
 do_install() {
-    install -d ${D}/opt/AGL/${PN}
-    install -m 0755 ${B}/HomeScreen/HomeScreen ${D}/opt/AGL/${PN}/
-    install -d ${D}/opt/AGL/${PN}/colorschemes
-    cp -r ${B}/HomeScreen/colorschemes/* ${D}/opt/AGL/${PN}/colorschemes/
-    install -m 0755 ${B}/SampleAppTimeDate/SampleAppTimeDate ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/SampleHomeScreenInterfaceApp/SampleHomeScreenInterfaceApp ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/HomeScreenAppFrameworkBinderAGL/HomeScreenAppFrameworkBinderAGL ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/WindowManager/WindowManager ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/InputEventManager/InputEventManager ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/SampleNavigationApp/SampleNavigationApp ${D}/opt/AGL/${PN}/
-    install -m 0755 ${B}/SampleMediaApp/SampleMediaApp ${D}/opt/AGL/${PN}/
+    install -d ${D}/usr/AGL/${PN}
+    install -m 0755 ${B}/HomeScreen/HomeScreen ${D}/usr/AGL/${PN}/
+    install -d ${D}/usr/AGL/${PN}/colorschemes
+    cp -r ${B}/HomeScreen/colorschemes/* ${D}/usr/AGL/${PN}/colorschemes/
+    install -m 0755 ${B}/SampleAppTimeDate/SampleAppTimeDate ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/SampleHomeScreenInterfaceApp/SampleHomeScreenInterfaceApp ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/HomeScreenAppFrameworkBinderAGL/HomeScreenAppFrameworkBinderAGL ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/WindowManager/WindowManager ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/InputEventManager/InputEventManager ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/SampleNavigationApp/SampleNavigationApp ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/SampleMediaApp/SampleMediaApp ${D}/usr/AGL/${PN}/
     
     install -d ${D}/usr/lib
     install -m 0644 ${B}/libhomescreen/libhomescreen.so.1.0.0 ${D}/usr/lib/
@@ -48,8 +48,8 @@ do_install() {
 }
 
 
-FILES_${PN} += "/opt/AGL/${PN}/ /opt/AGL/${PN}/colorschemes /usr/lib/"
-FILES_${PN}-dbg += "/opt/AGL/${PN}/.debug"
+FILES_${PN} += "/usr/AGL/${PN}/ /usr/AGL/${PN}/colorschemes /usr/lib/"
+FILES_${PN}-dbg += "/usr/AGL/${PN}/.debug"
 
 #############################################
 # this has to be set up later...
