@@ -26,7 +26,9 @@ IMAGE_TTF_FONTS = " \
 # add packages for CES2017 demo
 IMAGE_INSTALL_append = " \
     ces2017-demo \
-    can-utils iproute2 \
+    linux-firmware-ath9k \
+    can-utils \
+    iproute2 \
     python-curses \
     dhcp-client \
     climatecontrolplugin \
