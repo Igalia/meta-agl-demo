@@ -46,10 +46,10 @@ do_install() {
     ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1.0
 
     install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${B}/HomeScreen/conf/HomeScreen.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${B}/HomeScreenAppFrameworkBinderAGL/conf/HomeScreenAppFrameworkBinderAGL.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${B}/InputEventManager/conf/InputEventManager.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${B}/WindowManager/conf/WindowManager.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${S}/HomeScreen/conf/HomeScreen.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${S}/HomeScreenAppFrameworkBinderAGL/conf/HomeScreenAppFrameworkBinderAGL.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${S}/InputEventManager/conf/InputEventManager.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${S}/WindowManager/conf/WindowManager.service ${D}${systemd_unitdir}/system
 }
 
 FILES_${PN} += "/usr/AGL/${PN}/ /usr/AGL/${PN}/colorschemes ${libdir} ${systemd_unitdir}/system"
