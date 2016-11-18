@@ -1,0 +1,14 @@
+[Unit]
+Description=HTML5 runtime for OpenIVI Mobility applications
+Requires=dbus.service
+After=dbus.service lightmediascanner.service rygel.service weston.service
+
+[Service]
+User=root
+ExecStart=/usr/bin/openivi-html5.sh
+Restart=always
+RestartSec=2
+TimeoutStopSec=1
+
+[Install]
+WantedBy=multi-user.target
