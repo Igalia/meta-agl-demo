@@ -80,16 +80,16 @@ URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
 		> tested revision: c5906a1553513ef192a58231700357c5f14f4ae4
 
 		* `meta-agl/meta-agl-security`
-		> URI: https://git.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
+		> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
 		> branch            : master
 
 		* `meta-agl-extra/meta-app-framework`
-		> URI: https://git.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
+		> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
 		> branch            : master
 
  * The feature `agl-sota` has these dependencies:
 		* `meta-agl-extra/meta-sota`
-		> URI: https://git.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
+		> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
 		> branch            : master
 
 		* `meta-openembedded`
@@ -110,7 +110,7 @@ URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
 	* The feature `agl-netboot` has these dependenies:
 		* `meta-agl/meta-netboot`
 
-			> URI: https://git.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
+			> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
 			> branch            : master
 
 
