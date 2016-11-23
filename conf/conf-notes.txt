@@ -5,3 +5,4 @@ Common targets are:
     agl-demo-platform
     agl-demo-platform-crosssdk
     agl-demo-platform-qa
+    agl-demo-platform-html5
