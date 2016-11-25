@@ -15,6 +15,8 @@ DEPENDS = " qtbase "
 DEPENDS += " wayland-ivi-extension "
 # for libhomescreen
 DEPENDS += " glib-2.0 "
+# for sample apps
+DEPENDS += " qtdeclarative "
 
 LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 SRCREV  = "7f06418646c8822452f8541386810208c523f990"
