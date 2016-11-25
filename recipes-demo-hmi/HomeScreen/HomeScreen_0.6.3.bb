@@ -3,7 +3,7 @@ DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFr
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
-PV          = "0.6.2+gitr${SRCPV}"
+PV          = "0.6.3+gitr${SRCPV}"
 S           = "${WORKDIR}/git/"
 
 inherit qmake5 systemd
@@ -19,14 +19,10 @@ DEPENDS += " glib-2.0 "
 DEPENDS += " qtdeclarative "
 
 LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "7f06418646c8822452f8541386810208c523f990"
+SRCREV  = "75a4e94d7610db25c98f05cdda9491f4e7c0a4db"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http"
 
-
-do_compile_prepend(){
-    PATH=$PATH:${STAGING_BINDIR_NATIVE}/qt5
-    export PATH
-}
+PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 
 do_install() {
     install -d ${D}/usr/AGL/${PN}
@@ -47,21 +43,26 @@ do_install() {
     ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1
     ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1.0
 
-    install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/HomeScreen/conf/HomeScreen.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/HomeScreenAppFrameworkBinderAGL/conf/HomeScreenAppFrameworkBinderAGL.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/InputEventManager/conf/InputEventManager.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/WindowManager/conf/WindowManager.service ${D}${systemd_unitdir}/system
+
+    install -d ${D}${systemd_user_unitdir}
+    install -m 0644 ${S}/HomeScreen/conf/HomeScreen.service ${D}${systemd_user_unitdir}
+    install -m 0644 ${S}/HomeScreenAppFrameworkBinderAGL/conf/HomeScreenAppFrameworkBinderAGL.service ${D}${systemd_user_unitdir}
+    install -m 0644 ${S}/InputEventManager/conf/InputEventManager.service ${D}${systemd_user_unitdir}
+    install -m 0644 ${S}/WindowManager/conf/WindowManager.service ${D}${systemd_user_unitdir}
+
+    install -d ${D}${sysconfdir}/systemd/user/default.target.wants
+    ln -sf ${systemd_user_unitdir}/WindowManager.service ${D}${sysconfdir}/systemd/user/default.target.wants
+    ln -sf ${systemd_user_unitdir}/HomeScreen.service ${D}${sysconfdir}/systemd/user/default.target.wants
 }
 
-FILES_${PN} += "/usr/AGL/${PN}/ /usr/AGL/${PN}/colorschemes ${libdir} ${systemd_unitdir}/system"
+FILES_${PN} += "/usr/AGL/${PN}/ /usr/AGL/${PN}/colorschemes ${libdir} ${systemd_user_unitdir}"
 FILES_${PN}-dbg += "/usr/AGL/${PN}/.debug"
 
 #SYSTEMD_PACKAGES - no separate packages
-SYSTEMD_SERVICE += "WindowManager.service"
-SYSTEMD_SERVICE += "HomeScreen.service"
-SYSTEMD_SERVICE += "InputEventManager.service"
-SYSTEMD_SERVICE += "HomeScreenAppFrameworkBinderAGL.service"
+#SYSTEMD_SERVICE += "WindowManager.service"
+#SYSTEMD_SERVICE += "HomeScreen.service"
+#SYSTEMD_SERVICE += "InputEventManager.service"
+#SYSTEMD_SERVICE += "HomeScreenAppFrameworkBinderAGL.service"
 
 
 #############################################
