@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=4641e94ec96f98fabc56ff9cc48be14b"
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 SRC_URI = " \
-	git://github.com/openivimobility/openivi-html5.git;branch=master;tag=7e5d9574758e504b194d16a52e04a1cfe4320138 \
+	git://github.com/openivimobility/openivi-html5.git;branch=master;tag=0b370eea8c7c852365bd717013a523b678abbdba \
 	file://openivi-html5.sh \
 	file://openivi-html5.service \
 "

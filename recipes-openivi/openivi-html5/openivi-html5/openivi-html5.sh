@@ -22,4 +22,32 @@ if [ -e "$HOMESCREEN_CONFIG" ] ; then
     fi
 fi
 
-/usr/bin/openivi-html5 -f -u $HOMESCREEN
+#the following value shall be modified for your display side
+SCREEN_W=1080
+SCREEN_H=1920
+
+# Demo is configured to FullHD
+QT_W=1080
+QT_H=1920
+
+# Ensure that Weston has been fully loaded
+sleep 8
+
+/usr/bin/openivi-html5 -f -u $HOMESCREEN &
+
+# qmlscene create 2 surfaces
+#   0x80000000 : for off screen buffer ?
+#   0x80000001 : visible
+#
+SURFACE_ID_QML=0x80000001
+
+#
+# layer-add-surfaces wait till 2 surfaces are created.
+#
+layer-add-surfaces 1000 2
+
+/usr/bin/LayerManagerControl set surface $SURFACE_ID_QML destination region 0 0 $SCREEN_W $SCREEN_H
+/usr/bin/LayerManagerControl set surface $SURFACE_ID_QML source region 0 0 $QT_W $QT_H
+/usr/bin/LayerManagerControl set layer 1000 render order $SURFACE_ID_QML
+/usr/bin/LayerManagerControl set surfaces $SURFACE_ID_QML input focus keyboard
+/usr/bin/LayerManagerControl set screen 0 render order 1000
