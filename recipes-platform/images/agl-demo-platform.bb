@@ -32,6 +32,6 @@ IMAGE_INSTALL_append = " \
     python-curses \
     dhcp-client \
     climatecontrolplugin \
-    Navigation \
+    navigation \
     ${IMAGE_TTF_FONTS} \
     "
