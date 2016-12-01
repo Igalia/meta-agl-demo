@@ -1,0 +1,45 @@
+diff --git a/mecab-naist-jdic/Makefile.am b/mecab-naist-jdic/Makefile.am
+old mode 100644
+new mode 100755
+index 61915c1..030f540
+--- a/mecab-naist-jdic/Makefile.am
++++ b/mecab-naist-jdic/Makefile.am
+@@ -5,12 +5,12 @@ DISTCLEANFILES = *.log *.out *~
+ 
+ MAINTAINERCLEANFILES = Makefile.in char.bin matrix.bin sys.dic unk.dic
+ 
+-dicdir = @prefix@/dic
++dicdir = @prefix@/share/dic
+ 
+ dic_DATA   = char.bin matrix.bin sys.dic unk.dic
+ 
+ char.bin matrix.bin sys.dic unk.dic: naist-jdic.csv matrix.def left-id.def rewrite.def pos-id.def right-id.def char.def unk.def feature.def
+-	../mecab/src/mecab-dict-index -d . -o . -f UTF-8 -t @MECAB_CHARSET@
++	mecab-dict-index -d . -o . -f UTF-8 -t @MECAB_CHARSET@
+ 
+ clean:
+ 	rm -f char.bin matrix.bin sys.dic unk.dic
+diff --git a/mecab-naist-jdic/Makefile.in b/mecab-naist-jdic/Makefile.in
+old mode 100644
+new mode 100755
+index f92fe2c..7fdf4ad
+--- a/mecab-naist-jdic/Makefile.in
++++ b/mecab-naist-jdic/Makefile.in
+@@ -263,7 +263,7 @@ top_srcdir = @top_srcdir@
+ EXTRA_DIST = COPYING Makefile.mak naist-jdic.csv matrix.def left-id.def pos-id.def rewrite.def right-id.def char.def unk.def feature.def
+ DISTCLEANFILES = *.log *.out *~
+ MAINTAINERCLEANFILES = Makefile.in char.bin matrix.bin sys.dic unk.dic
+-dicdir = @prefix@/dic
++dicdir = @prefix@/share/dic
+ dic_DATA = char.bin matrix.bin sys.dic unk.dic
+ all: all-am
+ 
+@@ -476,7 +476,7 @@ uninstall-am: uninstall-dicDATA
+ 
+ 
+ char.bin matrix.bin sys.dic unk.dic: naist-jdic.csv matrix.def left-id.def rewrite.def pos-id.def right-id.def char.def unk.def feature.def
+-	../mecab/src/mecab-dict-index -d . -o . -f UTF-8 -t @MECAB_CHARSET@
++	mecab-dict-index -d . -o . -f UTF-8 -t @MECAB_CHARSET@
+ 
+ clean:
+ 	rm -f char.bin matrix.bin sys.dic unk.dic
