@@ -8,12 +8,11 @@ LICENSE     = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
 SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2016;protocol=http;branch=blowfish"
-
 SRCREV      = "6e048fa867650571cd1630908e6bd86828630d2f"
 # for development use
 #SRCREV      = "${AUTOREV}"
 
-PV = "2.0.1"
+PV = "2.0.4"
 
 RDEPENDS_${PN} += " \
     qtmultimedia-qmlplugins \

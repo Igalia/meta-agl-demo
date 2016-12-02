@@ -12,7 +12,7 @@ SRCREV      = "6f7c3f8cfadb092901d854fbe23d919e04470d31"
 # for development use:
 #SRCREV      = "${AUTOREV}"
 
-PV = "2.0.1"
+PV = "2.0.4"
 
 RDEPENDS_${PN} += " \
     qtmultimedia-qmlplugins \

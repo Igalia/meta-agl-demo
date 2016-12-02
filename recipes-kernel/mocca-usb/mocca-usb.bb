@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 inherit module
 
-PV = "0.1"
+PV = "2.0.4"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/can-lin/;protocol=https;branch=blowfish"
 S = "${WORKDIR}/git/Usb-Driver"
