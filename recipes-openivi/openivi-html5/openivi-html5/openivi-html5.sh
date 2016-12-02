@@ -17,7 +17,7 @@ HOMESCREEN=/usr/share/openivi/example/cluster/index.html
 HOMESCREEN_CONFIG=$XDG_CONFIG_DIRS/openivi-html5/openivi-html5.ini
 if [ -e "$HOMESCREEN_CONFIG" ] ; then
     HTML=`sed -n '/^homescreen=\(.*\)$/s//\1/p' <  $HOMESCREEN_CONFIG`
-    if [ -e "$HTML" ] ; then
+    if [ -n "$HTML" ] ; then
         HOMESCREEN=$HTML
     fi
 fi
