@@ -79,10 +79,6 @@ URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
 		> branch            : jethro
 		> tested revision: c5906a1553513ef192a58231700357c5f14f4ae4
 
-		* `meta-agl/meta-agl-security`
-		> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
-		> branch            : master
-
 		* `meta-agl-extra/meta-app-framework`
 		> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
 		> branch            : master
