@@ -3,7 +3,7 @@ DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFr
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
-PV          = "0.6.4+gitr${SRCPV}"
+PV          = "0.6.5+gitr${SRCPV}"
 S           = "${WORKDIR}/git/"
 
 inherit qmake5 systemd
