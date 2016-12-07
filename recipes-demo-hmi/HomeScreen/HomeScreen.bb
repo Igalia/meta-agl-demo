@@ -3,7 +3,7 @@ DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFr
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
-PV          = "0.6.5+gitr${SRCPV}"
+PV          = "0.6.5+git"
 S           = "${WORKDIR}/git/"
 
 inherit qmake5 systemd
@@ -16,10 +16,10 @@ DEPENDS += " wayland-ivi-extension "
 # for libhomescreen
 DEPENDS += " glib-2.0 "
 # for sample apps
-DEPENDS += " qtdeclarative "
+DEPENDS += " qtdeclarative qtquickcontrols2 "
 
 LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "2b94dd47aba5912bfb4fcb3bf3482b049d87a245"
+SRCREV  = "${AUTOREV}"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
