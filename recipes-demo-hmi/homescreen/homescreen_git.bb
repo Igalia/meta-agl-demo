@@ -5,6 +5,8 @@ LICENSE     = "Apache-2.0"
 SECTION     = "apps"
 S           = "${WORKDIR}/git/"
 
+BBCLASSEXTEND = " nativesdk"
+
 inherit qmake5 systemd
 DEPENDS = " qtbase "
 
@@ -56,23 +58,20 @@ FILES_${PN} += "/usr/AGL/${PN}/ ${libdir} ${systemd_user_unitdir}"
 FILES_${PN}-dbg += "/usr/AGL/${PN}/.debug"
 
 
-#############################################
-# this has to be set up later...
-#############################################
-#PACKAGES =+ "libhomescreen libhomescreen-dev libhomescreen-dbg"
-#
-#FILES_libhomescreen = "\
-#	${libdir}/libhomescreen.so.* \
-#"
-#FILES_libhomescreen-dev = "\
-#	${includedir}/libhomescreen.hpp \
-#	${libdir}/libhomescreen.so \
-#	${libdir}/pkgconfig/libhomescreen.pc \
-#"
-#FILES_libhomescreen-dbg = "\
-#	${libdir}/.debug/libhomescreen.so.* \
-#"
-#RDEPENDS_libhomescreen-dbg += "${PN}-dbg libhomescreen-dev"
-#
-#RDEPENDS_${PN}-dev += "libhomescreen-dev"
+PACKAGES =+ "libhomescreen libhomescreen-dev libhomescreen-dbg"
+
+FILES_libhomescreen = "\
+	${libdir}/libhomescreen.so.* \
+"
+FILES_libhomescreen-dev = "\
+	${includedir}/libhomescreen.hpp \
+	${libdir}/libhomescreen.so \
+	${libdir}/pkgconfig/libhomescreen.pc \
+"
+FILES_libhomescreen-dbg = "\
+	${libdir}/.debug/libhomescreen.so.* \
+"
+RDEPENDS_libhomescreen-dbg += "${PN}-dbg libhomescreen-dev"
+
+RDEPENDS_${PN}-dev += "libhomescreen-dev"
 
