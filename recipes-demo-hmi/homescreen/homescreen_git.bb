@@ -7,7 +7,7 @@ S           = "${WORKDIR}/git/"
 
 BBCLASSEXTEND = " nativesdk"
 
-inherit qmake5 systemd
+inherit qmake5 systemd pkgconfig
 DEPENDS = " qtbase "
 
 # for HomeScreenAppFrameworkBinderTizen:
@@ -42,6 +42,15 @@ do_install() {
     ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1
     ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1.0
 
+# kooltux: still some problem with paths inside .pc file
+# error at build time:
+# ERROR: homescreen-git-r0 do_populate_sysroot: QA Issue: homescreen.pc failed sanity test (tmpdir) in path /xdt/build/tmp/work/cortexa15hf-neon-agl-linux-gnueabi/homescreen/git-r0/sysroot-destdir/usr/lib/pkgconfig [pkgconfig]
+#
+#    install -d ${D}${libdir}/pkgconfig
+#    install -m 0644 ${B}/libhomescreen/pkgconfig/homescreen.pc ${D}${libdir}/pkgconfig/
+
+	install -d ${D}${includedir}
+	install -m 0644 ${S}/libhomescreen/include/libhomescreen.hpp ${D}${includedir}/
 
     install -d ${D}${systemd_user_unitdir}
     install -m 0644 ${S}/HomeScreen/conf/HomeScreen.service ${D}${systemd_user_unitdir}
@@ -66,7 +75,7 @@ FILES_libhomescreen = "\
 FILES_libhomescreen-dev = "\
 	${includedir}/libhomescreen.hpp \
 	${libdir}/libhomescreen.so \
-	${libdir}/pkgconfig/libhomescreen.pc \
+	${libdir}/pkgconfig/homescreen.pc \
 "
 FILES_libhomescreen-dbg = "\
 	${libdir}/.debug/libhomescreen.so.* \
