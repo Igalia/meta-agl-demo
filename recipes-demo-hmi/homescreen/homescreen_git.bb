@@ -26,8 +26,6 @@ PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 do_install() {
     install -d ${D}/usr/AGL/${PN}
     install -m 0755 ${B}/HomeScreen/HomeScreen ${D}/usr/AGL/${PN}/
-    install -d ${D}/usr/AGL/${PN}/colorschemes
-    cp -r ${B}/HomeScreen/colorschemes/* ${D}/usr/AGL/${PN}/colorschemes/
     install -m 0755 ${B}/SampleAppTimeDate/SampleAppTimeDate ${D}/usr/AGL/${PN}/
     install -m 0755 ${B}/SampleHomeScreenInterfaceApp/SampleHomeScreenInterfaceApp ${D}/usr/AGL/${PN}/
     install -m 0755 ${B}/HomeScreenAppFrameworkBinderAGL/HomeScreenAppFrameworkBinderAGL ${D}/usr/AGL/${PN}/
@@ -54,14 +52,8 @@ do_install() {
     ln -sf ${systemd_user_unitdir}/HomeScreen.service ${D}${sysconfdir}/systemd/user/default.target.wants
 }
 
-FILES_${PN} += "/usr/AGL/${PN}/ /usr/AGL/${PN}/colorschemes ${libdir} ${systemd_user_unitdir}"
+FILES_${PN} += "/usr/AGL/${PN}/ ${libdir} ${systemd_user_unitdir}"
 FILES_${PN}-dbg += "/usr/AGL/${PN}/.debug"
-
-#SYSTEMD_PACKAGES - no separate packages
-#SYSTEMD_SERVICE += "WindowManager.service"
-#SYSTEMD_SERVICE += "HomeScreen.service"
-#SYSTEMD_SERVICE += "InputEventManager.service"
-#SYSTEMD_SERVICE += "HomeScreenAppFrameworkBinderAGL.service"
 
 
 #############################################
