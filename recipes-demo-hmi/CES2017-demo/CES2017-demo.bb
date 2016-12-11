@@ -18,6 +18,7 @@ SRCREV      = "${AUTOREV}"
 
 RDEPENDS_${PN} += " \
     qtmultimedia-qmlplugins \
+    qtmultimedia-rtlfm-radio-plugin \
     qtquickcontrols-qmlplugins \
     qtquickcontrols2-qmlplugins \
     qtsvg-plugins \
