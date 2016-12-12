@@ -20,14 +20,9 @@ RDEPENDS_${PN} += "\
     qtdeclarative-examples \
     qtlocation-examples \
     qtmultimedia-examples \
-    qtquick1-examples \
-    qtscript-examples \
     qtsensors-examples \
-    qtsvg-examples \
     qtsystems-examples \
     qttools-examples \
     qtwayland-examples \
     qtxmlpatterns-examples \
-    qtquick1-examples \
-    qtwebkit-examples-examples \
     "
