@@ -1,5 +1,5 @@
 SUMMARY     = "AGL Home Screen Application"
-DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFrameworkBinderAGL + WindowManager + InputEventManager + two sample apps (QML and Qtwidget)"
+DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFrameworkBinderAGL + WindowManager + InputEventManager"
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
@@ -36,8 +36,6 @@ do_install() {
     install -m 0755 ${B}/HomeScreenAppFrameworkBinderAGL/HomeScreenAppFrameworkBinderAGL ${D}/usr/AGL/${PN}/
     install -m 0755 ${B}/WindowManager/WindowManager ${D}/usr/AGL/${PN}/
     install -m 0755 ${B}/InputEventManager/InputEventManager ${D}/usr/AGL/${PN}/
-    install -m 0755 ${B}/SampleNavigationApp/SampleNavigationApp ${D}/usr/AGL/${PN}/
-    install -m 0755 ${B}/SampleMediaApp/SampleMediaApp ${D}/usr/AGL/${PN}/
     
     install -d ${D}${libdir}
     install -m 0644 ${B}/libhomescreen/libhomescreen.so.1.0.0 ${D}${libdir}/
