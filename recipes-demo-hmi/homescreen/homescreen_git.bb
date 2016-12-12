@@ -21,6 +21,9 @@ DEPENDS += " qtdeclarative qtquickcontrols2 "
 
 LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 SRCREV  = "${AUTOREV}"
+# PV needs to be modified with SRCPV to work AUTOREV correctly
+PV = "0.0+git${SRCPV}"
+
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
