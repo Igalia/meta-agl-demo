@@ -1,0 +1,14 @@
+prefix=OEPREFIX
+exec_prefix=OEPREFIX
+libdir=OELIBDIR
+includedir=OEINCDIR
+
+
+Name: libhomescreen
+Description: A generic interface for the HomeScreen app
+Version: 1.0.0
+Libs: -L${libdir} -lhomescreen 
+Libs.private: -lgio-2.0 -lgobject-2.0 -lglib-2.0   
+Cflags: 
+Requires: glib-2.0 gio-unix-2.0
+

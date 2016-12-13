@@ -24,7 +24,8 @@ SRCREV  = "${AUTOREV}"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http \
+           file://homescreen.pc.in "
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 
@@ -47,8 +48,11 @@ do_install() {
 # error at build time:
 # ERROR: homescreen-git-r0 do_populate_sysroot: QA Issue: homescreen.pc failed sanity test (tmpdir) in path /xdt/build/tmp/work/cortexa15hf-neon-agl-linux-gnueabi/homescreen/git-r0/sysroot-destdir/usr/lib/pkgconfig [pkgconfig]
 #
-#    install -d ${D}${libdir}/pkgconfig
-#    install -m 0644 ${B}/libhomescreen/pkgconfig/homescreen.pc ${D}${libdir}/pkgconfig/
+    install -d ${D}${libdir}/pkgconfig
+    install -m 0644 ${WORKDIR}/homescreen.pc.in ${D}${libdir}/pkgconfig/homescreen.pc
+    sed -i s:OEPREFIX:${prefix}:g ${D}${libdir}/pkgconfig/homescreen.pc
+    sed -i s:OELIBDIR:${libdir}:g ${D}${libdir}/pkgconfig/homescreen.pc
+    sed -i s:OEINCDIR:${includedir}:g ${D}${libdir}/pkgconfig/homescreen.pc
 
 	install -d ${D}${includedir}
 	install -m 0644 ${S}/libhomescreen/include/libhomescreen.hpp ${D}${includedir}/
