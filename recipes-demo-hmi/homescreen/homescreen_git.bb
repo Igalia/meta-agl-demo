@@ -39,9 +39,9 @@ do_install() {
     
     install -d ${D}${libdir}
     install -m 0644 ${B}/libhomescreen/libhomescreen.so.1.0.0 ${D}${libdir}/
-    ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so
-    ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1
-    ln -sf ${libdir}/libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1.0
+    ln -sf libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so
+    ln -sf libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1
+    ln -sf libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1.0
 
 # kooltux: still some problem with paths inside .pc file
 # error at build time:
