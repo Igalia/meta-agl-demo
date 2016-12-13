@@ -1,0 +1,54 @@
+From 9bdc7c84eea0ff66c937d5f62ffed249321c3c35 Mon Sep 17 00:00:00 2001
+From: Tasuku Suzuki <tasuku.suzuki@qt.io>
+Date: Sun, 24 Jul 2016 00:23:36 +0900
+Subject: [PATCH] GStreamer: support cover art
+
+Change-Id: I05987f578a40c23dc2eb6f3e6a7f76d11f704214
+Reviewed-by: Yoann Lopes <yoann.lopes@qt.io>
+---
+ src/gsttools/qgstutils.cpp                               | 16 ++++++++++++++++
+ .../gstreamer/mediaplayer/qgstreamermetadataprovider.cpp |  1 +
+ 2 files changed, 17 insertions(+)
+
+diff --git a/src/gsttools/qgstutils.cpp b/src/gsttools/qgstutils.cpp
+index 831ba96..a2b3507 100644
+--- a/src/gsttools/qgstutils.cpp
++++ b/src/gsttools/qgstutils.cpp
+@@ -141,6 +141,22 @@ static void addTagToMap(const GstTagList *list,
+                 }
+                 if (!map->contains("year") && year > 0)
+                     map->insert("year", year);
++            } else if (G_VALUE_TYPE(&val) == GST_TYPE_SAMPLE) {
++                GstSample *sample = (GstSample *)g_value_get_boxed(&val);
++                GstCaps* caps = gst_sample_get_caps(sample);
++                if (caps && !gst_caps_is_empty(caps)) {
++                    GstStructure *structure = gst_caps_get_structure(caps, 0);
++                    const gchar *name = gst_structure_get_name(structure);
++                    if (QByteArray(name).startsWith("image/")) {
++                        GstBuffer *buffer = gst_sample_get_buffer(sample);
++                        if (buffer) {
++                            GstMapInfo info;
++                            gst_buffer_map(buffer, &info, GST_MAP_READ);
++                            map->insert(QByteArray(tag), QImage::fromData(info.data, info.size, name));
++                            gst_buffer_unmap(buffer, &info);
++                        }
++                    }
++                }
+ #endif
+             } else if (G_VALUE_TYPE(&val) == GST_TYPE_FRACTION) {
+                 int nom = gst_value_get_fraction_numerator(&val);
+diff --git a/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp b/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
+index 074f8ad..01103d6 100644
+--- a/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
++++ b/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
+@@ -93,6 +93,7 @@ static const QGstreamerMetaDataKeyLookup *qt_gstreamerMetaDataKeys()
+ 
+         //metadataKeys->insert(0, QMediaMetaData::CoverArtUrlSmall);
+         //metadataKeys->insert(0, QMediaMetaData::CoverArtUrlLarge);
++        metadataKeys->insert(GST_TAG_PREVIEW_IMAGE, QMediaMetaData::CoverArtImage);
+ 
+         // Image/Video
+         metadataKeys->insert("resolution", QMediaMetaData::Resolution);
+-- 
+2.7.4
+

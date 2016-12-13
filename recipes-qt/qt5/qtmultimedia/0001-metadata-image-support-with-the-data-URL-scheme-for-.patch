@@ -1,0 +1,80 @@
+From ed61f1d932c5c6d38458fcd2e1d5d154383f017e Mon Sep 17 00:00:00 2001
+From: Tasuku Suzuki <tasuku.suzuki@qt.io>
+Date: Mon, 12 Dec 2016 16:32:47 +0900
+Subject: [PATCH] metadata image support with the "data" URL scheme for QtQuick
+
+add posterImage, coverArtImage and thumbnailImage to metadata
+
+Change-Id: I10b9bae10c219ffa41506d6e6b345020790217a6
+---
+ .../multimedia/qdeclarativemediametadata_p.h       | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/src/imports/multimedia/qdeclarativemediametadata_p.h b/src/imports/multimedia/qdeclarativemediametadata_p.h
+index ede7f87..6a6a815 100644
+--- a/src/imports/multimedia/qdeclarativemediametadata_p.h
++++ b/src/imports/multimedia/qdeclarativemediametadata_p.h
+@@ -51,6 +51,9 @@
+ // We mean it.
+ //
+ 
++#include <QtCore/QBuffer>
++#include <QtGui/QImage>
++#include <QtGui/QImageWriter>
+ #include <QtQml/qqml.h>
+ #include <QtMultimedia/qmediametadata.h>
+ #include <QtMultimedia/qmediaservice.h>
+@@ -153,6 +156,9 @@ class QDeclarativeMediaMetaData : public QObject
+     Q_PROPERTY(QVariant gpsProcessingMethod READ gpsProcessingMethod WRITE setGPSProcessingMethod NOTIFY metaDataChanged)
+     Q_PROPERTY(QVariant gpsAreaInformation READ gpsAreaInformation WRITE setGPSAreaInformation NOTIFY metaDataChanged)
+ 
++    Q_PROPERTY(QVariant posterImage READ posterImage NOTIFY metaDataChanged)
++    Q_PROPERTY(QVariant coverArtImage READ coverArtImage NOTIFY metaDataChanged)
++    Q_PROPERTY(QVariant thumbnailImage READ thumbnailImage NOTIFY metaDataChanged)
+ public:
+     QDeclarativeMediaMetaData(QMediaObject *player, QObject *parent = 0)
+         : QObject(parent)
+@@ -425,6 +431,16 @@ QT_WARNING_POP
+     void setGPSAreaInformation(const QVariant &information) {
+         setMetaData(QMediaMetaData::GPSAreaInformation, information); }
+ 
++    QVariant posterImage() const {
++        return convertImageToUrl(m_mediaObject->metaData(QMediaMetaData::PosterImage));
++    }
++    QVariant coverArtImage() const {
++        return convertImageToUrl(m_mediaObject->metaData(QMediaMetaData::CoverArtImage));
++    }
++    QVariant thumbnailImage() const {
++        return convertImageToUrl(m_mediaObject->metaData(QMediaMetaData::ThumbnailImage));
++    }
++
+ Q_SIGNALS:
+     void metaDataChanged();
+ 
+@@ -440,6 +456,23 @@ private:
+             m_writerControl->setMetaData(key, value);
+     }
+ 
++    QUrl convertImageToUrl(const QVariant &variant) const
++    {
++        if (variant.type() != QVariant::Image)
++            return QUrl();
++
++        QImage image = variant.value<QImage>();
++        QByteArray data;
++        QBuffer buffer(&data);
++        buffer.open(QBuffer::WriteOnly);
++        QImageWriter png(&buffer, "png");
++        if (!png.write(image)) {
++            return QUrl();
++        }
++        buffer.close();
++        return QUrl(QStringLiteral("data:image/png;base64,") + data.toBase64());
++    }
++
+     QMediaObject *m_mediaObject;
+     QMetaDataWriterControl *m_writerControl;
+     bool m_requestedWriterControl;
+-- 
+2.7.4
+
