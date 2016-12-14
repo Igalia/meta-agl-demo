@@ -1,0 +1,25 @@
+--- a/buildX86/Makefile-Release.mk	2016-12-09 15:48:37.000000000 +0100
++++ b/buildX86/Makefile-Release.mk	2016-12-09 16:56:35.071740652 +0100
+@@ -11,14 +11,14 @@
+ MKDIR=mkdir
+ CP=cp
+ GREP=grep
+-NM=nm
+-CCADMIN=CCadmin
+-RANLIB=ranlib
+-CC=${CROSS_COMPILE}gcc
+-CCC=${CROSS_COMPILE}g++
+-CXX=${CROSS_COMPILE}g++
+-FC=${CROSS_COMPILE}gfortran
+-AS=${CROSS_COMPILE}as
++#NM=nm
++#CCADMIN=CCadmin
++#RANLIB=ranlib
++#CC=${CROSS_COMPILE}gcc
++#CCC=${CROSS_COMPILE}g++
++#CXX=${CROSS_COMPILE}g++
++#FC=${CROSS_COMPILE}gfortran
++#AS=${CROSS_COMPILE}as
+ 
+ # Macros
+ CND_PLATFORM=GNU-Linux-x86
