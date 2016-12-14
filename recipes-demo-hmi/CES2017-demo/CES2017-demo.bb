@@ -8,7 +8,7 @@ S           = "${WORKDIR}/git/"
 PN          = "ces2017-demo"
 
 inherit qmake5
-DEPENDS = " qtbase qtdeclarative qtquickcontrols2 qtmultimedia homescreen zip-native"
+DEPENDS = " qtbase qtdeclarative qtquickcontrols2 qtvirtualkeyboard qtmultimedia homescreen zip-native"
 
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 

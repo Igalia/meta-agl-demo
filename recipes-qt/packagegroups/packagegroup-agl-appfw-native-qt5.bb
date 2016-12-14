@@ -25,6 +25,7 @@ RDEPENDS_${PN} += "\
     qtwayland-plugins \
     qtwayland-tools \
     qtgraphicaleffects-qmlplugins \
+    qtvirtualkeyboard \
     "
 RDEPENDS_${PN}_checkforkrogoth += "\
     qtwayland-examples \
