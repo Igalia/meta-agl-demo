@@ -3,7 +3,7 @@ DESCRIPTION = "App Lanucher app in QML format for the AGL Demonstrator @ CESS201
 HOMEPAGE    = "https://git.automotivelinux.org/gerrit/#/admin/projects/AGL/DemoApps/CES2017"
 LICENSE     = "MPL-2.0"
 SECTION     = "apps"
-PV          = "1.0+git"
+PV          = "1.0+git${SRCPV}"
 S           = "${WORKDIR}/git/"
 PN          = "ces2017-demo"
 
