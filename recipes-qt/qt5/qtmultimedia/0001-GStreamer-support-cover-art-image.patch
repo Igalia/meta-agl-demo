@@ -1,0 +1,25 @@
+commit 83026d306daecdeb8743f5a7d3bfcc752555c86e
+Author: Tasuku Suzuki <tasuku.suzuki@qt.io>
+Date:   Wed Dec 14 23:00:37 2016 +0900
+
+    return better images in metadata in gstreamer
+    
+    cover art image uses "preview image". But "image" is better for
+    that. "preview image" will be used for thumbnail image.
+    
+    Change-Id: Ic01f878f146b0369eb84e6b153fa68fbc6c54e57
+
+diff --git a/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp b/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
+index 01103d65..b9e29245 100644
+--- a/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
++++ b/src/plugins/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
+@@ -93,7 +93,8 @@ static const QGstreamerMetaDataKeyLookup *qt_gstreamerMetaDataKeys()
+ 
+         //metadataKeys->insert(0, QMediaMetaData::CoverArtUrlSmall);
+         //metadataKeys->insert(0, QMediaMetaData::CoverArtUrlLarge);
+-        metadataKeys->insert(GST_TAG_PREVIEW_IMAGE, QMediaMetaData::CoverArtImage);
++        metadataKeys->insert(GST_TAG_PREVIEW_IMAGE, QMediaMetaData::ThumbnailImage);
++        metadataKeys->insert(GST_TAG_IMAGE, QMediaMetaData::CoverArtImage);
+ 
+         // Image/Video
+         metadataKeys->insert("resolution", QMediaMetaData::Resolution);
