@@ -22,6 +22,6 @@ do_install() {
 	install -m 0644 ${S}/scripts/camera-os88122-ts.script ${D}/home/root
 	install -m 0644 ${S}/scripts/i2c-slim-amplifier-v2.3.script ${D}/home/root
 	install -m 0644 ${S}/scripts/i2c-uda1388-v2.3.script ${D}/home/root
-	install -m 0644 ${S}/scripts/loadDriver.sh ${D}/home/root
+	install -m 0755	${S}/scripts/loadDriver.sh ${D}/home/root
 }
 FILES_${PN} += "/home/root*"
