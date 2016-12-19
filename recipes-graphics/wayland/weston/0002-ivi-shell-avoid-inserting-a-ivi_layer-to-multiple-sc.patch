@@ -1,0 +1,39 @@
+From 46969606558dc378042de125fa85efa6a658aa18 Mon Sep 17 00:00:00 2001
+From: Koji Ohira <kk.ohira.koji@nttd-mse.com>
+Date: Thu, 24 Nov 2016 21:04:43 +0900
+Subject: [PATCH] ivi-shell: avoid inserting a ivi_layer to multiple screens.
+
+In just previous wl_list_for_each_safe, list of layer in a screen is
+cleaned up. And then, the list is re-constructed from
+pending.layer_list.
+
+In this re-construction, if order.link of a layer were inserted into a
+screen whose number is later one of current screen, the order.link will
+inserted into layer_list of two screens. This shall be avoided.
+
+However, if we want to implement a feature to allow a layer to be added
+to multiple screens. A layer shall have several order.link per screens.
+So, I marked here as TODO.
+
+Signed-off-by: Koji Ohira <kk.ohira.koji@nttd-mse.com>
+---
+ ivi-shell/ivi-layout.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
+index efc0da5..1139590 100644
+--- a/ivi-shell/ivi-layout.c
++++ b/ivi-shell/ivi-layout.c
+@@ -974,6 +974,9 @@ commit_screen_list(struct ivi_layout *layout)
+ 
+ 			wl_list_for_each(ivilayer, &iviscrn->pending.layer_list,
+ 					 pending.link) {
++				/* FIXME: avoid to insert order.link to multiple screens */
++				wl_list_remove(&ivilayer->order.link);
++
+ 				wl_list_insert(&iviscrn->order.layer_list,
+ 					       &ivilayer->order.link);
+ 				add_orderlayer_to_screen(ivilayer, iviscrn);
+-- 
+2.7.4
+

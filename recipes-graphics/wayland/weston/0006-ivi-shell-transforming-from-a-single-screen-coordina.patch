@@ -1,0 +1,61 @@
+From 2a3b8a213d5076aa6f051e88858b65ebfc53f64a Mon Sep 17 00:00:00 2001
+From: Nobuhiko Tanibata <nobuhiko_tanibata@xddp.denso.co.jp>
+Date: Mon, 30 Nov 2015 15:08:32 +0900
+Subject: [PATCH] ivi-shell: transforming from a single screen coordinates to
+ multi screen coordinates: global coordinates.
+
+In single screen, the coordinates of layer local coordinates are the
+same as global coordinates. However, to support multi screens, the
+layer-local coordinates shall be transformed to multi screen coordinates,
+which is global coordinates. The abosolute coordinates of a screen in global
+stored in (x,y) of output of its weston output so it shall be used to
+transform layer-local to global coordinates.
+
+Signed-off-by: Nobuhiko Tanibata <nobuhiko_tanibata@xddp.denso.co.jp>
+---
+ ivi-shell/ivi-layout.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
+index 1773af8..65c2735 100644
+--- a/ivi-shell/ivi-layout.c
++++ b/ivi-shell/ivi-layout.c
+@@ -679,6 +679,7 @@ calc_inverse_matrix_transform(const struct weston_matrix *matrix,
+  */
+ static void
+ calc_surface_to_global_matrix_and_mask_to_weston_surface(
++	struct ivi_layout_screen  *iviscrn,
+ 	struct ivi_layout_layer *ivilayer,
+ 	struct ivi_layout_surface *ivisurf,
+ 	struct weston_matrix *m,
+@@ -686,6 +687,7 @@ calc_surface_to_global_matrix_and_mask_to_weston_surface(
+ {
+ 	const struct ivi_layout_surface_properties *sp = &ivisurf->prop;
+ 	const struct ivi_layout_layer_properties *lp = &ivilayer->prop;
++	struct weston_output *output = iviscrn->output;
+ 	struct ivi_rectangle weston_surface_rect = { 0,
+ 						     0,
+ 						     ivisurf->surface->width,
+@@ -713,7 +715,9 @@ calc_surface_to_global_matrix_and_mask_to_weston_surface(
+ 	 * coordinates to global coordinates, which is computed by
+ 	 * two steps,
+ 	 * - surface-local coordinates to layer-local coordinates
+-	 * - layer-local coordinates to global coordinates
++	 * - layer-local coordinates to a single screen-local coordinates
++	 * - a single screen-local coordinates to multi screen coordinates,
++         *   which is global coordinates.
+ 	 */
+ 	calc_transformation_matrix(&surface_source_rect,
+ 				   &surface_dest_rect,
+@@ -723,6 +727,8 @@ calc_surface_to_global_matrix_and_mask_to_weston_surface(
+ 				   &layer_dest_rect,
+ 				   lp->orientation, m);
+ 
++	weston_matrix_translate(m, output->x, output->y, 0.0f);
++
+ 	/* this intersected ivi_rectangle would be used for masking
+ 	 * weston_surface
+ 	 */
+-- 
+2.7.4
+

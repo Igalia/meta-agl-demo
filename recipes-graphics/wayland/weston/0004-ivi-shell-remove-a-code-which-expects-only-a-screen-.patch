@@ -1,0 +1,29 @@
+From 34200aa2bea0a400aa063d2233c8e4c6e44fa8a6 Mon Sep 17 00:00:00 2001
+From: Nobuhiko Tanibata <NOBUHIKO_TANIBATA@xddp.denso.co.jp>
+Date: Mon, 9 Nov 2015 13:38:23 +0900
+Subject: [PATCH] ivi-shell: remove a code which expects only a screen in the
+ system.
+
+It breaks from wl_list_for_each of screens when the frist screen found.
+
+Signed-off-by: Nobuhiko Tanibata <NOBUHIKO_TANIBATA@xddp.denso.co.jp>
+---
+ ivi-shell/ivi-layout.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
+index b14726e..31b5def 100644
+--- a/ivi-shell/ivi-layout.c
++++ b/ivi-shell/ivi-layout.c
+@@ -1012,8 +1012,6 @@ commit_screen_list(struct ivi_layout *layout)
+ 				ivisurf->surface->output = iviscrn->output;
+ 			}
+ 		}
+-
+-		break;
+ 	}
+ }
+ 
+-- 
+2.7.4
+

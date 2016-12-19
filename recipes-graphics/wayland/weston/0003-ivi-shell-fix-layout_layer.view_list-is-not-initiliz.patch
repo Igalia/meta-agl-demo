@@ -1,0 +1,43 @@
+From 83b1873a62c991f15a698e4de50182e4cf452be0 Mon Sep 17 00:00:00 2001
+From: Koji Ohira <kk.ohira.koji@nttd-mse.com>
+Date: Thu, 24 Nov 2016 21:06:56 +0900
+Subject: [PATCH] ivi-shell: fix layout_layer.view_list is not initilized per a
+ screen.
+
+This is potential bug when it supports several screens. If view_list is
+initilized here, the views, which are set by the previous screen, are
+cleared. So View list shall be initilized in front of wl_list_for_each
+of all screens.
+
+Signed-off-by: Koji Ohira <kk.ohira.koji@nttd-mse.com>
+---
+ ivi-shell/ivi-layout.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
+index 1139590..b14726e 100644
+--- a/ivi-shell/ivi-layout.c
++++ b/ivi-shell/ivi-layout.c
+@@ -960,6 +960,9 @@ commit_screen_list(struct ivi_layout *layout)
+ 	struct ivi_layout_layer   *next     = NULL;
+ 	struct ivi_layout_surface *ivisurf  = NULL;
+ 
++	/* Clear view list of layout ivi_layer */
++	wl_list_init(&layout->layout_layer.view_list.link);
++
+ 	wl_list_for_each(iviscrn, &layout->screen_list, link) {
+ 		if (iviscrn->order.dirty) {
+ 			wl_list_for_each_safe(ivilayer, next,
+@@ -986,9 +989,6 @@ commit_screen_list(struct ivi_layout *layout)
+ 			iviscrn->order.dirty = 0;
+ 		}
+ 
+-		/* Clear view list of layout ivi_layer */
+-		wl_list_init(&layout->layout_layer.view_list.link);
+-
+ 		wl_list_for_each(ivilayer, &iviscrn->order.layer_list, order.link) {
+ 			if (ivilayer->prop.visibility == false)
+ 				continue;
+-- 
+2.7.4
+

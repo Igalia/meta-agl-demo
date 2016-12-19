@@ -1,0 +1,74 @@
+From e8bfcbd7e64a296d2aba63a80d8e181055587f76 Mon Sep 17 00:00:00 2001
+From: Nobuhiko Tanibata <nobuhiko_tanibata@xddp.denso.co.jp>
+Date: Mon, 30 Nov 2015 11:05:37 +0900
+Subject: [PATCH] ivi-shell: multi screen support. ivi_layout_screen to be
+ taken account into property change in commitChanges.
+
+Property change is now done in update_prop so to consider ivi_screen
+property for caluculating transform of weston surface, ivi_layout_screen
+ is added as a parameter of update_prop.
+
+However, update_prop of weston_view of a ivi_surface can not be done
+even if it is set on a screen. The propoerty change shall be done only
+when a visibility of ivi_surface or ivi_layer which contains the
+ivi_surface is ON. Such a condition shall be checked at commit_changes
+as well to avoid calling update_prop, which actually updates
+weston_views.
+
+Signed-off-by: Nobuhiko Tanibata <nobuhiko_tanibata@xddp.denso.co.jp>
+---
+ ivi-shell/ivi-layout.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
+index 31b5def..1773af8 100644
+--- a/ivi-shell/ivi-layout.c
++++ b/ivi-shell/ivi-layout.c
+@@ -737,16 +737,17 @@ calc_surface_to_global_matrix_and_mask_to_weston_surface(
+ }
+ 
+ static void
+-update_prop(struct ivi_layout_layer *ivilayer,
++update_prop(struct ivi_layout_screen  *iviscrn,
++	    struct ivi_layout_layer *ivilayer,
+ 	    struct ivi_layout_surface *ivisurf)
+ {
+ 	struct weston_view *tmpview;
+ 	struct ivi_rectangle r;
+ 	bool can_calc = true;
+ 
+-	if (!ivilayer->event_mask && !ivisurf->event_mask) {
++	/*In case of no prop change, this just returns*/
++	if (!ivilayer->event_mask && !ivisurf->event_mask)
+ 		return;
+-	}
+ 
+ 	update_opacity(ivilayer, ivisurf);
+ 
+@@ -802,8 +803,22 @@ commit_changes(struct ivi_layout *layout)
+ 
+ 	wl_list_for_each(iviscrn, &layout->screen_list, link) {
+ 		wl_list_for_each(ivilayer, &iviscrn->order.layer_list, order.link) {
++			/*
++			 * If ivilayer is invisible, weston_view of ivisurf doesn't
++			 * need to be modified.
++			 */
++			if (ivilayer->prop.visibility == false)
++				continue;
++
+ 			wl_list_for_each(ivisurf, &ivilayer->order.surface_list, order.link) {
+-				update_prop(ivilayer, ivisurf);
++				/*
++				 * If ivilayer is invisible, weston_view of ivisurf doesn't
++				 * need to be modified.
++				 */
++				if (ivisurf->prop.visibility == false)
++					continue;
++
++				update_prop(iviscrn, ivilayer, ivisurf);
+ 			}
+ 		}
+ 	}
+-- 
+2.7.4
+
