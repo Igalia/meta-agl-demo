@@ -1,0 +1,25 @@
+[Unit]
+Conflicts=getty@tty1.service
+After=weston.service
+
+# map viewr is a child application which can work with navigation.
+# This app requires mapdata. It has to be stored at /var/mapdata/navi_data_UK .
+# currently the position to be shown is 384x368 surface on screen 1 for CES2017 cluster demo.
+
+[Service]
+Environment=NAVI_DATA_DIR=/var/mapdata/navi_data_UK/japan_TR9 XDG_RUNTIME_DIR=/run/user/0
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/mapview
+ExecStartPost=/usr/bin/LayerManagerControl create layer 1000 1920 1080
+ExecStartPost=/usr/bin/LayerManagerControl set layer 1000 render order 0x1000000 
+ExecStartPost=/usr/bin/LayerManagerControl set surface 0x1000000 source region 0 0 384 368
+ExecStartPost=/usr/bin/LayerManagerControl set surface 0x000000 destination region 0 0 384 368
+ExecStartPost=/usr/bin/LayerManagerControl set screen 1 render order 1000
+ExecStartPost=/usr/bin/LayerManagerControl set layer 1000 visibility 1
+ExecStartPost=/usr/bin/LayerManagerControl set surface 0x1000000 visibility 1
+
+ExecStop=/usr/bin/killall -s KILL mapview
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

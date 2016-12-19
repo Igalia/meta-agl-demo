@@ -9,7 +9,7 @@ DEPENDS = " \
 
 RDEPENDS_${PN} = " flite openjtalk "
 
-SRCREV="292c7f5abad2da32a9dc0d0314ba6aa8673fa052"
+SRCREV="1b7218335b5b7a5312e3611138c70c49a27a3b9f"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git \
          file://flite.in \
          file://jtalk.in \

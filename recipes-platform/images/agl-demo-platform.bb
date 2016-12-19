@@ -71,6 +71,7 @@ IMAGE_INSTALL_append = " \
     climatecontrolplugin \
     navigation \
     poiapp \
+    mapviewer \
     ${IMAGE_MOST_HVAC} \
     ${IMAGE_AGL_APPS} \
     ${IMAGE_TTF_FONTS} \
