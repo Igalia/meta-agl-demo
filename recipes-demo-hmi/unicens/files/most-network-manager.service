@@ -1,0 +1,11 @@
+[Unit]
+Description=Most Network Manager Service
+After=WindowManager.service most-network-startup.service
+
+[Service]
+Type=simple
+ExecStart=/usr/AGL/most/MostNetworkManager -i /usr/AGL/most/config-agl.xml
+Restart=always
+
+[Install]
+WantedBy=default.target

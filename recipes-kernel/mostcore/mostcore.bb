@@ -16,3 +16,11 @@ SRCREV = "7850efa9077fa84536e0442c65d39a36e25e39d1"
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.
+
+do_install_append () {
+    # modprobe automatically at boot
+    if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+        install -d ${D}${sysconfdir}/modules-load.d
+        echo "mostcore" > ${D}${sysconfdir}/modules-load.d/mostcore.conf
+    fi
+}

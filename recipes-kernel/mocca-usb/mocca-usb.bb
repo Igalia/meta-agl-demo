@@ -12,3 +12,11 @@ SRCREV = "02ba272c0eb51b06160307b6cb71f91684772c8c"
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.
+
+do_install_append () {
+    # modprobe automatically at boot
+    if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+        install -d ${D}${sysconfdir}/modules-load.d
+        echo "mocca_usb" > ${D}${sysconfdir}/modules-load.d/mocca_usb.conf
+    fi
+}

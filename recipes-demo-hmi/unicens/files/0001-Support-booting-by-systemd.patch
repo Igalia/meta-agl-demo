@@ -1,0 +1,147 @@
+From 7942933a4f1508966375326c4ee230812f504f4b Mon Sep 17 00:00:00 2001
+From: Tadao Tanikawa <tanikawa.tadao@jp.panasonic.com>
+Date: Tue, 20 Dec 2016 19:04:48 +0900
+Subject: [PATCH] Support booting by systemd
+
+Hack for CES2017 demo integration.
+
+Loading modules would be done by systemd, so loadDriver.sh
+could skip all insmod.
+
+Change-Id: I1d0d6db6faad789754707ffff127099f70150b1f
+Signed-off-by: Tadao Tanikawa <tanikawa.tadao@jp.panasonic.com>
+---
+ scripts/loadDriver.sh | 95 +++++++++++++++++++++++++++++----------------------
+ 1 file changed, 55 insertions(+), 40 deletions(-)
+
+diff --git a/scripts/loadDriver.sh b/scripts/loadDriver.sh
+index f55fdde..a3979cc 100755
+--- a/scripts/loadDriver.sh
++++ b/scripts/loadDriver.sh
+@@ -1,4 +1,7 @@
+ #!/bin/bash
++#
++# Usage: loadDriver.sh [--systemd]
++#
+ 
+ if [ ! "$(whoami)" = "root" ]
+ then
+@@ -13,63 +16,75 @@ else
+ 	echo Searching driver in folder:$(pwd)
+ fi
+ 
+-#unload MOST Kernel modules
+-lsmod | grep "^mxc_mlb\>" > /dev/null &&
+-	rmmod mxc_mlb && echo "unloaded mxc_mlb"
++load_modules()
++{
++	#unload MOST Kernel modules
++	lsmod | grep "^mxc_mlb\>" > /dev/null &&
++		rmmod mxc_mlb && echo "unloaded mxc_mlb"
++
++	lsmod | grep "^hdm_dim2_mx6q\>" > /dev/null &&
++		rmmod hdm_dim2_mx6q && echo "unloaded hdm_dim2_mx6q"
+ 
+-lsmod | grep "^hdm_dim2_mx6q\>" > /dev/null &&
+-	rmmod hdm_dim2_mx6q && echo "unloaded hdm_dim2_mx6q"
++	lsmod | grep "^hdm_dim2\>" > /dev/null &&
++		rmmod hdm_dim2 && echo "unloaded hdm_dim2"
+ 
+-lsmod | grep "^hdm_dim2\>" > /dev/null &&
+-	rmmod hdm_dim2 && echo "unloaded hdm_dim2"
++	lsmod | grep "^hdm_usb\>" > /dev/null &&
++		rmmod hdm_usb && echo "unloaded hdm_usb"
+ 
+-lsmod | grep "^hdm_usb\>" > /dev/null &&
+-	rmmod hdm_usb && echo "unloaded hdm_usb"
++	lsmod | grep "^aim_sound\>" > /dev/null &&
++		rmmod aim_sound && echo "unloaded aim_sound"
+ 
+-lsmod | grep "^aim_sound\>" > /dev/null &&
+-	rmmod aim_sound && echo "unloaded aim_sound"
++	lsmod | grep "^aim_v4l2\>" > /dev/null &&
++		rmmod aim_v4l2 && echo "unloaded aim_v4l2"
+ 
+-lsmod | grep "^aim_v4l2\>" > /dev/null &&
+-	rmmod aim_v4l2 && echo "unloaded aim_v4l2"
++	lsmod | grep "^aim_cdev\>" > /dev/null &&
++		rmmod aim_cdev && echo "unloaded aim_cdev"
+ 
+-lsmod | grep "^aim_cdev\>" > /dev/null &&
+-	rmmod aim_cdev && echo "unloaded aim_cdev"
++	lsmod | grep "^aim_network\>" > /dev/null &&
++		rmmod aim_network && echo "unloaded aim_network"
+ 
+-lsmod | grep "^aim_network\>" > /dev/null &&
+-	rmmod aim_network && echo "unloaded aim_network"
++	lsmod | grep "^mostcore\>" > /dev/null &&
++		rmmod mostcore && echo "unloaded mostcore"
+ 
+-lsmod | grep "^mostcore\>" > /dev/null &&
+-	rmmod mostcore && echo "unloaded mostcore"
++	echo
++	#load V4L support
++	lsmod | grep "^media\>" ||
++		insmod /lib/modules/$(uname -r)/kernel/drivers/media/media.ko
+ 
+-echo
+-#load V4L support
+-lsmod | grep "^media\>" ||
+-  insmod /lib/modules/$(uname -r)/kernel/drivers/media/media.ko
++	lsmod | grep "^videodev\>" ||
++		insmod /lib/modules/$(uname -r)/kernel/drivers/media/v4l2-core/videodev.ko
+ 
+-lsmod | grep "^videodev\>" ||
+-  insmod /lib/modules/$(uname -r)/kernel/drivers/media/v4l2-core/videodev.ko
++	#load MOST Kernel modules
++	insmod mostcore.ko && echo "loaded mostcore"
++	insmod aim_cdev.ko && echo "loaded aim_cdev"
+ 
+-#load MOST Kernel modules
+-insmod mostcore.ko && echo "loaded mostcore"
+-insmod aim_cdev.ko && echo "loaded aim_cdev"
++	[ -e aim_network.ko ] &&
++		insmod aim_network.ko && echo "loaded aim_network"
+ 
+-[ -e aim_network.ko ] &&
+-	insmod aim_network.ko && echo "loaded aim_network"
++	[ -e aim_sound.ko ] &&
++		insmod aim_sound.ko && echo "loaded sound"	
+ 
+-[ -e aim_sound.ko ] &&
+-	insmod aim_sound.ko && echo "loaded sound"	
++	[ -e aim_v4l2.ko ] &&
++		insmod aim_v4l2.ko && echo "loaded v4l2"
+ 
+-[ -e aim_v4l2.ko ] &&
+-	insmod aim_v4l2.ko && echo "loaded v4l2"
++	[ -e hdm_usb.ko ] &&
++		insmod hdm_usb.ko && echo "loaded hdm_usb"
+ 
+-[ -e hdm_usb.ko ] &&
+-	insmod hdm_usb.ko && echo "loaded hdm_usb"
++	[ -e hdm_dim2.ko ] &&
++		insmod hdm_dim2.ko clock_speed=4096fs fcnt=3 && echo "loaded hdm_dim2"
+ 
+-[ -e hdm_dim2.ko ] &&
+-	insmod hdm_dim2.ko clock_speed=4096fs fcnt=3 && echo "loaded hdm_dim2"
++	[ -e hdm_dim2_mx6q.ko ] &&
++		insmod hdm_dim2_mx6q.ko && echo "loaded hdm_dim2_mx6q"
++}
+ 
+-[ -e hdm_dim2_mx6q.ko ] &&
+-	insmod hdm_dim2_mx6q.ko && echo "loaded hdm_dim2_mx6q"
++#
++# Systemd load modules when booting system already.
++# If argv[1] == "--systemd" then skip load modules
++#
++if [ "$1" != "--systemd" ]; then
++        echo "Load modules"
++	load_modules
++fi
+ 
+ DEVS=/sys/devices/virtual/most/mostcore/devices
+ AIMS=/sys/devices/virtual/most/mostcore/aims
+-- 
+2.7.4
+

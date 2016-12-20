@@ -1,0 +1,12 @@
+[Unit]
+Description=Most Network Startup Service
+After=WindowManager.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+ExecStart=/usr/AGL/most/loadDriver.sh --systemd
+Restart=always
+
+[Install]
+WantedBy=default.target

@@ -16,3 +16,11 @@ SRCREV = "ad245bdd60434dd46d6461f585d49db1b3b0d75b"
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.
+
+do_install_append () {
+    # modprobe automatically at boot
+    if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+        install -d ${D}${sysconfdir}/modules-load.d
+        echo "hdm_i2c" > ${D}${sysconfdir}/modules-load.d/hdm_i2c.conf
+    fi
+}
