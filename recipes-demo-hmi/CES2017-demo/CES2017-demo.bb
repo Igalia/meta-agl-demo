@@ -58,22 +58,6 @@ do_install_prepend() {
 
 
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"home\" version=\"0.1\"> \
-  <name>Home</name> \
-  <content src=\"home\" type=\"application/x-executable\"/> \
-  <description>Home app.</description> \
-  <author>Qt</author> \
-  <icon src=\"home.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/Home/config.xml
-
-    cd ${B}/apps/Home/
-    zip home.wgt config.xml home
-
-
-
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"hvac\" version=\"0.1\"> \
   <name>HVAC</name> \
   <content src=\"hvac\" type=\"application/x-executable\"/> \
@@ -156,7 +140,6 @@ do_install_prepend() {
 	#!/bin/sh
 	/usr/bin/afm-util install controls.wgt
 	/usr/bin/afm-util install dashboard.wgt
-	/usr/bin/afm-util install home.wgt
 	/usr/bin/afm-util install hvac.wgt
 	/usr/bin/afm-util install mediaplayer.wgt
 	/usr/bin/afm-util install phone.wgt
@@ -169,7 +152,6 @@ do_install() {
     install -d ${D}/usr/AGL/${PN}
     install -m 0644 ${B}/apps/Controls/controls.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/Dashboard/dashboard.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/Home/home.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/HVAC/hvac.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/MediaPlayer/mediaplayer.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/${PN}/
