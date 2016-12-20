@@ -1,0 +1,31 @@
+diff --git a/lib/HTS_engine.c b/lib/HTS_engine.c
+old mode 100644
+new mode 100755
+index 5325426..b507226
+--- a/lib/HTS_engine.c
++++ b/lib/HTS_engine.c
+@@ -733,6 +733,9 @@ void HTS_Engine_save_riff(HTS_Engine * engine, FILE * fp)
+    HTS_fwrite_little_endian(data_37_40, sizeof(char), 4, fp);
+    HTS_fwrite_little_endian(&data_41_44, sizeof(int), 1, fp);
+    /* write data */
++   
++   short peak = 0;
++   
+    for (i = 0; i < HTS_GStreamSet_get_total_nsamples(gss); i++) {
+       x = HTS_GStreamSet_get_speech(gss, i);
+       if (x > 32767.0)
+@@ -741,6 +744,14 @@ void HTS_Engine_save_riff(HTS_Engine * engine, FILE * fp)
+          temp = -32768;
+       else
+          temp = (short) x;
++      short sample = abs(temp);
++      if(peak < sample)
++         peak = sample;
++   }
++   float mul = (32767.0f / peak);
++   for (i = 0; i < HTS_GStreamSet_get_total_nsamples(gss); i++) {
++      x = HTS_GStreamSet_get_speech(gss, i);
++      temp = ((short) x) * mul;
+       HTS_fwrite_little_endian(&temp, sizeof(short), 1, fp);
+    }
+ }
