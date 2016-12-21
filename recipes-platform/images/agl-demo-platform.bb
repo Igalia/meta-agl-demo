@@ -27,6 +27,7 @@ IMAGE_TTF_FONTS = " \
 IMAGE_INSTALL_append = " \
     ces2017-demo \
     linux-firmware-ath9k \
+    linux-firmware-ralink \
     can-utils \
     iproute2 \
     python-curses \
