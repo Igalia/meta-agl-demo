@@ -1,0 +1,12 @@
+[Unit]
+Description = HVAC DEMO hardware startup
+After=WindowManager.service
+
+[Service]
+Type=simple
+ExecStartPre=-/sbin/ip link add dev vcan0 type vcan
+ExecStartPre=-/sbin/ifconfig vcan0 up
+ExecStart=/usr/bin/openvt -e /usr/bin/OptoLyzerMoccaApp
+
+[Install]
+WantedBy=default.target
