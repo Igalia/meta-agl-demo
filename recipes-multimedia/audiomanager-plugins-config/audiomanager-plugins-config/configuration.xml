@@ -266,23 +266,11 @@
       </process>
       <process>
           <condition>name(CLASS, REQUESTING) EQ "BASE"</condition>
-          <condition>connectionState(CONNECTIONOFCLASS,"PHONE") INC CS_CONNECTED</condition>
-          <action>
-            <type>ACTION_DISCONNECT</type>
-            <param>
-                <sourceName>REQUESTING</sourceName>
-                <sinkName>REQUESTING</sinkName>
-            </param>
-          </action>
-          <break>TRUE</break>
-      </process>
-      <process>
-          <condition>name(CLASS, REQUESTING) EQ "BASE"</condition>
           <action>
             <type>ACTION_LIMIT</type>
             <param>
               <className>"BASE"</className>
-              <volume>-1500</volume>
+              <volume>-2500</volume>
               <pattern>01</pattern>
             </param>
           </action>
@@ -297,7 +285,7 @@
           <type>ACTION_LIMIT</type>
           <param>
             <className>"BASE"</className>
-            <volume>-1500</volume>
+            <volume>-2500</volume>
             <pattern>01</pattern>
           </param>
         </action>
@@ -353,7 +341,7 @@
             <type>ACTION_LIMIT</type>
             <param>
               <className>"BASE"</className>
-              <volume>-1500</volume>
+              <volume>-2500</volume>
               <pattern>02</pattern>
             </param>
           </action>
