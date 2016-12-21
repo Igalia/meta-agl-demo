@@ -51,7 +51,7 @@
         <source baseName="SourceTemplate">
             <id>1</id>
             <domainName>PulseAudio</domainName>
-            <name>Playback#Stream</name>
+            <name>mediaplayer</name>
             <className>BASE</className>
             <registrationType>REG_ROUTER</registrationType>
         </source>
@@ -65,36 +65,22 @@
         <source baseName="SourceTemplate">
             <id>3</id>
             <domainName>PulseAudio</domainName>
-            <name>Navi</name>
-            <className>INT</className>
+            <name>music</name>
+            <className>BASE</className>
             <registrationType>REG_ROUTER</registrationType>
         </source>
         <source baseName="SourceTemplate">
             <id>4</id>
             <domainName>PulseAudio</domainName>
-            <name>Telephone</name>
+            <name>Navi</name>
+            <className>INT</className>
+            <registrationType>REG_ROUTER</registrationType>
+        </source>
+        <source baseName="SourceTemplate">
+            <id>5</id>
+            <domainName>PulseAudio</domainName>
+            <name>phone</name>
             <className>PHONE</className>
-            <registrationType>REG_ROUTER</registrationType>
-        </source>
-        <source baseName="SourceTemplate">
-            <id>5</id>
-            <domainName>PulseAudio</domainName>
-            <name>Monitor#of#rsnd-dai.0-ak4642-hifi#Analog#Stereo</name>
-            <className>REC</className>
-            <registrationType>REG_ROUTER</registrationType>
-        </source>
-        <source baseName="SourceTemplate">
-            <id>5</id>
-            <domainName>PulseAudio</domainName>
-            <name>rsnd-dai.0-ak4642-hifi#Analog#Stereo</name>
-            <className>REC</className>
-            <registrationType>REG_ROUTER</registrationType>
-        </source>
-        <source baseName="SourceTemplate">
-            <id>6</id>
-            <domainName>PulseAudio</domainName>
-            <name>Bluetooth</name>
-            <className>BASE</className>
             <registrationType>REG_ROUTER</registrationType>
         </source>
     </listSources>  
@@ -222,8 +208,8 @@
         <sink baseName="SinkTemplate">
             <id>2</id>
             <domainName>PulseAudio</domainName>
-            <name>MediaRecorder</name>
-            <className>REC</className>
+            <name>Microchip#MOST:0#Multichannel</name>
+            <className>BASE</className>
             <registrationType>REG_ROUTER</registrationType>
         </sink>
     </listSinks>
@@ -247,25 +233,19 @@
             <name>BASE</name>
             <type>C_PLAYBACK</type>
             <priority>1</priority>
-            <topology>rsnd-dai.0-ak4642-hifi#Analog#Stereo=Playback#Stream^ALSA#Playback^Bluetooth</topology>
+            <topology>Microchip#MOST:0#Multichannel^rsnd-dai.0-ak4642-hifi#Analog#Stereo=mediaplayer^music^ALSA#Playback</topology>
         </class>
         <class>
             <name>INT</name>
             <type>C_PLAYBACK</type>
-            <priority>1</priority>
-            <topology>rsnd-dai.0-ak4642-hifi#Analog#Stereo=Navi</topology>
+            <priority>2</priority>
+            <topology>Microchip#MOST:0#Multichannel^rsnd-dai.0-ak4642-hifi#Analog#Stereo=Navi</topology>
         </class>
         <class>
             <name>PHONE</name>
             <type>C_PLAYBACK</type>
-            <priority>1</priority>
-            <topology>rsnd-dai.0-ak4642-hifi#Analog#Stereo=Telephone</topology>
-        </class>
-        <class>
-            <name>REC</name>
-            <type>C_CAPTURE</type>
-            <priority>1</priority>
-            <topology>MediaRecorder=rsnd-dai.0-ak4642-hifi#Analog#Stereo</topology>
+            <priority>3</priority>
+            <topology>Microchip#MOST:0#Multichannel^rsnd-dai.0-ak4642-hifi#Analog#Stereo=phone</topology>
         </class>
     </listClasses>
     <listPolicies>
@@ -373,10 +353,11 @@
           <condition>name(CLASS, REQUESTING) EQ "PHONE"</condition>
           <condition>connectionState(CONNECTIONOFCLASS, "BASE") INC CS_CONNECTED</condition>
           <action>
-            <type>ACTION_SUSPEND</type>
+            <type>ACTION_LIMIT</type>
             <param>
               <className>"BASE"</className>
-              <connectionState>CS_CONNECTED</connectionState>
+              <volume>-1500</volume>
+              <pattern>02</pattern>
             </param>
           </action>
       </process>
@@ -401,20 +382,7 @@
           </action>
           <break>TRUE</break>
       </process>
-      <process>
-          <condition>name(SOURCE, REQUESTING) EQ "Mic"</condition>
-          <condition>name(SINK, REQUESTING) EQ "MediaRecorder"</condition>
-          <action>
-            <type>ACTION_CONNECT</type>
-            <param>
-              <className>REQUESTING</className>
-              <timeOut>5000</timeOut>
-            </param>
-          </action>
-          <break>TRUE</break>
-      </process>
     </policy>
-
 <!--Connect policy end-->
 <!--Disconnect policy start-->
     <policy>
@@ -464,10 +432,10 @@
           <condition>name(CLASS, REQUESTING) EQ "PHONE"</condition>
           <condition>connectionState(CONNECTIONOFCLASS, "BASE") INC CS_SUSPENDED</condition>
           <action>
-            <type>ACTION_RESUME</type>
+            <type>ACTION_UNLIMIT</type>
             <param>
               <className>"BASE"</className>
-	      <connectionState>CS_SUSPENDED</connectionState>
+	          <pattern>02</pattern>
             </param>
           </action>
       </process>
@@ -523,7 +491,6 @@
     <policy>
       <trigger>USER_SET_SINK_MAIN_SOUND_PROPERTY</trigger>
       <process>
-            
             <action>
                 <type>ACTION_SET_PROPERTY</type>
                 <param>
