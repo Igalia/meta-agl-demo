@@ -264,17 +264,6 @@
             </param>
           </action>
       </process>
-      <process>
-          <condition>name(CLASS, REQUESTING) EQ "BASE"</condition>
-          <action>
-            <type>ACTION_LIMIT</type>
-            <param>
-              <className>"BASE"</className>
-              <volume>-2500</volume>
-              <pattern>01</pattern>
-            </param>
-          </action>
-      </process>
     </policy>
 <!--INT policy-->
     <policy>
