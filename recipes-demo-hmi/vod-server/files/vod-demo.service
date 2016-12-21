@@ -1,0 +1,10 @@
+[Unit]
+Description=Video On Demand AGL Demo
+After=WindowManager.service most-network-manager.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/VideoOnDemand -p /home/root/Video
+
+[Install]
+WantedBy=default.target
