@@ -24,3 +24,6 @@ do_install_append () {
         echo "aim_sound" > ${D}${sysconfdir}/modules-load.d/aim_sound.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

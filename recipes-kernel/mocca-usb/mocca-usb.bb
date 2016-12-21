@@ -20,3 +20,6 @@ do_install_append () {
         echo "mocca_usb" > ${D}${sysconfdir}/modules-load.d/mocca_usb.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

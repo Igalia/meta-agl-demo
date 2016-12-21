@@ -24,3 +24,6 @@ do_install_append () {
         echo "hdm_i2c" > ${D}${sysconfdir}/modules-load.d/hdm_i2c.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

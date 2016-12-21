@@ -24,3 +24,6 @@ do_install_append () {
         echo "hdm_usb" > ${D}${sysconfdir}/modules-load.d/hdm_usb.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

@@ -24,3 +24,6 @@ do_install_append () {
         echo "aim_v4l2" > ${D}${sysconfdir}/modules-load.d/aim_v4l2.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

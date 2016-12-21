@@ -24,3 +24,6 @@ do_install_append () {
         echo "mostcore" > ${D}${sysconfdir}/modules-load.d/mostcore.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

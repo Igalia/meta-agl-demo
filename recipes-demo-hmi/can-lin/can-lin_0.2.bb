@@ -8,6 +8,9 @@ SRC_URI += "file://hvac-demo.service"
 S = "${WORKDIR}/git"
 SRCREV = "fd2101e277cb80eef4c6381924cfdc1d50087d12"
 
+# These binaries are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"
+
 do_install() {
         install -m 0755 -d ${D}${bindir}
         install -m 0755 ${S}/OptoLyzerMoccaApp ${D}${bindir}

@@ -24,3 +24,6 @@ do_install_append () {
         echo "hdm_dim2" > ${D}${sysconfdir}/modules-load.d/hdm_dim2.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"

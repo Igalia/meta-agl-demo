@@ -24,3 +24,6 @@ do_install_append () {
         echo "aim_cdev" > ${D}${sysconfdir}/modules-load.d/aim_cdev.conf
     fi
 }
+
+# These sources are currently for the porter kernel only
+COMPATIBLE_MACHINE = "porter"
