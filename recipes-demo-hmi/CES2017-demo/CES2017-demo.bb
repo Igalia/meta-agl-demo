@@ -8,7 +8,7 @@ S           = "${WORKDIR}/git/"
 PN          = "ces2017-demo"
 
 inherit qmake5
-DEPENDS = " qtbase qtdeclarative qtquickcontrols2 qtvirtualkeyboard qtmultimedia homescreen zip-native"
+DEPENDS = "homescreen zip-native qtmultimedia qtquickcontrols2"
 
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
@@ -58,38 +58,6 @@ do_install_prepend() {
 
 
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"hvac\" version=\"0.1\"> \
-  <name>HVAC</name> \
-  <content src=\"hvac\" type=\"application/x-executable\"/> \
-  <description>HVAC app.</description> \
-  <author>Qt</author> \
-  <icon src=\"hvac.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/HVAC/config.xml
-
-    cd ${B}/apps/HVAC/
-    zip hvac.wgt config.xml hvac
-
-
-
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"mediaplayer\" version=\"0.1\"> \
-  <name>MediaPlayer</name> \
-  <content src=\"mediaplayer\" type=\"application/x-executable\"/> \
-  <description>MediaPlayer app.</description> \
-  <author>Qt</author> \
-  <icon src=\"mediaplayer.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/MediaPlayer/config.xml
-
-    cd ${B}/apps/MediaPlayer/
-    zip mediaplayer.wgt config.xml mediaplayer
-
-
-
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"phone\" version=\"0.1\"> \
   <name>Phone</name> \
   <content src=\"phone\" type=\"application/x-executable\"/> \
@@ -121,27 +89,10 @@ do_install_prepend() {
 
 
 
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"settings\" version=\"0.1\"> \
-  <name>Settings</name> \
-  <content src=\"settings\" type=\"application/x-executable\"/> \
-  <description>Settings app.</description> \
-  <author>Qt</author> \
-  <icon src=\"settings.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/Settings/config.xml
-
-    cd ${B}/apps/Settings/
-    zip settings.wgt config.xml settings
-
-
     cat > ${B}/apps/installAllApps.sh <<-EOF
 	#!/bin/sh
 	/usr/bin/afm-util install controls.wgt
 	/usr/bin/afm-util install dashboard.wgt
-	/usr/bin/afm-util install hvac.wgt
-	/usr/bin/afm-util install mediaplayer.wgt
 	/usr/bin/afm-util install phone.wgt
 	/usr/bin/afm-util install radio.wgt
 	/usr/bin/afm-util install settings.wgt
@@ -153,11 +104,8 @@ do_install() {
     install -d ${D}/usr/AGL/${PN}
     install -m 0644 ${B}/apps/Controls/controls.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/Dashboard/dashboard.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/HVAC/hvac.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/MediaPlayer/mediaplayer.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/${PN}/
     install -m 0644 ${B}/apps/Radio/radio.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/Settings/settings.wgt ${D}/usr/AGL/${PN}/
 
     install -m 0755 ${B}/apps/installAllApps.sh ${D}/usr/AGL/${PN}/
 
