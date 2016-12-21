@@ -278,7 +278,6 @@
       </process>
       <process>
           <condition>name(CLASS, REQUESTING) EQ "BASE"</condition>
-          <condition>connectionState(CONNECTIONOFCLASS, "INT") INC CS_CONNECTED</condition>
           <action>
             <type>ACTION_LIMIT</type>
             <param>
@@ -294,7 +293,6 @@
       <trigger>USER_CONNECTION_REQUEST</trigger>
       <process>
         <condition>name(CLASS, REQUESTING) EQ "INT"</condition>
-        <condition>connectionState(CONNECTIONOFCLASS, "BASE") INC CS_CONNECTED</condition>
         <action>
           <type>ACTION_LIMIT</type>
           <param>
@@ -351,7 +349,6 @@
       <trigger>USER_CONNECTION_REQUEST</trigger>
       <process>
           <condition>name(CLASS, REQUESTING) EQ "PHONE"</condition>
-          <condition>connectionState(CONNECTIONOFCLASS, "BASE") INC CS_CONNECTED</condition>
           <action>
             <type>ACTION_LIMIT</type>
             <param>
@@ -398,7 +395,6 @@
       </process>
       <process>
           <condition>name(CLASS, REQUESTING) EQ "INT"</condition>
-          <condition>connectionState(CONNECTIONOFCLASS, "BASE") INC CS_CONNECTED</condition>
           <action>
             <type>ACTION_UNLIMIT</type>
             <param>
@@ -430,7 +426,6 @@
       </process>
       <process>
           <condition>name(CLASS, REQUESTING) EQ "PHONE"</condition>
-          <condition>connectionState(CONNECTIONOFCLASS, "BASE") INC CS_SUSPENDED</condition>
           <action>
             <type>ACTION_UNLIMIT</type>
             <param>
