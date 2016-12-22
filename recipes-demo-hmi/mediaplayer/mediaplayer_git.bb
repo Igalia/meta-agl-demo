@@ -9,7 +9,7 @@ S  = "${WORKDIR}/git"
 
 inherit qmake5
 
-DEPENDS += "qtquickcontrols2"
+DEPENDS += "qtquickcontrols2 qtmultimedia"
 # 'wgtpkg-pack' in af-main-native is required.
 DEPENDS += "af-main-native"
 
