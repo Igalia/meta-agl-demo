@@ -4,12 +4,12 @@ LIC_FILES_CHKSUM="file://LICENSE;md5=3595e9c703a847d990664d2b396a9df0 \
 
 DEPENDS = " \
           glib-2.0 freetype sqlite3 wayland zlib expat openssl virtual/libgles2 virtual/libgl virtual/egl \
-          wayland \
+          wayland libdbus-c++ \
           "
 
 RDEPENDS_${PN} = " flite openjtalk "
 
-SRCREV="153f9d7ecb652732b1acc1cb00919c6a6af5556e"
+SRCREV="292c7f5abad2da32a9dc0d0314ba6aa8673fa052"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git \
          file://flite.in \
          file://jtalk.in \
