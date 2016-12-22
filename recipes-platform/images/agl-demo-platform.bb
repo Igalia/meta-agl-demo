@@ -34,5 +34,6 @@ IMAGE_INSTALL_append = " \
     dhcp-client \
     climatecontrolplugin \
     navigation \
+    poiapp \
     ${IMAGE_TTF_FONTS} \
     "
