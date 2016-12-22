@@ -145,6 +145,7 @@ do_install_prepend() {
 	/usr/bin/afm-util install phone.wgt
 	/usr/bin/afm-util install radio.wgt
 	/usr/bin/afm-util install settings.wgt
+	/usr/bin/afm-util install navigation.wgt
 	EOF
 }
 
