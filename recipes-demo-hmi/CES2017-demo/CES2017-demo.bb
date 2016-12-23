@@ -113,6 +113,16 @@ do_install() {
     install -m 0644 ${S}/imports/AGL/Demo/Controls/qmldir ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
     install -m 0644 ${S}/imports/AGL/Demo/Controls/ImageButton.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
     install -m 0644 ${S}/imports/AGL/Demo/Controls/ToggleButton.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/Key.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/AbstractKeyboard.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/Symbols.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/Alphabet.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/Keyboard.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
+    install -d ${D}${libdir}/qt5/qml/AGL/Demo/Controls/images/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/images/Keyboard_Back.svg ${D}${libdir}/qt5/qml/AGL/Demo/Controls/images/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/images/Keyboard_Shift.svg ${D}${libdir}/qt5/qml/AGL/Demo/Controls/images/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/images/Keyboard_Space.svg ${D}${libdir}/qt5/qml/AGL/Demo/Controls/images/
+    install -m 0644 ${S}/imports/AGL/Demo/Controls/images/Keyboard_Arrow.svg ${D}${libdir}/qt5/qml/AGL/Demo/Controls/images/
 
     install -d ${D}${libdir}/qt5/qml/QtQuick/Controls.2/AGL
     install -m 0644 ${S}/imports/qtquickcontrols2aglstyle/*.qml ${D}${libdir}/qt5/qml/QtQuick/Controls.2/AGL
@@ -131,6 +141,15 @@ FILES_${PN} += "/usr/AGL/ \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/qmldir \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ImageButton.qml \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ToggleButton.qml \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/Key.qml \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/AbstractKeyboard.qml \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/Symbols.qml \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/Alphabet.qml \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/Keyboard.qml \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/images/Keyboard_Back.svg \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/images/Keyboard_Shift.svg \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/images/Keyboard_Space.svg \
+	/usr/lib/qt5/qml/AGL/Demo/Controls/images/Keyboard_Arrow.svg \
 	/usr/lib/qt5/qml/QtQuick/Controls.2/AGL \
 	/usr/lib/qt5/qml/QtQuick/Controls.2/AGL/images \
 	"
