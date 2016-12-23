@@ -3,7 +3,7 @@ HOMEPAGE = ""
 LICENSE = "Proprietary"
 SECTION = "multimedia"
 
-LIC_FILES_CHKSUM = "file://${WORKDIR}/configuration.xml;md5=efe5e38bb59f58fcc742675fbabf0812"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/configuration.xml;md5=97090515005265aca5bddffcee4bc8a1"
 RDEPENDS_${PN} = "libxml2 zlib dbus-lib"
 
 SRC_URI = " \
