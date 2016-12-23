@@ -10,7 +10,7 @@ SRC_URI = " \
     git://github.com/tisogai/module-router.git;protocol=https;branch=master \
   "
 
-SRCREV = "f38273696eecd718c5cfb1285a2cd0d796a0d540"
+SRCREV = "10b9b8bbd890dcd9acb55d4bb12f80659e1338b6"
 
 S = "${WORKDIR}/git"
 inherit cmake
