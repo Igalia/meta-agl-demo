@@ -55,6 +55,7 @@ IMAGE_MOST_HVAC_append_porter = " \
 IMAGE_AGL_APPS = " \
     hvac \
     mediaplayer \
+    mixer \
     navigation \
     settings \
     "
