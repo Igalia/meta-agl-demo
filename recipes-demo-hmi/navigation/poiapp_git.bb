@@ -9,7 +9,6 @@ DEPENDS += " qtbase libdbus-c++ json-c \
 SRCREV="4e09ab88d0d97c59896ba66bf08a8e006e2af81a"
 SRC_URI="git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=new-layout \
          file://config.xml \
-         file://installNaviApps.sh \
 "
 
 RDEPENDS_${PN} = " navigation "
@@ -25,7 +24,6 @@ do_install_append() {
    install -d ${D}/usr/AGL/ces2017-demo
    install -m 0644 ${WORKDIR}/widget/poi.wgt ${D}/usr/AGL/ces2017-demo/
 
-   install -m 0755 ${WORKDIR}/installNaviApps.sh ${D}/usr/AGL/ces2017-demo/
 }
 
-FILES_${PN} += " /usr/AGL/ces2017-demo/poi.wgt /usr/AGL/ces2017-demo/installNaviApps.sh "
+FILES_${PN} += " /usr/AGL/ces2017-demo/poi.wgt "
