@@ -21,9 +21,8 @@ do_install_append() {
    install -m 0755 ${D}/usr/bin/yelp-client ${WORKDIR}/widget/poi
    zip -ju ${WORKDIR}/widget/poi.wgt ${WORKDIR}/widget/poi ${WORKDIR}/widget/config.xml
 
-   install -d ${D}/usr/AGL/ces2017-demo
-   install -m 0644 ${WORKDIR}/widget/poi.wgt ${D}/usr/AGL/ces2017-demo/
-
+   install -d ${D}/usr/AGL/apps
+   install -m 0644 ${WORKDIR}/widget/poi.wgt ${D}/usr/AGL/apps/
 }
 
-FILES_${PN} += " /usr/AGL/ces2017-demo/poi.wgt "
+FILES_${PN} += " /usr/AGL/apps/poi.wgt "

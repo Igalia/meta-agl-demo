@@ -91,6 +91,7 @@ do_install_prepend() {
 
     cat > ${B}/apps/installAllApps.sh <<-EOF
 	#!/bin/sh
+	cd /usr/AGL/apps
 	/usr/bin/afm-util install controls.wgt
 	/usr/bin/afm-util install dashboard.wgt
 	/usr/bin/afm-util install phone.wgt
@@ -107,12 +108,14 @@ do_install_prepend() {
 
 do_install() {
     install -d ${D}/usr/AGL/${PN}
-    install -m 0644 ${B}/apps/Controls/controls.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/Dashboard/dashboard.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/${PN}/
-    install -m 0644 ${B}/apps/Radio/radio.wgt ${D}/usr/AGL/${PN}/
+    install -d ${D}/usr/AGL/apps
+    install -m 0644 ${B}/apps/Controls/controls.wgt ${D}/usr/AGL/apps/
+    install -m 0644 ${B}/apps/Dashboard/dashboard.wgt ${D}/usr/AGL/apps/
+    install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/apps/
+    install -m 0644 ${B}/apps/Radio/radio.wgt ${D}/usr/AGL/apps/
 
-    install -m 0755 ${B}/apps/installAllApps.sh ${D}/usr/AGL/${PN}/
+    install -m 0755 ${B}/apps/installAllApps.sh ${D}/usr/AGL/apps/
+    ln -sf            ../apps/installAllApps.sh ${D}/usr/AGL/${PN}/installAllApps.sh
 
     install -d ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
     install -m 0644 ${S}/imports/AGL/Demo/Controls/qmldir ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
@@ -143,6 +146,8 @@ do_install() {
 #}
 
 FILES_${PN} += "/usr/AGL/ \
+        /usr/AGL/apps/* \
+        /usr/AGL/${PN}/* \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/qmldir \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ImageButton.qml \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ToggleButton.qml \

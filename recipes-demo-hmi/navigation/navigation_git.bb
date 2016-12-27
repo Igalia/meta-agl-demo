@@ -34,11 +34,10 @@ do_install_append() {
    install -m 0755 ${D}/usr/bin/navi ${WORKDIR}/widget
    zip -ju ${WORKDIR}/widget/navigation.wgt ${WORKDIR}/widget/navi ${WORKDIR}/widget/config.xml
 
-   install -d ${D}/usr/AGL/ces2017-demo
-   install -m 0644 ${WORKDIR}/widget/navigation.wgt ${D}/usr/AGL/ces2017-demo/
-   install -d ${D}/usr/AGL/ces2017-demo
+   install -d ${D}/usr/AGL/apps
+   install -m 0644 ${WORKDIR}/widget/navigation.wgt ${D}/usr/AGL/apps/
 
    install -d ${D}/usr/share/mapdata
 }
 
-FILES_${PN} += " /usr/AGL/ces2017-demo/navigation.wgt /usr/share/mapdata "
+FILES_${PN} += " /usr/AGL/apps/navigation.wgt /usr/share/mapdata "
