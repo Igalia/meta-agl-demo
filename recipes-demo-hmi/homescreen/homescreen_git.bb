@@ -25,7 +25,8 @@ SRCREV  = "${AUTOREV}"
 PV = "0.0+git${SRCPV}"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http \
-           file://homescreen.pc.in "
+           file://homescreen.pc.in \
+           file://dbus-homescreen.conf.in"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 
@@ -43,6 +44,11 @@ do_install() {
     ln -sf libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so
     ln -sf libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1
     ln -sf libhomescreen.so.1.0.0 ${D}${libdir}/libhomescreen.so.1.0
+
+# claneys: add dbus policy to make wifi/bluetooth status icon working as quick 
+# workaround. (jira.automotivelinux.org : SPEC-377)
+    install -d ${D}/etc/dbus-1/session.d
+    install -m 0644 ${WORKDIR}/dbus-homescreen.conf.in ${D}/etc/dbus-1/session.d/homescreen.conf
 
 # kooltux: still some problem with paths inside .pc file
 # error at build time:
