@@ -11,12 +11,9 @@ Environment=NAVI_DATA_DIR=/var/mapdata/navi_data_UK/japan_TR9 XDG_RUNTIME_DIR=/r
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/mapview
 ExecStartPost=/usr/bin/LayerManagerControl create layer 1000 1920 1080
-ExecStartPost=/usr/bin/LayerManagerControl set layer 1000 render order 0x1000000 
-ExecStartPost=/usr/bin/LayerManagerControl set surface 0x1000000 source region 0 0 384 368
-ExecStartPost=/usr/bin/LayerManagerControl set surface 0x000000 destination region 0 0 384 368
-ExecStartPost=/usr/bin/LayerManagerControl set screen 1 render order 1000
 ExecStartPost=/usr/bin/LayerManagerControl set layer 1000 visibility 1
-ExecStartPost=/usr/bin/LayerManagerControl set surface 0x1000000 visibility 1
+ExecStartPost=/usr/bin/LayerManagerControl set screen 1 render order 1000
+ExecStartPost=/usr/AGL/mapviewer/mapviewer-settings.sh
 
 ExecStop=/usr/bin/killall -s KILL mapview
 Type=simple

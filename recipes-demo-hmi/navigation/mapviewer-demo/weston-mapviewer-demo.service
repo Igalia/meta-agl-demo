@@ -1,0 +1,16 @@
+[Unit]
+Description=Weston reference Wayland compositor
+Conflicts=getty@tty1.service
+After=dbus.service rc.pvr.service
+
+[Service]
+ExecStartPre=/sbin/ifconfig eth0 192.168.20.93
+ExecStartPre=/bin/rm -rf /home/root/.cache/gstreamer-1.0
+#ExecStartPre=/bin/sleep 10
+ExecStart=/usr/bin/weston-launch -u root -- --idle-time=4294967 --gst-record --config=weston-mapviewer-demo.ini
+ExecStop=/usr/bin/killall -s KILL weston
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+Alias=weston.service
