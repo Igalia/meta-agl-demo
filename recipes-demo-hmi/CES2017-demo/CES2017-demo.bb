@@ -12,9 +12,12 @@ DEPENDS = "homescreen zip-native qtmultimedia qtquickcontrols2"
 
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
-SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http"
-SRCREV      = "${AUTOREV}"
+AGL_RADIO_PRESETS_LOCALE ?= "CES"
 
+SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http \
+               file://presets-${AGL_RADIO_PRESETS_LOCALE}.conf \
+"
+SRCREV      = "${AUTOREV}"
 
 RDEPENDS_${PN} += " \
     qtmultimedia-qmlplugins \
@@ -88,7 +91,6 @@ do_install_prepend() {
     zip radio.wgt config.xml radio
 
 
-
     cat > ${B}/apps/installAllApps.sh <<-EOF
 	#!/bin/sh
 	cd /usr/AGL/apps
@@ -111,6 +113,8 @@ do_install() {
     install -m 0644 ${B}/apps/Dashboard/dashboard.wgt ${D}/usr/AGL/apps/
     install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/apps/
     install -m 0644 ${B}/apps/Radio/radio.wgt ${D}/usr/AGL/apps/
+    install -d ${D}/home/root/app-data/radio
+    install -m 0644 ${WORKDIR}/presets-${AGL_RADIO_PRESETS_LOCALE}.conf ${D}/home/root/app-data/radio/presets.conf
 
     install -m 0755 ${B}/apps/installAllApps.sh ${D}/usr/AGL/apps/
     ln -sf            ../apps/installAllApps.sh ${D}/usr/AGL/${PN}/installAllApps.sh
@@ -146,6 +150,7 @@ do_install() {
 FILES_${PN} += "/usr/AGL/ \
         /usr/AGL/apps/* \
         /usr/AGL/${PN}/* \
+        /home/root/app-data/radio/presets.conf \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/qmldir \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ImageButton.qml \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ToggleButton.qml \
