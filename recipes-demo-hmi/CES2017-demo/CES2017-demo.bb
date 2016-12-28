@@ -92,14 +92,11 @@ do_install_prepend() {
     cat > ${B}/apps/installAllApps.sh <<-EOF
 	#!/bin/sh
 	cd /usr/AGL/apps
-	/usr/bin/afm-util install controls.wgt
-	/usr/bin/afm-util install dashboard.wgt
-	/usr/bin/afm-util install phone.wgt
-	/usr/bin/afm-util install radio.wgt
-	/usr/bin/afm-util install settings.wgt
-	/usr/bin/afm-util install navigation.wgt
-	/usr/bin/afm-util install poi.wgt
-	/usr/bin/afm-util install mixer.wgt
+	for file in \`find . -maxdepth 1 -name '*.wgt'\`; do
+
+	    /usr/bin/afm-util install \$file
+	done
+	sync
 	
 	#it's Workaround
 	cyad -s -k MANIFESTS -t allow -c User::App::navigation -u '*' -p 'http://tizen.org/privilege/internal/dbus'
