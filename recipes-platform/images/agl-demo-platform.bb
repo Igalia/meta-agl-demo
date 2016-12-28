@@ -52,6 +52,13 @@ IMAGE_MOST_HVAC_append_porter = " \
     can-lin \
     "
 
+# mapviewer and mapviewer-demo requires AGL CES2017 demo mock-up
+IMAGE_MAPVIEWER = " "
+IMAGE_MAPVIEWER_append_porter = " \
+    mapviewer \
+    mapviewer-demo \
+    "
+
 IMAGE_AGL_APPS = " \
     hvac \
     mediaplayer \
@@ -70,7 +77,7 @@ IMAGE_INSTALL_append = " \
     dhcp-client \
     navigation \
     poiapp \
-    mapviewer \
+    ${IMAGE_MAPVIEWER} \
     ${IMAGE_MOST_HVAC} \
     ${IMAGE_AGL_APPS} \
     ${IMAGE_TTF_FONTS} \
