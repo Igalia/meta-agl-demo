@@ -1,17 +1,20 @@
-LICENSE="GPLv2"
-LIC_FILES_CHKSUM="file://LICENSE;md5=53633740548e7211116fc17bbe20aaf8"
+SUMMARY     = "AGL Reference POI application."
+DESCRIPTION = "This application provides the function of destination search to AGL.  It uses the API provided by AGL Reference Navigation.  This application uses yelp WebAPI."
+HOMEPAGE    = "https://github.com/AGLExport/genivi-navi-yelp-client"
+SECTION     = "apps"
+
+LICENSE          = "GPLv2"
+LIC_FILES_CHKSUM = "file://COPYING;md5=947b2d60ca3872e172034438e9801200"
 
 inherit cmake_qt5 pkgconfig
 
 DEPENDS += " qtbase libdbus-c++ json-c \
            "
 
-SRCREV="4e09ab88d0d97c59896ba66bf08a8e006e2af81a"
-SRC_URI="git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=new-layout \
+SRCREV="3e162a60c76dee1b4dede81db55e0fa6bae05433"
+SRC_URI="git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=agl \
          file://config.xml \
 "
-
-RDEPENDS_${PN} = " navigation "
 
 S = "${WORKDIR}/git"
 
