@@ -9,6 +9,7 @@ PV = "0.1"
 DEPENDS += "libxml2"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/unicens;protocol=https"
+SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/src/unicens;protocol=https;branch=chinook"
 SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch"
 SRC_URI += "file://0001-Support-booting-by-systemd.patch \
             file://most-network-startup.service \
@@ -17,6 +18,7 @@ SRC_URI += "file://0001-Support-booting-by-systemd.patch \
 S = "${WORKDIR}/git"
 #SRCREV = "8c5f2324d7aa61669324aec1a0ad091fe1379489"
 SRCREV = "${AUTOREV}"
+SRCREV_chinook = "7d889414539b8722e0093f3997ccbf2008c0e189"
 
 do_install() {
     install -m 0755 -d ${D}/usr/AGL/most
