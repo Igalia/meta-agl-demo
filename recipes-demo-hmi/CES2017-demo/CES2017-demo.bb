@@ -16,8 +16,14 @@ AGL_RADIO_PRESETS_LOCALE ?= "CES"
 
 SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http \
                file://presets-${AGL_RADIO_PRESETS_LOCALE}.conf \
-"
+              "
 SRCREV      = "${AUTOREV}"
+
+# Pinned branch/SRCREV for Charming Chinook
+SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http;branch=chinook \
+                   file://presets-${AGL_RADIO_PRESETS_LOCALE}.conf \
+                  "
+SRCREV_chinook = "354195c83841240ddd5f2c5daad97d66cc9e1d28"
 
 RDEPENDS_${PN} += " \
     qtmultimedia-qmlplugins \
