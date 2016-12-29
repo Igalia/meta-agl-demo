@@ -1,15 +1,27 @@
 SUMMARY     = "AGL Home Screen Application"
 DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate + HomeScreenAppFrameworkBinderAGL + WindowManager + InputEventManager"
 HOMEPAGE    = "https://wiki.automotivelinux.org/homescreen"
-LICENSE     = "Apache-2.0"
 SECTION     = "apps"
+
+LICENSE     = "Apache-2.0"
+LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
+
+
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http \
+           file://homescreen.pc.in \
+           file://dbus-homescreen.conf.in"
+SRCREV  = "${AUTOREV}"
+
+# Pinned SRCREV for Charming Chinook, staging projects do not follow release branches
+SRCREV_chinook = "5e2ec461d467571834d18df91b1cf37905229db0"
+
+
+# PV needs to be modified with SRCPV to work AUTOREV correctly
+PV = "0.0+git${SRCPV}"
+# git repository used
 S           = "${WORKDIR}/git/"
 
-BBCLASSEXTEND = " nativesdk"
-
-inherit qmake5 systemd pkgconfig
-DEPENDS = " qtbase "
-
+DEPENDS += " qtbase "
 # for HomeScreenAppFrameworkBinderTizen:
 #DEPENDS += " pkgmgr-info aul "
 # for WindowManager:
@@ -19,14 +31,9 @@ DEPENDS += " glib-2.0 "
 # for sample apps
 DEPENDS += " qtdeclarative qtquickcontrols2 "
 
-LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "${AUTOREV}"
-# PV needs to be modified with SRCPV to work AUTOREV correctly
-PV = "0.0+git${SRCPV}"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http \
-           file://homescreen.pc.in \
-           file://dbus-homescreen.conf.in"
+inherit qmake5 systemd pkgconfig
+
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 
@@ -95,3 +102,5 @@ RDEPENDS_libhomescreen-dbg += "${PN}-dbg libhomescreen-dev"
 
 RDEPENDS_${PN}-dev += "libhomescreen-dev"
 
+
+BBCLASSEXTEND = " nativesdk"
