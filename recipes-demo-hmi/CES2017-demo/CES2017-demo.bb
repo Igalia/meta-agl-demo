@@ -12,6 +12,7 @@ DEPENDS = "homescreen zip-native qtmultimedia qtquickcontrols2"
 
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
+# ALS, CES, FOSDEM available
 AGL_RADIO_PRESETS_LOCALE ?= "CES"
 
 SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http \
