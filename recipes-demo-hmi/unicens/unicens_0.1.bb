@@ -10,8 +10,8 @@ DEPENDS += "libxml2"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/unicens;protocol=https"
 SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/src/unicens;protocol=https;branch=chinook"
-SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch"
-SRC_URI += "file://0001-Support-booting-by-systemd.patch \
+SRC_URI_append = " file://0001-Fix-cross-compilation-with-yocto.patch"
+SRC_URI_append = " file://0001-Support-booting-by-systemd.patch \
             file://most-network-startup.service \
             file://most-network-manager.service"
 

@@ -8,8 +8,8 @@ PV = "0.1"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/vod-server;protocol=https"
 SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/src/vod-server;protocol=https;branch=chinook"
-SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch \
-            file://vod-demo.service"
+SRC_URI_append  = " file://0001-Fix-cross-compilation-with-yocto.patch \
+                    file://vod-demo.service "
 
 S = "${WORKDIR}/git"
 #SRCREV = "8c5f2324d7aa61669324aec1a0ad091fe1379489"
