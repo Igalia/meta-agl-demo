@@ -16,13 +16,17 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 AGL_RADIO_PRESETS_LOCALE ?= "CES"
 
 SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http \
-               file://presets-${AGL_RADIO_PRESETS_LOCALE}.conf \
+               file://presets-ALS.conf \
+               file://presets-CES.conf \
+               file://presets-FOSDEM.conf \
               "
 SRCREV      = "${AUTOREV}"
 
 # Pinned branch/SRCREV for Charming Chinook
 SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http;branch=chinook \
-                   file://presets-${AGL_RADIO_PRESETS_LOCALE}.conf \
+                   file://presets-ALS.conf \
+                   file://presets-CES.conf \
+                   file://presets-FOSDEM.conf \
                   "
 SRCREV_chinook = "354195c83841240ddd5f2c5daad97d66cc9e1d28"
 
@@ -121,6 +125,9 @@ do_install() {
     install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/apps/
     install -m 0644 ${B}/apps/Radio/radio.wgt ${D}/usr/AGL/apps/
     install -d ${D}/home/root/app-data/radio
+    install -m 0644 ${WORKDIR}/presets-CES.conf ${D}/home/root/app-data/radio/
+    install -m 0644 ${WORKDIR}/presets-ALS.conf ${D}/home/root/app-data/radio/
+    install -m 0644 ${WORKDIR}/presets-FOSDEM.conf ${D}/home/root/app-data/radio/
     install -m 0644 ${WORKDIR}/presets-${AGL_RADIO_PRESETS_LOCALE}.conf ${D}/home/root/app-data/radio/presets.conf
 
     install -m 0755 ${B}/apps/installAllApps.sh ${D}/usr/AGL/apps/
@@ -157,6 +164,7 @@ do_install() {
 FILES_${PN} += "/usr/AGL/ \
         /usr/AGL/apps/* \
         /usr/AGL/${PN}/* \
+        /home/root/app-data/radio/presets-*.conf \
         /home/root/app-data/radio/presets.conf \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/qmldir \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ImageButton.qml \
