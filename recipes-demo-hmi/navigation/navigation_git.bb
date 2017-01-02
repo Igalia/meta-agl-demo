@@ -14,6 +14,7 @@ SRC_URI="git://github.com/AGLExport/gpsnavi.git \
          file://flite.in \
          file://jtalk.in \
          file://config.xml \
+         file://download_mapdata.sh \
 "
 
 # To avoid C++ library link failure
@@ -36,8 +37,9 @@ do_install_append() {
 
    install -d ${D}/usr/AGL/apps
    install -m 0644 ${WORKDIR}/widget/navigation.wgt ${D}/usr/AGL/apps/
+   install -m 0755 ${WORKDIR}/download_mapdata.sh ${D}/usr/AGL/apps/
 
-   install -d ${D}/usr/share/mapdata
+   install -d ${D}/var/mapdata
 }
 
-FILES_${PN} += " /usr/AGL/apps/navigation.wgt /usr/share/mapdata "
+FILES_${PN} += " /usr/AGL/apps/* /var/mapdata "
