@@ -68,7 +68,6 @@ IMAGE_INSTALL_append = " \
     iproute2 \
     python-curses \
     dhcp-client \
-    climatecontrolplugin \
     navigation \
     poiapp \
     mapviewer \
