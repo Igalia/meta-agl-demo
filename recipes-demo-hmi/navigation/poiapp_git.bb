@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=947b2d60ca3872e172034438e9801200"
 inherit cmake_qt5 pkgconfig
 inherit aglwgt
 
-DEPENDS += " qtbase libdbus-c++ json-c \
+DEPENDS += " qtbase libdbus-c++ json-c zip-native \
            "
 
 SRCREV="3e162a60c76dee1b4dede81db55e0fa6bae05433"
