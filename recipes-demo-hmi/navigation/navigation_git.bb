@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM="file://LICENSE;md5=3595e9c703a847d990664d2b396a9df0 \
 
 DEPENDS = " \
           glib-2.0 freetype sqlite3 wayland zlib expat openssl virtual/libgles2 virtual/libgl virtual/egl \
-          wayland libdbus-c++ \
+          wayland libdbus-c++ zip-native \
           "
 
 RDEPENDS_${PN} = " flite openjtalk "
