@@ -12,6 +12,10 @@ PV = "0.1+git${SRCPV}"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/qtmultimedia-rtlfm-radio-plugin;protocol=https"
 SRCREV = "${AUTOREV}"
 
+# Pinned branch/SRCREV for Charming Chinook
+SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/staging/qtmultimedia-rtlfm-radio-plugin;protocol=https;branch=chinook"
+SRCREV_chinook = "a30670cd12e03dc874d2f22c48f497817c78ecdc"
+
 S = "${WORKDIR}/git"
 
 inherit qmake5
