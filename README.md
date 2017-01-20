@@ -124,7 +124,7 @@ As meta-agl's design of packagegroups, ``agl-demo-platform.bb`` contains
 only ``packagegroup-agl-demo-platform`` and the packages of the DEMO applications.
 
 ``agl-demo-platform`` has 4 packagegroups in it,
-``packagegroup-agl-core``, ``packagegroup-agl-ivi``,
+``packagegroup-agl-image-minimal``, ``packagegroup-agl-image-ivi``,
 ``packagegroup-ivi-common-core``, and ``packagegroup-agl-demo-platform``.
 
 * packagegroup-agl-appfw*

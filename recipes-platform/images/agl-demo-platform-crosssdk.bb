@@ -6,6 +6,8 @@ to form a standalone cross SDK."
 
 require agl-demo-platform.bb
 
+LICENSE = "MIT"
+
 IMAGE_FEATURES_append = "dev-pkgs"
 IMAGE_INSTALL_append = "kernel-dev"
 
