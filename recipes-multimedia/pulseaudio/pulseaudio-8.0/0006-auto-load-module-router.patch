@@ -1,0 +1,26 @@
+diff --git a/src/daemon/default.pa.in b/src/daemon/default.pa.in
+index 783e326..3c68638 100755
+--- a/src/daemon/default.pa.in
++++ b/src/daemon/default.pa.in
+@@ -35,9 +35,9 @@ load-sample-dir-lazy %WINDIR%\Media\*.wav
+ .fail
+ 
+ ### Automatically restore the volume of streams and devices
+-load-module module-device-restore
+-load-module module-stream-restore
+-load-module module-card-restore
++#load-module module-device-restore
++#load-module module-stream-restore
++#load-module module-card-restore
+ 
+ ### Automatically augment property information from .desktop files
+ ### stored in /usr/share/application
+@@ -195,3 +195,8 @@ ifelse(@HAVE_X11@, 1, [dnl
+ ### Make some devices default
+ #set-default-sink output
+ #set-default-source input
++
++.ifexists module-router.so
++load-module module-router
++.endif
++

@@ -1,9 +1,9 @@
 DESCRIPTION = "Configurations for Audiomanager Plugins for AGL Demo"
 HOMEPAGE = ""
-LICENSE = "Proprietary"
+LICENSE = "MPLv2"
 SECTION = "multimedia"
 
-LIC_FILES_CHKSUM = "file://${WORKDIR}/configuration.xml;md5=97090515005265aca5bddffcee4bc8a1"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MPL-2.0;md5=815ca599c9df247a0c7f619bab123dad"
 RDEPENDS_${PN} = "libxml2 zlib dbus-lib"
 
 SRC_URI = " \
