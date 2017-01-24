@@ -1,4 +1,4 @@
-DESCRIPTION = "Example of how to build an external Linux kernel module"
+DESCRIPTION = "Build USB driver for MOCCA box"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
@@ -20,6 +20,3 @@ do_install_append () {
         echo "mocca_usb" > ${D}${sysconfdir}/modules-load.d/mocca_usb.conf
     fi
 }
-
-# These sources are currently for the porter kernel only
-COMPATIBLE_MACHINE = "porter"

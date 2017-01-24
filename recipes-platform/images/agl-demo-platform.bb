@@ -27,7 +27,7 @@ IMAGE_TTF_FONTS = " \
 # Only for porter as these kernel module sources
 # are for the 3.10.x kernel only
 MOST_DRIVERS = " "
-MOST_DRIVERS_append_porter = " \
+MOST_DRIVERS_append = " \
     aim-cdev \
     aim-network \
     aim-sound \
@@ -41,7 +41,7 @@ MOST_DRIVERS_append_porter = " \
 
 # HVAC dependencies depend on drivers above
 IMAGE_MOST_HVAC = " "
-IMAGE_MOST_HVAC_append_porter = " \
+IMAGE_MOST_HVAC_append = " \
     ${MOST_DRIVERS} \
     unicens \
     vod-server \
