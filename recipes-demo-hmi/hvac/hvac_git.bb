@@ -9,6 +9,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/hvac;protocol=http"
 SRCREV  = "559d1a3272a6dbf87139cc3a77beaddfc5f66b63"
 
+# Pinned branch/SRCREV for Charming Chinook
+SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/apps/hvac;protocol=http;branch=chinook"
+SRCREV_chinook = "97a6c028a016aa8c345cbd5c6b15a90fcf6b7b5b"
+
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
