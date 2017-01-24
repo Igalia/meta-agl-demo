@@ -1,0 +1,45 @@
+From 4c49b7ad9e3c1e64e4e6042e6fee357b5d9b3df2 Mon Sep 17 00:00:00 2001
+From: Christian Gromm <christian.gromm@microchip.com>
+Date: Mon, 23 Jan 2017 14:57:55 +0100
+Subject: [PATCH] aim-network: create backport patch for 3.10.31-ltsi
+
+Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+---
+ aim-network/networking.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/networking.c b/aim-network/networking.c
+index ce1764c..e04b523 100644
+--- a/networking.c
++++ b/networking.c
+@@ -362,8 +362,7 @@ static int aim_probe_channel(struct most_interface *iface, int channel_idx,
+ 
+ 	if (nd->tx.linked || nd->rx.linked) {
+ 		struct net_device *dev =
+-			alloc_netdev(0, "meth%d", NET_NAME_UNKNOWN,
+-				     most_nd_setup);
++			alloc_netdev(0, "meth%d", most_nd_setup);
+ 
+ 		if (!dev) {
+ 			pr_err("no memory for net_device\n");
+@@ -483,7 +482,7 @@ static int aim_rx_data(struct mbo *mbo)
+ 
+ 	if (nd->is_mamac) {
+ 		/* dest */
+-		ether_addr_copy(skb_put(skb, ETH_ALEN), dev->dev_addr);
++		memcpy(skb_put(skb, ETH_ALEN), dev->dev_addr, ETH_ALEN);
+ 
+ 		/* src */
+ 		memcpy(skb_put(skb, 4), &zero, 4);
+@@ -577,7 +576,7 @@ void most_deliver_netinfo(struct most_interface *iface,
+ 		if (!is_valid_ether_addr(dev->dev_addr)) {
+ 			netdev_info(dev, "set mac %02x-%02x-%02x-%02x-%02x-%02x\n",
+ 				    m[0], m[1], m[2], m[3], m[4], m[5]);
+-			ether_addr_copy(dev->dev_addr, m);
++			memcpy(dev->dev_addr, m, ETH_ALEN);
+ 			complete(&nd->mac_compl);
+ 		} else if (!ether_addr_equal(dev->dev_addr, m)) {
+ 			netdev_warn(dev, "reject mac %02x-%02x-%02x-%02x-%02x-%02x\n",
+-- 
+2.11.0
+

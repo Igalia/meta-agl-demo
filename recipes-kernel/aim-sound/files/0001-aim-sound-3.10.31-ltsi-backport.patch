@@ -1,0 +1,29 @@
+From 686130266ff7968edc863d398fba82bd0f78bf29 Mon Sep 17 00:00:00 2001
+From: Christian Gromm <christian.gromm@microchip.com>
+Date: Wed, 28 Sep 2016 13:43:36 +0200
+Subject: [PATCH 1/4] backport module
+
+This patch replaces function snd_card_new() with snd_card_create() to match
+AGL/Renesas kernel API.
+
+Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+---
+ aim-sound/sound.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound.c b/aim-sound/sound.c
+index 3dc625c..af0af2d 100644
+--- a/sound.c
++++ b/sound.c
+@@ -595,7 +595,7 @@ static int audio_probe_channel(struct most_interface *iface, int channel_id,
+ 		return ret;
+ 	}
+ 
+-	ret = snd_card_new(NULL, -1, card_name, THIS_MODULE,
++	ret = snd_card_create(-1, card_name, THIS_MODULE,
+ 			   sizeof(*channel), &card);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+1.7.9.5
+
