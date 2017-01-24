@@ -274,7 +274,7 @@
           <type>ACTION_LIMIT</type>
           <param>
             <className>"BASE"</className>
-            <volume>-2500</volume>
+            <volume>-1000</volume>
             <pattern>01</pattern>
           </param>
         </action>
@@ -330,7 +330,7 @@
             <type>ACTION_LIMIT</type>
             <param>
               <className>"BASE"</className>
-              <volume>-2500</volume>
+              <volume>-1000</volume>
               <pattern>02</pattern>
             </param>
           </action>
