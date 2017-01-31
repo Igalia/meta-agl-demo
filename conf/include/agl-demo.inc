@@ -10,5 +10,4 @@ IMAGE_INSTALL_append = " qtwebkit qtwebkit-examples-examples"
 # add support for websocket in Qt and QML
 IMAGE_INSTALL_append = " qtwebsockets qtwebsockets-qmlplugins"
 
-IMAGE_INSTALL_append = " iotivity-resource-samples "
 IMAGE_INSTALL_append = " screen "

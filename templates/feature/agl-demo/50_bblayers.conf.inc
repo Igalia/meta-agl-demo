@@ -7,7 +7,6 @@ BBLAYERS =+ " \
 # These are the dependencies of the AGL DEMO Layer
 #-------------------------------------------------
 BBLAYERS =+ " \
-   ${METADIR}/meta-oic \
    ${METADIR}/meta-qt5 \
 "
 
