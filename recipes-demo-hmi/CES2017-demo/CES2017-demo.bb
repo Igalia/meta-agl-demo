@@ -10,6 +10,8 @@ PN          = "ces2017-demo"
 inherit qmake5
 DEPENDS = "homescreen zip-native qtmultimedia qtquickcontrols2"
 
+inherit aglwgt
+
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
 # ALS, CES, FOSDEM available
@@ -31,6 +33,8 @@ RDEPENDS_${PN} += " \
     "
 
 do_install_prepend() {
+    mkdir -p ${B}/package
+
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"controls\" version=\"0.1\"> \
   <name>Controls</name> \
@@ -43,9 +47,7 @@ do_install_prepend() {
 " > ${B}/apps/Controls/config.xml
 
     cd ${B}/apps/Controls/
-    zip controls.wgt config.xml controls
-
-
+    zip ${B}/package/controls.wgt config.xml controls
 
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"dashboard\" version=\"0.1\"> \
@@ -59,8 +61,7 @@ do_install_prepend() {
 " > ${B}/apps/Dashboard/config.xml
 
     cd ${B}/apps/Dashboard/
-    zip dashboard.wgt config.xml dashboard
-
+    zip ${B}/package/dashboard.wgt config.xml dashboard
 
 
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
@@ -75,7 +76,7 @@ do_install_prepend() {
 " > ${B}/apps/Phone/config.xml
 
     cd ${B}/apps/Phone/
-    zip phone.wgt config.xml phone
+    zip ${B}/package/phone.wgt config.xml phone
 
 
 
@@ -91,39 +92,16 @@ do_install_prepend() {
 " > ${B}/apps/Radio/config.xml
 
     cd ${B}/apps/Radio/
-    zip radio.wgt config.xml radio
+    zip ${B}/package/radio.wgt config.xml radio
 
-
-    cat > ${B}/apps/installAllApps.sh <<-EOF
-	#!/bin/sh
-	cd /usr/AGL/apps
-	for file in \`find . -maxdepth 1 -name '*.wgt'\`; do
-
-	    /usr/bin/afm-util install \$file
-	done
-	sync
-	
-	#it's Workaround
-	cyad -s -k MANIFESTS -t allow -c User::App::navigation -u '*' -p 'http://tizen.org/privilege/internal/dbus'
-	cyad -s -k MANIFESTS -t allow -c User::App::poi -u '*' -p 'http://tizen.org/privilege/internal/dbus'
-	EOF
 }
 
 do_install() {
-    install -d ${D}/usr/AGL/${PN}
-    install -d ${D}/usr/AGL/apps
-    install -m 0644 ${B}/apps/Controls/controls.wgt ${D}/usr/AGL/apps/
-    install -m 0644 ${B}/apps/Dashboard/dashboard.wgt ${D}/usr/AGL/apps/
-    install -m 0644 ${B}/apps/Phone/phone.wgt ${D}/usr/AGL/apps/
-    install -m 0644 ${B}/apps/Radio/radio.wgt ${D}/usr/AGL/apps/
     install -d ${D}/home/root/app-data/radio
     install -m 0644 ${WORKDIR}/presets-CES.conf ${D}/home/root/app-data/radio/
     install -m 0644 ${WORKDIR}/presets-ALS.conf ${D}/home/root/app-data/radio/
     install -m 0644 ${WORKDIR}/presets-FOSDEM.conf ${D}/home/root/app-data/radio/
     install -m 0644 ${WORKDIR}/presets-${AGL_RADIO_PRESETS_LOCALE}.conf ${D}/home/root/app-data/radio/presets.conf
-
-    install -m 0755 ${B}/apps/installAllApps.sh ${D}/usr/AGL/apps/
-    ln -sf            ../apps/installAllApps.sh ${D}/usr/AGL/${PN}/installAllApps.sh
 
     install -d ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
     install -m 0644 ${S}/imports/AGL/Demo/Controls/qmldir ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
@@ -154,8 +132,6 @@ do_install() {
 #}
 
 FILES_${PN} += "/usr/AGL/ \
-        /usr/AGL/apps/* \
-        /usr/AGL/${PN}/* \
         /home/root/app-data/radio/presets-*.conf \
         /home/root/app-data/radio/presets.conf \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/qmldir \

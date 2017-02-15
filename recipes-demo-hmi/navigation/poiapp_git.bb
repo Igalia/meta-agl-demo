@@ -7,6 +7,7 @@ LICENSE          = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=947b2d60ca3872e172034438e9801200"
 
 inherit cmake_qt5 pkgconfig
+inherit aglwgt
 
 DEPENDS += " qtbase libdbus-c++ json-c zip-native \
            "
@@ -22,10 +23,8 @@ do_install_append() {
    mkdir -p ${WORKDIR}/widget
    install -m 0644 ${WORKDIR}/config.xml ${WORKDIR}/widget
    install -m 0755 ${D}/usr/bin/yelp-client ${WORKDIR}/widget/poi
-   zip -ju ${WORKDIR}/widget/poi.wgt ${WORKDIR}/widget/poi ${WORKDIR}/widget/config.xml
 
-   install -d ${D}/usr/AGL/apps
-   install -m 0644 ${WORKDIR}/widget/poi.wgt ${D}/usr/AGL/apps/
+   mkdir -p ${B}/package
+   zip -ju ${B}/package/poi.wgt ${WORKDIR}/widget/poi ${WORKDIR}/widget/config.xml
+
 }
-
-FILES_${PN} += " /usr/AGL/apps/poi.wgt "
