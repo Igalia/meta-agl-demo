@@ -26,6 +26,7 @@ SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
 SECURITY_CFLAGS = ""
 
 inherit autotools pkgconfig
+inherit aglwgt
 
 S = "${WORKDIR}/git"
 
@@ -36,11 +37,17 @@ do_compile_prepend() {
 
 do_install_append() {
    install -d ${D}/usr/AGL/apps
-   install -m 0644 ${B}/navigation.wgt ${D}/usr/AGL/apps/
+   mkdir -p ${B}/package/
+   mv ${B}/navigation.wgt ${B}/package/
    install -m 0755 ${WORKDIR}/download_mapdata_jp.sh ${D}/usr/AGL/apps/
    install -m 0755 ${WORKDIR}/download_mapdata_uk.sh ${D}/usr/AGL/apps/
 
    install -d ${D}/var/mapdata
 }
+#it's Workaround
+EXTRA_WGT_POSTINSTALL = "\
+        cyad -s -k MANIFESTS -t allow -c User::App::navigation -u '*' -p 'http://tizen.org/privilege/internal/dbus';\
+        cyad -s -k MANIFESTS -t allow -c User::App::poi -u '*' -p 'http://tizen.org/privilege/internal/dbus';\
+"
 
-FILES_${PN} += " /usr/AGL/apps/* /var/mapdata "
+FILES_${PN} += " /usr/AGL/apps/*.sh /var/mapdata "
