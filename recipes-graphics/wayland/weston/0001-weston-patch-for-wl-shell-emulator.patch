@@ -7,7 +7,7 @@ diff --git a/ivi-shell/ivi-layout-export.h b/ivi-shell/ivi-layout-export.h
 index 8a92009..7f93c82 100644
 --- a/ivi-shell/ivi-layout-export.h
 +++ b/ivi-shell/ivi-layout-export.h
-@@ -185,6 +185,25 @@ struct ivi_controller_interface {
+@@ -185,6 +185,25 @@ struct ivi_layout_interface {
 	int32_t (*commit_changes)(void);
 
 	/**
@@ -37,7 +37,7 @@ diff --git a/ivi-shell/ivi-layout.c b/ivi-shell/ivi-layout.c
 index 51d0a8d..76891bf 100644
 --- a/ivi-shell/ivi-layout.c
 +++ b/ivi-shell/ivi-layout.c
-@@ -2870,6 +2870,8 @@ static struct ivi_controller_interface ivi_controller_interface = {
+@@ -2870,6 +2870,8 @@ static struct ivi_layout_interface ivi_layout_interface = {
 	 */
 	.commit_changes = ivi_layout_commit_changes,
 
