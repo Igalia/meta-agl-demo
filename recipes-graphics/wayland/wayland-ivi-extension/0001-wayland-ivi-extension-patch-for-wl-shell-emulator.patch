@@ -15,61 +15,13 @@ index a75390f..3610fa9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -42,6 +42,7 @@ if(WITH_ILM_INPUT)
-     add_subdirectory(ivi-input-controller)
+     add_subdirectory(ivi-input-modules/ivi-input-controller)
  endif()
-
+ 
 +add_subdirectory(wl-shell-emulator)
-
+ 
  #=============================================================================================
  # generate all documents
-diff --git a/ivi-layermanagement-examples/EGLWLMockNavigation/src/OpenGLES2App.cpp b/ivi-layermanagement-examples/EGLWLMockNavigation/src/OpenGLES2App.cpp
-index 2e65864..8b7e0d1 100644
---- a/ivi-layermanagement-examples/EGLWLMockNavigation/src/OpenGLES2App.cpp
-+++ b/ivi-layermanagement-examples/EGLWLMockNavigation/src/OpenGLES2App.cpp
-@@ -126,8 +126,11 @@ OpenGLES2App::OpenGLES2App(float fps, float animationSpeed, SurfaceConfiguration
-     createWLContext(config);
-     createEGLContext();
-
--    ilmClient_init((t_ilm_nativedisplay)m_wlContextStruct.wlDisplay);
--    setupLayerMangement(config);
-+    if (m_wlContextStruct.wlShell == NULL)
-+    {
-+        ilmClient_init((t_ilm_nativedisplay)m_wlContextStruct.wlDisplay);
-+        setupLayerMangement(config);
-+    }
-
-     if (config->nosky)
-     {
-diff --git a/weston-ivi-shell/src/ivi-controller-interface.h b/weston-ivi-shell/src/ivi-controller-interface.h
-index cdafcc9..fd18009 100644
---- a/weston-ivi-shell/src/ivi-controller-interface.h
-+++ b/weston-ivi-shell/src/ivi-controller-interface.h
-@@ -66,6 +66,25 @@ struct ivi_controller_interface {
-	int32_t (*commit_changes)(void);
-
-	/**
-+	* \brief Creates an ivi_layout_surface.
-+	*
-+	* \return IVI_SUCCEEDED if the method call was successful
-+	* \return IVI_FAILED if the method call was failed
-+	*/
-+	struct ivi_layout_surface* (*surface_create)(
-+				struct weston_surface *wl_surface,
-+				uint32_t id_surface);
-+
-+	/**
-+	 * \brief Configure an ivi_layout_surface
-+	 *
-+	 * \return IVI_SUCCEEDED if the method call was successful
-+	 * \return IVI_FAILED if the method call was failed
-+	 */
-+	void (*surface_configure)(struct ivi_layout_surface *ivisurf,
-+				  int32_t width, int32_t height);
-+
-+	/**
-	 * surface controller interface
-	 */
-
 diff --git a/wl-shell-emulator/CMakeLists.txt b/wl-shell-emulator/CMakeLists.txt
 new file mode 100644
 index 0000000..2678098
@@ -206,8 +158,8 @@ index 0000000..274b192
 +
 +#include <weston/compositor.h>
 +
-+#include "ivi-layout-export.h"
-+#include "ivi-controller-interface.h"
++#include "weston/ivi-layout-export.h"
++
 +
 +#ifndef container_of
 +#define container_of(ptr, type, member) ({                              \
@@ -244,7 +196,7 @@ index 0000000..274b192
 +    struct wl_list controller_list;
 +    struct wl_list surface_list;
 +    struct weston_compositor *compositor;
-+    const struct ivi_controller_interface *ivi_controller_interface;
++    const struct ivi_layout_interface *ivi_layout_interface;
 +
 +    uint32_t id_surface_base;
 +};
@@ -260,7 +212,7 @@ index 0000000..274b192
 +emulator_surface_move(struct wl_client *client, struct wl_resource *resource,
 +           struct wl_resource *seat_resource, uint32_t serial)
 +{
-+/*Use ivi_controller_interface to implement*/
++/*Use ivi_layout_interface to implement*/
 +}
 +
 +static void
@@ -268,14 +220,14 @@ index 0000000..274b192
 +           struct wl_resource *seat_resource, uint32_t serial,
 +           uint32_t edges)
 +{
-+/*Use ivi_controller_interface to implement*/
++/*Use ivi_layout_interface to implement*/
 +}
 +
 +static void
 +emulator_surface_set_toplevel(struct wl_client *client,
 +           struct wl_resource *resource)
 +{
-+/*Use ivi_controller_interface to implement*/
++/*Use ivi_layout_interface to implement*/
 +}
 +
 +static void
@@ -284,7 +236,7 @@ index 0000000..274b192
 +        struct wl_resource *parent_resource,
 +        int x, int y, uint32_t flags)
 +{
-+/*Use ivi_controller_interface to implement*/
++/*Use ivi_layout_interface to implement*/
 +}
 +
 +static void
@@ -294,7 +246,7 @@ index 0000000..274b192
 +           uint32_t framerate,
 +           struct wl_resource *output_resource)
 +{
-+/*Use ivi_controller_interface to implement*/
++/*Use ivi_layout_interface to implement*/
 +}
 +
 +static void
@@ -388,7 +340,7 @@ index 0000000..274b192
 +        surf->last_height = surface->height;
 +
 +        ctx = surf->context;
-+        ctx->ivi_controller_interface->surface_configure(surf->layout_surface,
++        ctx->ivi_layout_interface->surface_configure(surf->layout_surface,
 +                                                         surface->width,
 +                                                         surface->height);
 +    }
@@ -418,8 +370,8 @@ index 0000000..274b192
 +    struct weston_surface *surface;
 +    struct ivi_layout_surface *layout_surface;
 +    struct wl_resource *res;
-+    const struct ivi_controller_interface *interface =
-+                            context->ivi_controller_interface;
++    const struct ivi_layout_interface *interface =
++                            context->ivi_layout_interface;
 +
 +    surface = wl_resource_get_user_data(surface_resource);
 +
@@ -510,7 +462,7 @@ index 0000000..274b192
 +
 +static struct emulator_context *
 +create_emulator_context(struct weston_compositor *ec,
-+                     const struct ivi_controller_interface *interface)
++                     const struct ivi_layout_interface *interface)
 +{
 +    struct emulator_context *ctx = NULL;
 +    ctx = calloc(1, sizeof *ctx);
@@ -523,7 +475,7 @@ index 0000000..274b192
 +    memset(ctx, 0, sizeof *ctx);
 +
 +    ctx->compositor = ec;
-+    ctx->ivi_controller_interface = interface;
++    ctx->ivi_layout_interface = interface;
 +    wl_list_init(&ctx->controller_list);
 +    wl_list_init(&ctx->surface_list);
 +
@@ -552,7 +504,7 @@ index 0000000..274b192
 +
 +WL_EXPORT int
 +controller_module_init(struct weston_compositor *ec, int* argc, char *argv[],
-+                       const struct ivi_controller_interface *interface,
++                       const struct ivi_layout_interface *interface,
 +                       size_t interface_version)
 +{
 +    struct emulator_context *ctx = create_emulator_context(ec, interface);

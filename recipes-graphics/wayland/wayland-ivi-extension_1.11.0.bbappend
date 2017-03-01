@@ -11,6 +11,7 @@ DISABLE_TEST = "-DBUILD_ILM_API_TESTS:BOOL=FALSE \
 PACKAGECONFIG ??= "ilm_input test"
 PACKAGECONFIG[test] = "${ENABLE_TEST},${DISABLE_TEST},gtest"
 
+
 SRC_URI_append = "\
     file://0001-wayland-ivi-extension-patch-for-wl-shell-emulator.patch \
     file://cmake-find-gtest.patch \
