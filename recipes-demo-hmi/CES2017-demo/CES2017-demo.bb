@@ -1,108 +1,23 @@
 SUMMARY     = "App Launcher for the AGL Demonstrator @ CES2017"
 DESCRIPTION = "App Lanucher app in QML format for the AGL Demonstrator @ CESS2017"
 HOMEPAGE    = "https://git.automotivelinux.org/gerrit/#/admin/projects/AGL/DemoApps/CES2017"
-LICENSE     = "MPL-2.0"
 SECTION     = "apps"
-PV          = "1.0+git${SRCPV}"
-S           = "${WORKDIR}/git/"
-PN          = "ces2017-demo"
-
-inherit qmake5
-DEPENDS = "homescreen zip-native qtmultimedia qtquickcontrols2"
-
-inherit aglwgt
-
+LICENSE     = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
-# ALS, CES, FOSDEM available
-AGL_RADIO_PRESETS_LOCALE ?= "CES"
+DEPENDS = "homescreen zip-native qtmultimedia qtquickcontrols2"
 
-SRC_URI     = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http \
-               file://presets-ALS.conf \
-               file://presets-CES.conf \
-               file://presets-FOSDEM.conf \
-"
-SRCREV      = "${AUTOREV}"
+PV = "1.0+git${SRCPV}"
+PN = "ces2017-demo"
 
-RDEPENDS_${PN} += " \
-    qtmultimedia-qmlplugins \
-    qtmultimedia-rtlfm-radio-plugin \
-    qtquickcontrols-qmlplugins \
-    qtquickcontrols2-qmlplugins \
-    qtsvg-plugins \
-    "
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http"
+SRCREV = "${AUTOREV}"
 
-do_install_prepend() {
-    mkdir -p ${B}/package
+S = "${WORKDIR}/git/"
 
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"controls\" version=\"0.1\"> \
-  <name>Controls</name> \
-  <content src=\"controls\" type=\"application/x-executable\"/> \
-  <description>Controls app.</description> \
-  <author>Qt</author> \
-  <icon src=\"controls.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/Controls/config.xml
-
-    cd ${B}/apps/Controls/
-    zip ${B}/package/controls.wgt config.xml controls
-
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"dashboard\" version=\"0.1\"> \
-  <name>Dashboard</name> \
-  <content src=\"dashboard\" type=\"application/x-executable\"/> \
-  <description>Dashboard app.</description> \
-  <author>Qt</author> \
-  <icon src=\"dashboard.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/Dashboard/config.xml
-
-    cd ${B}/apps/Dashboard/
-    zip ${B}/package/dashboard.wgt config.xml dashboard
-
-
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"phone\" version=\"0.1\"> \
-  <name>Phone</name> \
-  <content src=\"phone\" type=\"application/x-executable\"/> \
-  <description>Phone app.</description> \
-  <author>Qt</author> \
-  <icon src=\"phone.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/Phone/config.xml
-
-    cd ${B}/apps/Phone/
-    zip ${B}/package/phone.wgt config.xml phone
-
-
-
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<widget xmlns=\"http://www.w3.org/ns/widgets\" id=\"radio\" version=\"0.1\"> \
-  <name>Radio</name> \
-  <content src=\"radio\" type=\"application/x-executable\"/> \
-  <description>Radio app.</description> \
-  <author>Qt</author> \
-  <icon src=\"radio.png\"/> \
-  <license>Apache 2.0</license> \
-</widget> \
-" > ${B}/apps/Radio/config.xml
-
-    cd ${B}/apps/Radio/
-    zip ${B}/package/radio.wgt config.xml radio
-
-}
+inherit qmake5
 
 do_install() {
-    install -d ${D}/home/root/app-data/radio
-    install -m 0644 ${WORKDIR}/presets-CES.conf ${D}/home/root/app-data/radio/
-    install -m 0644 ${WORKDIR}/presets-ALS.conf ${D}/home/root/app-data/radio/
-    install -m 0644 ${WORKDIR}/presets-FOSDEM.conf ${D}/home/root/app-data/radio/
-    install -m 0644 ${WORKDIR}/presets-${AGL_RADIO_PRESETS_LOCALE}.conf ${D}/home/root/app-data/radio/presets.conf
-
     install -d ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
     install -m 0644 ${S}/imports/AGL/Demo/Controls/qmldir ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
     install -m 0644 ${S}/imports/AGL/Demo/Controls/ImageButton.qml ${D}${libdir}/qt5/qml/AGL/Demo/Controls/
@@ -125,15 +40,8 @@ do_install() {
     install -m 0644 ${S}/imports/qtquickcontrols2aglstyle/images/* ${D}${libdir}/qt5/qml/QtQuick/Controls.2/AGL/images/
 }
 
-# plain copy in own folder for now
-#do_install() {
-#    mkdir -p ${D}/usr/AGL/CES2017/
-#    cp -rf ./* ${D}/usr/AGL/CES2017/
-#}
-
-FILES_${PN} += "/usr/AGL/ \
-        /home/root/app-data/radio/presets-*.conf \
-        /home/root/app-data/radio/presets.conf \
+FILES_${PN} += " \
+	/usr/AGL/ \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/qmldir \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ImageButton.qml \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/ToggleButton.qml \
@@ -148,4 +56,10 @@ FILES_${PN} += "/usr/AGL/ \
 	/usr/lib/qt5/qml/AGL/Demo/Controls/images/Keyboard_Arrow.svg \
 	/usr/lib/qt5/qml/QtQuick/Controls.2/AGL \
 	/usr/lib/qt5/qml/QtQuick/Controls.2/AGL/images \
-	"
+"
+
+RDEPENDS_${PN} += " \
+	qtquickcontrols-qmlplugins \
+	qtquickcontrols2-qmlplugins \
+	qtsvg-plugins \
+"

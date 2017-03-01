@@ -56,18 +56,21 @@ MAPVIEWER_append_porter = " \
     "
 
 AGL_APPS = " \
+    controls \
+    dashboard \
     hvac \
     mediaplayer \
     mixer \
     navigation \
+    phone \
+    poiapp \
+    radio \
     settings \
     "
 
 RDEPENDS_${PN}_append = " \
     ces2017-demo \
     linux-firmware-ralink \
-    navigation \
-    poiapp \
     ${MAPVIEWER} \
     ${MOST_HVAC} \
     ${AGL_APPS} \
