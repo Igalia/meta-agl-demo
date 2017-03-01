@@ -60,10 +60,15 @@ IMAGE_MAPVIEWER_append_porter = " \
     "
 
 IMAGE_AGL_APPS = " \
+    controls \
+    dashboard \
     hvac \
     mediaplayer \
     mixer \
     navigation \
+    poiapp \
+    phone \
+    radio \
     settings \
     "
 
@@ -75,8 +80,6 @@ IMAGE_INSTALL_append = " \
     iproute2 \
     python-curses \
     dhcp-client \
-    navigation \
-    poiapp \
     ${IMAGE_MAPVIEWER} \
     ${IMAGE_MOST_HVAC} \
     ${IMAGE_AGL_APPS} \
