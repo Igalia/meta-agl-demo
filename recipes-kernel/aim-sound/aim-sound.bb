@@ -12,6 +12,10 @@ SRC_URI_append_porter = " file://0001-aim-sound-3.10.31-ltsi-backport.patch"
 S = "${WORKDIR}/git/driver/${PN}"
 SRCREV = "${AUTOREV}"
 
+# Pinned branch/SRCREV for Charming Chinook
+SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https;branch=chinook"
+SRCREV_chinook = "61ddb0d8f200af2da56f0922ffabfa7c5627ad15"
+
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.
 
