@@ -13,7 +13,7 @@ SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;prot
 SRCREV  = "${AUTOREV}"
 
 # Pinned SRCREV for Charming Chinook, staging projects do not follow release branches
-SRCREV_chinook = "5e2ec461d467571834d18df91b1cf37905229db0"
+SRCREV_chinook = "3b5d0701a25b19ee2ac91d7466652c8fc4025db0"
 
 
 # PV needs to be modified with SRCPV to work AUTOREV correctly

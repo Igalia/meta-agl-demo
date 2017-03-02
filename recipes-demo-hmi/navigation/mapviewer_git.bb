@@ -9,7 +9,7 @@ DEPENDS = " \
 
 RDEPENDS_${PN} = " navigation "
 
-SRCREV="348edb91ab6ea94e0d60c5a1789e1e9c2ae961c6"
+SRCREV="05337ef71ae3aef50ff8135819eb3b666bb99e53"
 SRC_URI="git://github.com/AGLExport/mapviwer.git"
 
 # To avoid C++ library link failure

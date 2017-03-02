@@ -15,7 +15,7 @@ SRCREV = "${AUTOREV}"
 
 # Pinned branch/SRCREV for Charming Chinook
 SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/AGL/DemoApps/CES2017;protocol=http;branch=chinook"
-SRCREV_chinook = "354195c83841240ddd5f2c5daad97d66cc9e1d28"
+SRCREV_chinook = "f31423226ad2baf75a770d41dae1b0ec42bf7ff1"
 
 S = "${WORKDIR}/git/"
 
