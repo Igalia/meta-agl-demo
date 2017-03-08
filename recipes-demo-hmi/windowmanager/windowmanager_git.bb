@@ -26,9 +26,10 @@ do_install() {
     
     install -d ${D}${systemd_user_unitdir}
     install -m 0644 ${S}/windowmanager/conf/WindowManager.service ${D}${systemd_user_unitdir}
+    install -m 0644 ${S}/windowmanager/conf/WindowManager.path ${D}${systemd_user_unitdir}
 
     install -d ${D}${sysconfdir}/systemd/user/default.target.wants
-    ln -sf ${systemd_user_unitdir}/WindowManager.service ${D}${sysconfdir}/systemd/user/default.target.wants
+    ln -sf ${systemd_user_unitdir}/WindowManager.path ${D}${sysconfdir}/systemd/user/default.target.wants
 }
 
 FILES_${PN} += "/usr/AGL/${PN}/ ${systemd_user_unitdir}"
