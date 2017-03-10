@@ -7,6 +7,7 @@ PACKAGECONFIG_WAYLAND = "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'way
 PACKAGECONFIG_GL = "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2', '', d)}"
 PACKAGECONFIG_append = " ${PACKAGECONFIG_WAYLAND} icu accessibility"
 PACKAGECONFIG_append = " fontconfig"
+PACKAGECONFIG_append = " sql-sqlite"
 
 EXTRA_OECONF_append = ""
 
