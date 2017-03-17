@@ -3,8 +3,6 @@ DESCRIPTION = "A set of packages which contains Qt5 examples"
 
 LICENSE = "MIT"
 
-PR="r0"
-
 inherit packagegroup
 
 PACKAGES = "\

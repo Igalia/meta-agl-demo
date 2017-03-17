@@ -13,7 +13,6 @@ SRC_URI = " \
 
 inherit pkgconfig cmake_qt5 externalsrc systemd
 PV = "0.1"
-PR = "r0"
 
 S = "${WORKDIR}/git"
 
