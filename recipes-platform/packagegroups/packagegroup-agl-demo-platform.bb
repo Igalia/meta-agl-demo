@@ -18,10 +18,7 @@ RDEPENDS_${PN} += "\
 RDEPENDS_${PN} += "\
     packagegroup-agl-demo \
     "
-    
-# add packages for CES2017 demo
-# Only for porter as these kernel module sources
-# are for the 3.10.x kernel only
+
 MOST_DRIVERS = " "
 MOST_DRIVERS_append = " \
     aim-cdev \
