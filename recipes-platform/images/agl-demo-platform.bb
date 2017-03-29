@@ -73,13 +73,14 @@ IMAGE_AGL_APPS = " \
     "
 
 IMAGE_INSTALL_append = " \
-    ces2017-demo \
     linux-firmware-ath9k \
     linux-firmware-ralink \
     can-utils \
     iproute2 \
     python-curses \
     dhcp-client \
+    qtquickcontrols2-agl \
+    qtquickcontrols2-agl-style \
     ${IMAGE_MAPVIEWER} \
     ${IMAGE_MOST_HVAC} \
     ${IMAGE_AGL_APPS} \
