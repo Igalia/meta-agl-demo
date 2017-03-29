@@ -1,6 +1,7 @@
 IMAGE_FEATURES =+ "debug-tweaks"
 
 DISTRO_FEATURES_append = " webruntime "
+DISTRO_FEATURES_append = " automount "
 
 # Add webkit as workaround as webengine is broken right now
 IMAGE_INSTALL_append = " qtwebkit qtwebkit-examples-examples"
