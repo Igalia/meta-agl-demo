@@ -13,3 +13,7 @@ EXTRA_OECONF_append = ""
 
 # '-qpa wayland-egl' set wayland-egl as default of platform plagins
 PACKAGECONFIG[wayland]="-qpa wayland-egl -no-qpa-platform-guard"
+
+# Needed for qt58 - but not happy with this dependency       ____________________________________________________________________
+#                                                                                                                        \/ \/ \/
+PACKAGECONFIG_X11 = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xcb xrender xinput2 glib xkb xkbcommon-evdev', 'xkbcommon-evdev', d)}"

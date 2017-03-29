@@ -39,5 +39,7 @@ FILES_${PN} += " \
 
 RDEPENDS_${PN} += " \
     qtmultimedia-qmlplugins \
-    qtmultimedia-rtlfm-radio-plugin \
 "
+# FIXME: temporarily remove the plugins - broken with qt58
+#    qtmultimedia-rtlfm-radio-plugin \
+#

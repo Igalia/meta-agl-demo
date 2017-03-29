@@ -22,8 +22,11 @@ FILESEXTRAPATHS_append := ":${THISDIR}/${PN}"
 
 SRC_URI_append = "\
     file://0010-Added-manifest-file-according-to-smack-3-domain-mode.patch \
-    file://0001-Avoid-attaching-NULL-buffer-while-hiding-EGL-windows.patch \
     "
+# FIXME: patch does not apply on qt58 - needed or not ?
+#    file://0001-Avoid-attaching-NULL-buffer-while-hiding-EGL-windows.patch \
+#
+
 SRC_URI_append_checkforkrogoth = "\
     file://disable_xcomposite_egl_qt_wayland_client_buffer_integration.patch \
     file://0001-Implement-initial-IVI-shell-support-with-shell-integ.patch \

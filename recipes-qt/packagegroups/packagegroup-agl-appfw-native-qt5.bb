@@ -18,7 +18,6 @@ RDEPENDS_${PN} += "\
     qtbase-staticdev \
     qtbase-tools \
     qtdeclarative \
-    qtdeclarative-plugins \
     qtdeclarative-qmlplugins \
     qtdeclarative-tools \
     qtwayland \
@@ -30,3 +29,7 @@ RDEPENDS_${PN} += "\
 RDEPENDS_${PN}_checkforkrogoth += "\
     qtwayland-examples \
     "
+
+# FIXME: package does not exist in qt58
+#    qtdeclarative-plugins \
+#
