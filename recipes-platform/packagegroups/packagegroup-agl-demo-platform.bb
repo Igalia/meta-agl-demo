@@ -66,7 +66,8 @@ AGL_APPS = " \
     "
 
 RDEPENDS_${PN}_append = " \
-    ces2017-demo \
+    qtquickcontrols2-agl \
+    qtquickcontrols2-agl-style \
     linux-firmware-ralink \
     ${MAPVIEWER} \
     ${MOST_HVAC} \
