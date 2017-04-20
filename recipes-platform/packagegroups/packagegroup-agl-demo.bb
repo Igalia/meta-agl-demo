@@ -15,6 +15,7 @@ ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} += "\
     packagegroup-agl-appfw \
     homescreen \
+    udisks \
     "
 
 # fonts
