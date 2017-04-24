@@ -11,7 +11,7 @@ SRCREV  = "559d1a3272a6dbf87139cc3a77beaddfc5f66b63"
 
 # Pinned branch/SRCREV for Charming Chinook
 SRC_URI_chinook = "git://gerrit.automotivelinux.org/gerrit/apps/hvac;protocol=http;branch=chinook"
-SRCREV_chinook = "97a6c028a016aa8c345cbd5c6b15a90fcf6b7b5b"
+SRCREV_chinook = "31e930c7fbd9a32f200c654a383d29f973d94440"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
