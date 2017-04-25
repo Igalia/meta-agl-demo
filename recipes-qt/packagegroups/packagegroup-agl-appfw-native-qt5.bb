@@ -18,7 +18,6 @@ RDEPENDS_${PN} += "\
     qtbase-staticdev \
     qtbase-tools \
     qtdeclarative \
-    qtdeclarative-plugins \
     qtdeclarative-qmlplugins \
     qtdeclarative-tools \
     qtwayland \
