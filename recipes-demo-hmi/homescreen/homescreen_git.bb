@@ -8,6 +8,7 @@ LIC_FILES_CHKSUM = "file://HomeScreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c9
 
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/staging/HomeScreen.git;protocol=http \
+           file://0001-Hack-to-resolve-the-media-player-doesn-t-play-next.patch \
            file://homescreen.pc.in \
            file://dbus-homescreen.conf.in"
 SRCREV  = "${AUTOREV}"

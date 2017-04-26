@@ -1,0 +1,396 @@
+From 8fcc04ebda417fae3bd8e8300db6d48e71b0ff16 Mon Sep 17 00:00:00 2001
+From: Tadao Tanikawa <tanikawa.tadao@jp.panasonic.com>
+Date: Tue, 18 Apr 2017 18:32:15 +0900
+Subject: [PATCH] Hack to resolve the media player doesn't play next
+
+Current window manager make own ivi-layer to each application
+and adjust the order when rendering (screen's render order of
+layers).
+
+E.g. When showing apps launcher, window manager has only 1
+ivi-layer for homescreen under screen 0. When showing an app,
+window manager add 1 ivi-layer for it and set render order
+of 2 layers, front: app's and back: homescreen layer.
+And when app hides, it's layer is removed from render order.
+
+But if removed from render order, excecuting QML also stopped.
+It is caused why the media player doesn't play next song
+when it is not shown.
+
+This patch changes how to make render order to keep media
+player's layer in render order even when it is not shown.
+
+Change-Id: I4f27a77789733987b8b92f068946cb64e9654901
+Signed-off-by: Tadao Tanikawa <tanikawa.tadao@jp.panasonic.com>
+---
+ HomeScreen/qml/Home.qml             |   2 +-
+ HomeScreen/qml/ShortcutArea.qml     |   2 +-
+ HomeScreen/src/layouthandler.cpp    |   5 +-
+ HomeScreen/src/layouthandler.h      |   2 +-
+ WindowManager/src/windowmanager.cpp | 123 ++++++++++++++++++++++++++++--------
+ WindowManager/src/windowmanager.hpp |  14 +++-
+ interfaces/windowmanager.xml        |   4 +-
+ 7 files changed, 116 insertions(+), 36 deletions(-)
+
+diff --git a/HomeScreen/qml/Home.qml b/HomeScreen/qml/Home.qml
+index aa3a129..33b958e 100644
+--- a/HomeScreen/qml/Home.qml
++++ b/HomeScreen/qml/Home.qml
+@@ -54,7 +54,7 @@ Item {
+ 
+                     applicationArea.visible = true
+                     appLauncherAreaLauncher.visible = false
+-                    layoutHandler.showAppLayer(pid)
++                    layoutHandler.showAppLayer(model.id, pid)
+                 }
+                 else {
+                     console.warn("app cannot be launched!")
+diff --git a/HomeScreen/qml/ShortcutArea.qml b/HomeScreen/qml/ShortcutArea.qml
+index 14c7b6b..9be3fd0 100644
+--- a/HomeScreen/qml/ShortcutArea.qml
++++ b/HomeScreen/qml/ShortcutArea.qml
+@@ -69,7 +69,7 @@ Item {
+                             applicationArea.visible = true
+                             appLauncherAreaLauncher.visible = false
+                             layoutHandler.makeMeVisible(pid)
+-                            layoutHandler.showAppLayer(pid)
++                            layoutHandler.showAppLayer(model.application, pid)
+                         }
+                         else {
+                             console.warn("app cannot be launched!")
+diff --git a/HomeScreen/src/layouthandler.cpp b/HomeScreen/src/layouthandler.cpp
+index c0fa620..b91984d 100644
+--- a/HomeScreen/src/layouthandler.cpp
++++ b/HomeScreen/src/layouthandler.cpp
+@@ -86,9 +86,9 @@ LayoutHandler::~LayoutHandler()
+     delete mp_dBusWindowManagerProxy;
+ }
+ 
+-void LayoutHandler::showAppLayer(int pid)
++void LayoutHandler::showAppLayer(const QString &app_id, int pid)
+ {
+-    mp_dBusWindowManagerProxy->showAppLayer(pid);
++    mp_dBusWindowManagerProxy->showAppLayer(app_id, pid);
+ }
+ 
+ void LayoutHandler::hideAppLayer()
+@@ -275,4 +275,3 @@ void LayoutHandler::timerEvent(QTimerEvent *e)
+         checkToDoQueue();
+     }
+ }
+-
+diff --git a/HomeScreen/src/layouthandler.h b/HomeScreen/src/layouthandler.h
+index c82bfda..007f1ad 100644
+--- a/HomeScreen/src/layouthandler.h
++++ b/HomeScreen/src/layouthandler.h
+@@ -31,7 +31,7 @@ public:
+ signals:
+ 
+ public slots:
+-    void showAppLayer(int pid);
++    void showAppLayer(const QString &app_id, int pid);
+     void hideAppLayer();
+     void makeMeVisible(int pid);
+ private:
+diff --git a/WindowManager/src/windowmanager.cpp b/WindowManager/src/windowmanager.cpp
+index e7802ca..02bc392 100644
+--- a/WindowManager/src/windowmanager.cpp
++++ b/WindowManager/src/windowmanager.cpp
+@@ -51,7 +51,7 @@ void* WindowManager::myThis = 0;
+ WindowManager::WindowManager(int displayId, QObject *parent) :
+     QObject(parent),
+     m_layouts(),
+-    mp_layoutAreaToSurfaceIdAssignment(0),
++    // mp_layoutAreaToSurfaceIdAssignmment(0),
+     m_currentLayout(-1),
+     m_screenId(displayId),
+     m_screenWidth(0),
+@@ -60,6 +60,8 @@ WindowManager::WindowManager(int displayId, QObject *parent) :
+     ,
+     m_appSurfaces(),
+     m_appLayers(),
++    m_keepApps(),
++    m_bgApps(),
+     m_pending_to_show(-1)
+ #endif
+ {
+@@ -71,6 +73,7 @@ WindowManager::WindowManager(int displayId, QObject *parent) :
+     m_showLayers[2] = 0; /* APPLICATIONS is not shown by default */
+     m_showLayers[3] = WINDOWMANAGER_LAYER_HOMESCREEN; /* HOMESCREEN is shwon by default */
+ 
++    m_keepApps.append(QString("mediaplayer@"));
+ #endif
+     qDebug("-=[WindowManager]=-");
+ }
+@@ -120,17 +123,36 @@ WindowManager::~WindowManager()
+ }
+ 
+ #ifdef HAVE_IVI_LAYERMANAGEMENT_API
+-int WindowManager::getLayerRenderOrder(t_ilm_layer id_array[])
++t_ilm_layer* WindowManager::getLayerRenderOrder(int& num_layers)
+ {
+-    int i, j;
++    int i, j, n_bg = m_bgApps.size();
+ 
+-    for (i = WINDOWMANAGER_LAYER_NUM - 1, j = 0; i >= 0; i--) {
++    t_ilm_layer* id_array = new t_ilm_layer[n_bg + WINDOWMANAGER_LAYER_NUM];
++
++    qDebug("Layer render order (ivi-layer-id), %d bgApps: ", n_bg);
++
++    num_layers = 0;
++    for (i = 0; i < n_bg; i++) {
++        if (m_bgApps[i] != 0) {
++            QMap<pid_t, t_ilm_layer>::const_iterator i_layers;
++            i_layers = m_appLayers.find(m_bgApps[i]);
++            /* m_showLayers[2] means layer for apps */
++            if (i_layers != m_appLayers.end() && i_layers.value() != 0
++                && i_layers.value() != m_showLayers[2]) {
++                qDebug("  m_bgApps[%d]=%d", i, i_layers.value());
++                id_array[num_layers++] = i_layers.value();
++            }
++        }
++    }
++
++    for (i = WINDOWMANAGER_LAYER_NUM - 1, j = 0; i >= 0; i--,j++) {
+         if (m_showLayers[i] != 0) {
+-            id_array[j++] = m_showLayers[i];
++            qDebug("  m_showLayers[%d]=%d", i, m_showLayers[i]);
++            id_array[num_layers++] = m_showLayers[i];
+         }
+     }
+ 
+-    return j;
++    return id_array;
+ }
+ #endif
+ 
+@@ -401,13 +423,12 @@ void WindowManager::updateScreen()
+ #endif
+ #ifdef HAVE_IVI_LAYERMANAGEMENT_API
+     if (m_pending_to_show != -1) {
+-        qDebug("show pending app (%d)", m_pending_to_show);
++        qDebug() << "show pending app (%d)" << m_pending_to_show;
+         showAppLayer(m_pending_to_show);
+     } else {
+         // display layer render order
+-        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+-        int num_layers = getLayerRenderOrder(renderOrder);
+-
++        int num_layers;
++        t_ilm_layer *renderOrder = getLayerRenderOrder(num_layers);
+         qDebug("Screen render order %d, %d layers", m_screenId, num_layers);
+         ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
+         ilm_commitChanges();
+@@ -686,6 +707,18 @@ QString WindowManager::getLayoutName(int layoutId)
+     return result;
+ }
+ 
++#ifdef HAVE_IVI_LAYERMANAGEMENT_API
++void WindowManager::renderLayers(void)
++{
++    int num_layers;
++    t_ilm_layer *renderOrder = getLayerRenderOrder(num_layers);
++
++    qDebug("Screen render order %d, %d layers", m_screenId, num_layers);
++    ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
++    ilm_commitChanges();
++}
++#endif
++
+ void WindowManager::hideLayer(int layer)
+ {
+     qDebug("-=[hideLayer]=-");
+@@ -701,10 +734,7 @@ void WindowManager::hideLayer(int layer)
+             m_pending_to_show = -1;
+         }
+ 
+-        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+-        int num_layers = getLayerRenderOrder(renderOrder);
+-        ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
+-        ilm_commitChanges();
++        renderLayers();
+     }
+ #endif
+ }
+@@ -779,10 +809,7 @@ void WindowManager::showLayer(int layer)
+ 
+         m_showLayers[layer] = layer_id_array[layer];
+ 
+-        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+-        int num_layers = getLayerRenderOrder(renderOrder);
+-        ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
+-        ilm_commitChanges();
++        renderLayers();
+     }
+ #endif
+ }
+@@ -790,7 +817,7 @@ void WindowManager::showLayer(int layer)
+ void WindowManager::showAppLayer(int pid)
+ {
+     qDebug("-=[showAppLayer]=-");
+-    qDebug("pid %d", pid);
++    qDebug() << "pid=" << pid;
+ 
+     if (pid == -1) {
+         /* nothing to show */
+@@ -802,17 +829,65 @@ void WindowManager::showAppLayer(int pid)
+ 
+     /* search layer id for application to show */
+     QMap<pid_t, t_ilm_layer>::const_iterator i = m_appLayers.find(pid);
+-    QMap<pid_t, t_ilm_surface>::const_iterator j = m_appSurfaces.find(pid);
+ 
+     if (i != m_appLayers.end()) {
++        qDebug("Found layer(%d) to show for app(pid=%d)", m_showLayers[2], pid);
+         m_showLayers[2] = i.value();
++    } else {
++        QMap<pid_t, t_ilm_surface>::const_iterator j = m_appSurfaces.find(pid);
++        /* check if this app is registered */
++        if (j == m_appSurfaces.end()) {
++            qDebug("New app %d", pid);
++            m_appSurfaces.insert(pid, 0); /* register pid only so far */
++        } /* check app is required keep running while background */
++
++          /* Probably app layer hasn't been made yet */
++          m_pending_to_show = pid;
++          /* hide current app once, back to default screen */
++          m_showLayers[2] = 0;
++          qDebug("No layer to show for app(pid=%d)", pid);
++    }
++    renderLayers();
++#endif
++}
++
++void WindowManager::showAppLayer(const QString &app_id, int pid)
++{
++    qDebug("-=[showAppLayer]=-");
++    qDebug() << "id=" << app_id << ", pid=" << pid;
++
++    if (pid == -1) {
++        /* nothing to show */
++        return;
++    }
++#ifdef HAVE_IVI_LAYERMANAGEMENT_API
++    /* clear pending flag */
++    m_pending_to_show = -1;
++
++    /* search layer id for application to show */
++    QMap<pid_t, t_ilm_layer>::const_iterator i = m_appLayers.find(pid);
++
++    if (i != m_appLayers.end()) {
+         qDebug("Found layer(%d) to show for app(pid=%d)", m_showLayers[2], pid);
++        m_showLayers[2] = i.value();
+     } else {
++        QMap<pid_t, t_ilm_surface>::const_iterator j = m_appSurfaces.find(pid);
+         /* check if this app is registered */
+         if (j == m_appSurfaces.end()) {
+             qDebug("New app %d", pid);
+             m_appSurfaces.insert(pid, 0); /* register pid only so far */
+-        }
++
++            /* check if rendering is always required */
++            /* QML apps should be always rendered if */
++            for (int k = 0; k != m_keepApps.size(); k++) {
++                if (app_id.indexOf(m_keepApps[k]) == 0) {
++                    int idx = m_bgApps.indexOf(pid);
++                    if (idx == -1) {
++                        m_bgApps.append(pid);
++                    }
++                }
++            }
++        } /* check app is required keep running while background */
+ 
+         /* Probably app layer hasn't been made yet */
+         m_pending_to_show = pid;
+@@ -820,10 +895,6 @@ void WindowManager::showAppLayer(int pid)
+         m_showLayers[2] = 0;
+         qDebug("No layer to show for app(pid=%d)", pid);
+     }
+-    t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+-
+-    int num_layers = getLayerRenderOrder(renderOrder);
+-    ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
+-    ilm_commitChanges();
++    renderLayers();
+ #endif
+ }
+diff --git a/WindowManager/src/windowmanager.hpp b/WindowManager/src/windowmanager.hpp
+index 89f255e..532bf80 100644
+--- a/WindowManager/src/windowmanager.hpp
++++ b/WindowManager/src/windowmanager.hpp
+@@ -25,6 +25,7 @@
+ 
+ #ifdef HAVE_IVI_LAYERMANAGEMENT_API
+ #include <ilm/ilm_control.h>
++#include <vector>
+ #endif
+ class WindowManager : public QObject
+ {
+@@ -50,9 +51,14 @@ private:
+ 
+ #ifdef HAVE_IVI_LAYERMANAGEMENT_API
+     t_ilm_layer* m_showLayers;
++
+     QMap<pid_t, t_ilm_surface> m_appSurfaces;
+     QMap<pid_t, t_ilm_layer> m_appLayers;
+-    int getLayerRenderOrder(t_ilm_layer* id_array);
++
++    QList<QString> m_keepApps; /* Apps needs to keep rendering */
++    QList<pid_t> m_bgApps;
++
++    t_ilm_layer* getLayerRenderOrder(int& num_layers);
+ 
+     void createNewLayer(const int layerId);
+ 
+@@ -61,11 +67,14 @@ private:
+     pid_t m_pending_to_show;
+ 
+     void addSurface(const t_ilm_surface surfaceId);
+-    t_ilm_layer addSurfaceToAppLayer(pid_t pid, const int surfaceId);
++
++  t_ilm_layer addSurfaceToAppLayer(pid_t pid, const int surfaceId);
+     void addSurfaceToLayer(const int surfaceId, const int layerId);
+ 
+     void configureHomeScreenMainSurface(const t_ilm_surface surface, const t_ilm_int width, const t_ilm_int height);
+     void configureAppSurface(const pid_t pid, const t_ilm_surface surface, const t_ilm_int width, const t_ilm_int height);
++
++    void renderLayers(void);
+ #endif
+     void updateScreen();
+ 
+@@ -118,6 +127,7 @@ public Q_SLOTS: // METHODS
+     int setSurfaceToLayoutArea(int surfaceId, int layoutAreaId);
+     void showLayer(int layer);
+     void showAppLayer(int pid);
++    void showAppLayer(const QString &app_id, int pid);
+ 
+ Q_SIGNALS: // SIGNALS
+     void surfaceVisibilityChanged(int surfaceId, bool visible);
+diff --git a/interfaces/windowmanager.xml b/interfaces/windowmanager.xml
+index e3c6df3..9d8cafc 100644
+--- a/interfaces/windowmanager.xml
++++ b/interfaces/windowmanager.xml
+@@ -157,7 +157,7 @@
+ 		-->
+ 		<method name="getAvailableSurfaces">
+ 			<arg name="surfaceIds" type="a(i)" direction="out"/>
+-			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/> 
++			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
+ 		</method>
+ 
+ 		<!--
+@@ -191,6 +191,7 @@
+ 		  Show layer for application .
+ 		-->
+ 		<method name="showAppLayer">
++			<arg name="name" type="s" direction="in"/>
+ 			<arg name="pid" type="i" direction="in"/>
+ 		</method>
+ 		<!--
+@@ -205,4 +206,3 @@
+ 		</method>
+ 	</interface>
+ </node>
+-
+-- 
+2.7.4
+
