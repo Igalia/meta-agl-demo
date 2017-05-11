@@ -8,8 +8,8 @@ require agl-demo-platform.bb
 
 LICENSE = "MIT"
 
-IMAGE_FEATURES_append = "dev-pkgs"
-IMAGE_INSTALL_append = "kernel-dev"
+IMAGE_FEATURES_append = " dev-pkgs"
+IMAGE_INSTALL_append = " kernel-dev"
 
 inherit populate_sdk populate_sdk_qt5
 
