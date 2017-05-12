@@ -39,11 +39,7 @@ MOST_HVAC_append_porter = " \
     "
 
 # mapviewer and mapviewer-demo requires AGL CES2017 demo mock-up
-MAPVIEWER = " "
-MAPVIEWER_append_porter = " \
-    mapviewer \
-    mapviewer-demo \
-    "
+MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-mapviewer-demo", " mapviewer mapviewer-demo", "",d)}"
 
 AGL_APPS = " \
     dashboard \
