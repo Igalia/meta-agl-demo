@@ -20,6 +20,7 @@ SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://jtalk.in \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
+         file://0001-Makefile-compatible-aglwgt.patch \
 "
 
 # To avoid C++ library link failure
