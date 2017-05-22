@@ -53,7 +53,6 @@ MAPVIEWER_append_porter = " \
     "
 
 AGL_APPS = " \
-    controls \
     dashboard \
     hvac \
     mediaplayer \
