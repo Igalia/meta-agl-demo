@@ -1,0 +1,12 @@
+diff --git a/WindowManager/src/windowmanager.cpp b/WindowManager/src/windowmanager.cpp
+index 02bc392..9094115 100644
+--- a/WindowManager/src/windowmanager.cpp
++++ b/WindowManager/src/windowmanager.cpp
+@@ -74,6 +74,7 @@ WindowManager::WindowManager(int displayId, QObject *parent) :
+     m_showLayers[3] = WINDOWMANAGER_LAYER_HOMESCREEN; /* HOMESCREEN is shwon by default */
+ 
+     m_keepApps.append(QString("mediaplayer@"));
++    m_keepApps.append(QString("navigation@"));
+ #endif
+     qDebug("-=[WindowManager]=-");
+ }
