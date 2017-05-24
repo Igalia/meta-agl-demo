@@ -6,7 +6,7 @@ SECTION     = "apps"
 S           = "${WORKDIR}/git/"
 
 inherit qmake5 systemd pkgconfig
-DEPENDS = " qtbase qtdeclarative qtquickcontrols2 "
+DEPENDS = " qtbase qtdeclarative qtquickcontrols2 pulseaudio"
 RDEPENDS_${PN} = " \
 	homescreenappframeworkbinderagl \
 	inputeventmanager \
