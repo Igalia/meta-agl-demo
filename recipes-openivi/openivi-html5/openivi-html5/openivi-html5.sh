@@ -30,10 +30,7 @@ SCREEN_H=1920
 QT_W=1080
 QT_H=1920
 
-# Ensure that Weston has been fully loaded
-sleep 8
-
-/usr/bin/openivi-html5 -f -u $HOMESCREEN &
+QT_IVI_SURFACE_ID=4194304 QT_WAYLAND_SHELL_INTEGRATION=ivi-shell /usr/bin/openivi-html5 -f -u $HOMESCREEN &
 
 # qmlscene create 2 surfaces
 #   0x80000000 : for off screen buffer ?

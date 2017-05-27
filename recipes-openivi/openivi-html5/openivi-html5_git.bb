@@ -16,9 +16,7 @@ PV = "0.1"
 
 S = "${WORKDIR}/git"
 
-SYSTEMD_SERVICE_${PN} = "openivi-html5.service"
-
-RDEPENDS_${PN} = "qtbase qtwebkit"
+RDEPENDS_${PN} = "qtbase qtwebkit inputeventmanager windowmanager"
 DEPENDS = "qtbase-native qtbase qtwebkit"
 
 EXTRA_OECMAKE = " -DCMAKE_DISABLE_FIND_PACKAGE_X11=TRUE "
@@ -35,8 +33,11 @@ do_install() {
   install -p -D ${WORKDIR}/openivi-html5.sh ${D}${bindir}/openivi-html5.sh
 
   if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
-    install -p -D ${WORKDIR}/openivi-html5.service ${D}${systemd_unitdir}/system/openivi-html5.service
+    install -d ${D}${systemd_user_unitdir}
+    install -p -D ${WORKDIR}/openivi-html5.service ${D}${systemd_user_unitdir}/openivi-html5.service
+    install -d ${D}${sysconfdir}/systemd/user/default.target.wants
+    ln -sf ${systemd_user_unitdir}/openivi-html5.service ${D}${sysconfdir}/systemd/user/default.target.wants
   fi
 }
 
-FILES_${PN} += " ${prefix}/bin/openivi-html5.sh"
+FILES_${PN} += " ${prefix}/bin/openivi-html5.sh ${systemd_user_unitdir} ${sysconfdir}"
