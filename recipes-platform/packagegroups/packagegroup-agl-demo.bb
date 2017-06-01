@@ -29,6 +29,16 @@ TTF_FONTS = " \
     ttf-dejavu-serif \
     "
 
+# Add webkit as workaround as webengine is broken right now
+EXTRA_APPS_append = " qtwebkit qtwebkit-examples-examples"
+#EXTRA_APPS_append = " qtsmarthome cinematicexperience qt5everywheredemo qt5-demo-extrafiles"
+#IMAGE_INSTALL_append = " qtwebengine-examples"
+
+# add support for websocket in Qt and QML
+EXTRA_APPS_append = " qtwebsockets qtwebsockets-qmlplugins"
+PREFERRED_PROVIDER_virtual/webruntime = "web-runtime"
+
+
 RDEPENDS_${PN} += " \
     linux-firmware-ath9k \
     can-utils \
@@ -36,4 +46,5 @@ RDEPENDS_${PN} += " \
     python-curses \
     dhcp-client \
     ${TTF_FONTS} \
+    ${EXTRA_APPS} \
     "

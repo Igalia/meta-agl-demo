@@ -13,3 +13,6 @@ EXTRA_OECONF_append = ""
 
 # '-qpa wayland-egl' set wayland-egl as default of platform plagins
 PACKAGECONFIG[wayland]="-qpa wayland-egl -no-qpa-platform-guard"
+
+# Temporarily fix bug due to binutils 2.28
+QT_CONFIG_FLAGS_append = " -no-use-gold-linker"
