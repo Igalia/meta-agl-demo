@@ -8,9 +8,8 @@ DISABLE_TEST = "-DBUILD_ILM_API_TESTS:BOOL=FALSE \
     -DINSTALL_ILM_API_TESTS:BOOL=FALSE \
     "
 
-PACKAGECONFIG ??= "ilm_input test"
+PACKAGECONFIG ??= "test"
 PACKAGECONFIG[test] = "${ENABLE_TEST},${DISABLE_TEST},gtest"
-
 
 SRC_URI_append = "\
     file://cmake-find-gtest.patch \
