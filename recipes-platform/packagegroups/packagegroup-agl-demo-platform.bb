@@ -21,15 +21,8 @@ RDEPENDS_${PN} += "\
 
 MOST_DRIVERS = " "
 MOST_DRIVERS_append = " \
-    aim-cdev \
-    aim-network \
-    aim-sound \
-    aim-v4l2 \
-    hdm-dim2 \
-    hdm-i2c \
-    hdm-usb \
     mocca-usb \
-    mostcore \
+    most \
     "
 
 # HVAC dependencies depend on drivers above

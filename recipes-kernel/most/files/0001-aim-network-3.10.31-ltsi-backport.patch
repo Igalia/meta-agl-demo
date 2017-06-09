@@ -8,10 +8,10 @@ Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
  aim-network/networking.c | 7 +++----
  1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/networking.c b/aim-network/networking.c
+diff --git a/aim-network/networking.c b/aim-network/networking.c
 index ce1764c..e04b523 100644
---- a/networking.c
-+++ b/networking.c
+--- a/aim-network/networking.c
++++ b/aim-network/networking.c
 @@ -362,8 +362,7 @@ static int aim_probe_channel(struct most_interface *iface, int channel_idx,
  
  	if (nd->tx.linked || nd->rx.linked) {

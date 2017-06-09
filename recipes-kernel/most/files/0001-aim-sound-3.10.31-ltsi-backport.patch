@@ -11,10 +11,10 @@ Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
  aim-sound/sound.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound.c b/aim-sound/sound.c
+diff --git a/aim-sound/sound.c b/aim-sound/sound.c
 index 3dc625c..af0af2d 100644
---- a/sound.c
-+++ b/sound.c
+--- a/aim-sound/sound.c
++++ b/aim-sound/sound.c
 @@ -595,7 +595,7 @@ static int audio_probe_channel(struct most_interface *iface, int channel_id,
  		return ret;
  	}
