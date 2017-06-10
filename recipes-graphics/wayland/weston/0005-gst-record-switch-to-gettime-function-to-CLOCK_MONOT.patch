@@ -1,0 +1,64 @@
+From 725eeebe45149c1340d68a24da50b301955146fc Mon Sep 17 00:00:00 2001
+From: Harunobu Kurokawa <harunobu.kurokawa.dn@renesas.com>
+Date: Sat, 10 Jun 2017 11:23:02 +0900
+Subject: [PATCH] gst-record: switch to gettime function to CLOCK_MONOTONIC
+
+When system time is changed (e.g. from NTP) and buffer duration
+is bigger, the gst-record stops. It should use the CLOCK_MONOTONIC time.
+
+This patch is updated from
+https://gerrit.automotivelinux.org/gerrit/#/c/9417/
+
+Signed-off-by: Harunobu Kurokawa <harunobu.kurokawa.dn@renesas.com>
+---
+ src/gst-recorder.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/src/gst-recorder.c b/src/gst-recorder.c
+index 441e294..ed1526d 100644
+--- a/src/gst-recorder.c
++++ b/src/gst-recorder.c
+@@ -102,8 +102,9 @@ struct gst_recorder {
+ 	/* bus */
+ 	GstBus *bus;
+ 	/* timestamp */
++	GstClock   *clock;
+ 	GstClockTime timestamp;
+-	uint32_t ts_last_frame;
++	GstClockTime ts_last_frame;
+ 	/* to be removed */
+ 	guint callback_tag;
+ 
+@@ -1036,6 +1037,9 @@ gst_recorder_create(struct gst_recorder_settings *settings)
+ 		goto err_gst_stop;
+ 	}
+ 
++	/* set clock time */
++	r->clock = gst_element_get_clock (GST_ELEMENT_CAST (r->appsrc));
++
+ 	weston_log("gst_recorder_create done\n");
+ 
+ 	return r;
+@@ -1071,15 +1075,15 @@ gst_recorder_destroy(struct gst_recorder *r)
+ static int
+ gst_recorder_set_timestamp(struct gst_recorder *r, GstBuffer *buffer)
+ {
+-	uint32_t cur_time = weston_compositor_get_time();
++	GstClockTime cur_time = gst_clock_get_time(r->clock);
+ 
+ 	if (r->timestamp == 0) {
+ 		/* first frame assume around DEFAULT_FPS FPS */
+ 		GST_BUFFER_DURATION(buffer) = gst_util_uint64_scale_int(1, GST_SECOND, DEFAULT_FPS);
+ 	} else {
+-		uint32_t delta = cur_time - r->ts_last_frame;
+-		/* delta in mS */
+-		GST_BUFFER_DURATION(buffer) = gst_util_uint64_scale_int(delta, GST_SECOND, 1000);
++		GstClockTime delta = cur_time - r->ts_last_frame;
++		/* delta in nS */
++		GST_BUFFER_DURATION(buffer) = delta;
+ 	}
+ 
+ 	r->timestamp += GST_BUFFER_DURATION(buffer);
+-- 
+2.9.2
+
