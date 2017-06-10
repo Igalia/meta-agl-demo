@@ -17,4 +17,4 @@ inherit qmake5 aglwgt
 # build-time dependencies
 DEPENDS += "sqlite3 qtquickcontrols2 qtmultimedia"
 
-RDEPENDS_${PN} += "qtmultimedia qtmultimedia-qmlplugins"
+RDEPENDS_${PN} += "qtmultimedia qtmultimedia-qmlplugins lightmediascanner"
