@@ -13,12 +13,12 @@ RDEPENDS_${PN} = " \
 	windowmanager"
 
 LIC_FILES_CHKSUM = "file://homescreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "${AUTOREV}"
+
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=https;branch=dab \
+           file://dbus-homescreen.conf.in"
+SRCREV  = "ce92baf2335146b44dd1f56bcac4b1586752bcc3"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
-
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=http \
-           file://dbus-homescreen.conf.in"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 

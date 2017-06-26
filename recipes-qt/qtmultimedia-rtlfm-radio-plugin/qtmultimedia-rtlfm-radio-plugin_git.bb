@@ -7,10 +7,10 @@ LIC_FILES_CHKSUM = "file://rtlfmradioplugin.cpp;endline=5;md5=747a800420eac5cb6a
 
 DEPENDS = "qtmultimedia pulseaudio alsa-lib rtl-sdr"
 
-PV = "0.1+git${SRCPV}"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/qtmultimedia-rtlfm-radio-plugin;protocol=https"
-SRCREV = "${AUTOREV}"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/qtmultimedia-rtlfm-radio-plugin;protocol=https;branch=master"
+SRCREV = "aeb67506173a7b8cef089fa725c3abe1f629dc67"
+PV = "0.1+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 

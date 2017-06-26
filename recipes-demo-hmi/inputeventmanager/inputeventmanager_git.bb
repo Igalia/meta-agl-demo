@@ -9,11 +9,11 @@ inherit qmake5 systemd
 DEPENDS = " qtbase "
 
 LIC_FILES_CHKSUM = "file://inputeventmanager/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "${AUTOREV}"
+
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/inputeventmanager.git;protocol=https;branch=dab"
+SRCREV  = "b39053a5a8512a735ac154ddbd7dba3ceeadce3e"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
-
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/inputeventmanager.git;protocol=http"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 

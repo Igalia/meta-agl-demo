@@ -4,15 +4,14 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 #LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e \
 #		   "  
 
-PV = "0.1"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/vod-server;protocol=https"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/vod-server;protocol=https;branch=dab"
 SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch \
             file://vod-demo.service"
 
 S = "${WORKDIR}/git"
-#SRCREV = "8c5f2324d7aa61669324aec1a0ad091fe1379489"
-SRCREV = "${AUTOREV}"
+SRCREV = "38a2c807b3128c5a84538334c6ba18fe95a55734"
+PV = "0.1+git${SRCREV}"
 
 do_install() {
         install -m 0755 -d ${D}${bindir}

@@ -5,10 +5,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
 DEPENDS = "qtquickcontrols2"
 
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/qtquickcontrols2-agl;protocol=https;branch=dab"
+SRCREV = "99437bc7f2c41d534b2585650b01dc1683da857f"
 PV = "1.0+git${SRCPV}"
-
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/qtquickcontrols2-agl;protocol=http"
-SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git/"
 

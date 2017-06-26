@@ -4,19 +4,18 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 #LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e \
 #		   "  
 
-PV = "0.1"
 
 DEPENDS += "libxml2"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/unicens;protocol=https"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/unicens;protocol=https;branch=dab"
 SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch"
 SRC_URI += "file://0001-Support-booting-by-systemd.patch \
             file://most-network-startup.service \
             file://most-network-manager.service"
 
 S = "${WORKDIR}/git"
-#SRCREV = "8c5f2324d7aa61669324aec1a0ad091fe1379489"
-SRCREV = "${AUTOREV}"
+SRCREV = "98de71566c669330284fb5c707b7f05abd893862"
+PV = "0.1+git${SRCREV}"
 
 do_install() {
     install -m 0755 -d ${D}/usr/AGL/most

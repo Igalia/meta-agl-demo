@@ -6,12 +6,12 @@ inherit module
 
 PV = "0.1"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https;branch=dab"
 SRC_URI_append_porter = " file://0001-aim-network-3.10.31-ltsi-backport.patch \
 			   file://0001-aim-sound-3.10.31-ltsi-backport.patch \
 			 "
 S = "${WORKDIR}/git/driver"
-SRCREV = "${AUTOREV}"
+SRCREV = "c52aecbce20ccc47ee91a9bd33cf413772b3487a"
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.
