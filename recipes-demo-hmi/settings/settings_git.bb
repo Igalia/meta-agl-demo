@@ -15,4 +15,9 @@ S  = "${WORKDIR}/git"
 # build-time dependencies
 DEPENDS += "qtquickcontrols2"
 
+# runtime dependencies
+RDEPENDS_${PN} += " \
+            agl-service-bluetooth \
+            agl-service-wifi"
+
 inherit qmake5 aglwgt
