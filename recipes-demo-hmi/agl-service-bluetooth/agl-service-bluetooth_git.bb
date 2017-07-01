@@ -12,4 +12,7 @@ SRCREV  = "${AUTOREV}"
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
+# for historical reasons, TODO: migrate to cmake
+DEPENDS += "qtbase"
+
 inherit qmake5 aglwgt
