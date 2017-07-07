@@ -14,3 +14,12 @@ ALLOW_EMPTY_${PN} = "1"
 
 RDEPENDS_${PN} += "\
     "
+
+AGL_APPS = " \
+    low-level-can-service \
+    "
+
+RDEPENDS_${PN}_append = " \
+    ${AGL_APPS} \
+    "
+
