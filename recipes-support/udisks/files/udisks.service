@@ -6,7 +6,6 @@ Documentation=man:udisks(7)
 Type=dbus
 BusName=org.freedesktop.UDisks
 ExecStart=/usr/libexec/udisks-daemon --no-debug
-ExecStartPost=/usr/libexec/automount.sh
 
 [Install]
 WantedBy=default.target

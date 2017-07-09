@@ -6,7 +6,7 @@ pathtoname() {
 
 MOUNT_OPTIONS="ro,sync"
 
-rmdir /media/* || true &> /dev/null
+rmdir /media/* &> /dev/null || true
 for DEVNAME in $(udisks --enumerate-device-files|grep -e sd[a-z][0-9]); do
 	udisks --mount-options $MOUNT_OPTIONS --mount $DEVNAME
 done
