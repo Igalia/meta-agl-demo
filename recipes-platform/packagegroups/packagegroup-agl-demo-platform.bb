@@ -51,6 +51,8 @@ AGL_APPS = " \
     poiapp \
     radio \
     settings \
+    high-level-viwi-service \
+    low-can-demo \
     "
 
 RDEPENDS_${PN}_append = " \
