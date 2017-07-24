@@ -16,8 +16,11 @@ RDEPENDS_${PN} += "\
     "
 
 AGL_APPS = " \
-    low-level-can-service \
     "
+# restricted due to dependency on Kernel >= 4.8 which is not available in all repositories
+AGL_APPS_append_m3ulcb = " low-level-can-service "
+AGL_APPS_append_intel-corei7-64 = " low-level-can-service "
+AGL_APPS_append_qemux86-64 = " low-level-can-service "
 
 RDEPENDS_${PN}_append = " \
     ${AGL_APPS} \
