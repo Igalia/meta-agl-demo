@@ -37,6 +37,14 @@ do_compile_prepend() {
 }
 
 do_install_append() {
+   # Attention: BUG: app ships native lib as part of platform
+   # see SPEC-785 and SPEC-384
+   # /start FIXME __________________
+     cd ${B}
+     oe_runmake 'DESTDIR=${D}' install
+     rm ${D}/usr/bin/navi
+   # /end   FIXME ^^^^^^^^^^^^^^^^^^^
+
    install -d ${D}/usr/AGL/apps
    mkdir -p ${B}/package/
    mv ${B}/navigation.wgt ${B}/package/
