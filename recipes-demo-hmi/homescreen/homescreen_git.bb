@@ -14,7 +14,7 @@ RDEPENDS_${PN} = " \
 
 LIC_FILES_CHKSUM = "file://homescreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=https;branch=${AGL_BRANCH} \
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=http;branch=sandbox/jobol/forgerock \
            file://dbus-homescreen.conf.in"
 SRCREV  = "${AGL_APP_REVISION}"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
@@ -25,6 +25,7 @@ PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 do_install() {
     install -d ${D}/usr/AGL/${PN}
     install -m 0755 ${B}/homescreen/HomeScreen ${D}/usr/AGL/${PN}/
+    install -m 0755 ${S}/homescreen/HomeScreen.launch ${D}/usr/AGL/${PN}/
     install -m 0755 ${B}/sampleapptimedate/SampleAppTimeDate ${D}/usr/AGL/${PN}/
 
 # claneys: add dbus policy to make wifi/bluetooth status icon working as quick 
