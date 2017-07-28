@@ -12,7 +12,8 @@ DEPENDS = " \
           wayland libdbus-c++ af-main \
           "
 
-RDEPENDS_${PN} = " flite openjtalk "
+RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat openssl \
+                   wayland libdbus-c++ af-main "
 
 SRCREV="c6403c1147fa53cd6a638f738d270c5d3bb214cf"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \

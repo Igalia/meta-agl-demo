@@ -12,6 +12,9 @@ inherit aglwgt
 DEPENDS += " qtbase libdbus-c++ json-c \
            "
 
+RDEPENDS_${PN} =  " qtbase libdbus-c++ json-c \
+                  "
+
 SRCREV  = "b0e059007de776450c91c983a2bcac20414617e9"
 SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=agl \
           "
