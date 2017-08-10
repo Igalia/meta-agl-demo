@@ -15,13 +15,10 @@ DEPENDS = " \
 RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat openssl \
                    wayland libdbus-c++ af-main "
 
-SRCREV="c6403c1147fa53cd6a638f738d270c5d3bb214cf"
+SRCREV="acbb9ea0678bd2f21f268000332a4786e87fb3f6"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
-         file://flite.in \
-         file://jtalk.in \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
-         file://0001-Makefile-compatible-aglwgt.patch \
 "
 
 # To avoid C++ library link failure
@@ -32,32 +29,13 @@ inherit aglwgt
 
 S = "${WORKDIR}/git"
 
-do_compile_prepend() {
-   cp ${WORKDIR}/flite.in ${S}/
-   cp ${WORKDIR}/jtalk.in ${S}/
-}
-
 do_install_append() {
-   # Attention: BUG: app ships native lib as part of platform
-   # see SPEC-785 and SPEC-384
-   # /start FIXME __________________
-     cd ${B}
-     oe_runmake 'DESTDIR=${D}' install
-     rm ${D}/usr/bin/navi
-   # /end   FIXME ^^^^^^^^^^^^^^^^^^^
-
+# mapdata install scripts
    install -d ${D}/usr/AGL/apps
-   mkdir -p ${B}/package/
-   mv ${B}/navigation.wgt ${B}/package/
    install -m 0755 ${WORKDIR}/download_mapdata_jp.sh ${D}/usr/AGL/apps/
    install -m 0755 ${WORKDIR}/download_mapdata_uk.sh ${D}/usr/AGL/apps/
 
    install -d ${D}/var/mapdata
 }
-#it's Workaround
-EXTRA_WGT_POSTINSTALL = "\
-        cyad -s -k MANIFESTS -t allow -c User::App::navigation -u '*' -p 'http://tizen.org/privilege/internal/dbus';\
-        cyad -s -k MANIFESTS -t allow -c User::App::poi -u '*' -p 'http://tizen.org/privilege/internal/dbus';\
-"
 
 FILES_${PN} += " /usr/AGL/apps/*.sh /var/mapdata "
