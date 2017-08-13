@@ -11,11 +11,14 @@ PACKAGES = "\
 
 ALLOW_EMPTY_${PN} = "1"
 
+SMARTDEVICELINK = "${@bb.utils.contains('DISTRO_FEATURES', 'agl-sdl', \
+    'packagegroup-agl-smartdevicelink', '', d)}"
 
 RDEPENDS_${PN} += "\
     packagegroup-agl-appfw \
     homescreen \
     udisks \
+    ${SMARTDEVICELINK} \
     "
 
 # fonts
