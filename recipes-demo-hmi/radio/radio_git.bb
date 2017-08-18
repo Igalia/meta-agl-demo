@@ -18,7 +18,7 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS = "qtquickcontrols2 rtl-sdr glib-2.0 pulseaudio alsa-lib"
+DEPENDS = "qtquickcontrols2"
 
 inherit qmake5 aglwgt
 
@@ -37,3 +37,5 @@ FILES_${PN} += " \
 	/home/root/app-data/radio/presets-*.conf \
 	/home/root/app-data/radio/presets.conf \
 "
+
+RDEPENDS_${PN} += "agl-service-radio"
