@@ -7,3 +7,5 @@ SRC_URI_append_m3ulcb = " \
     file://0004-gst-record-Specify-bytesused-and-length-of-VSP-input.patch \
     file://0005-gst-record-switch-to-gettime-function-to-CLOCK_MONOT.patch \
 "
+
+DEPENDS_append_m3ulcb = " gstreamer1.0-plugins-base"
