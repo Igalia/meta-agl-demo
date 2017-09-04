@@ -1,0 +1,26 @@
+From b269994be937cbb31c0d73ecc899ca8a545a6a4a Mon Sep 17 00:00:00 2001
+From: Christian Gromm <christian.gromm@microchip.com>
+Date: Mon, 4 Sep 2017 11:09:17 +0200
+Subject: [PATCH 3/5] core: remove kernel log for MBO status
+
+Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+---
+ driver/mostcore/core.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/mostcore/core.c b/mostcore/core.c
+index 931efb9..595becc 100644
+--- a/mostcore/core.c
++++ b/mostcore/core.c
+@@ -1348,8 +1348,6 @@ static void most_write_completion(struct mbo *mbo)
+ 	BUG_ON((!mbo) || (!mbo->context));
+ 
+ 	c = mbo->context;
+-	if (mbo->status == MBO_E_INVAL)
+-		pr_info("WARN: Tx MBO status: invalid\n");
+ 	if (unlikely(c->is_poisoned || (mbo->status == MBO_E_CLOSE)))
+ 		trash_mbo(mbo);
+ 	else
+-- 
+2.7.4
+

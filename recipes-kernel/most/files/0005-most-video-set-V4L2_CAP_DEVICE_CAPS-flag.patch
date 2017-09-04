@@ -1,0 +1,25 @@
+From 7518453386ad3e82008186a6c9ca86ed8c136801 Mon Sep 17 00:00:00 2001
+From: Christian Gromm <christian.gromm@microchip.com>
+Date: Mon, 4 Sep 2017 16:08:38 +0200
+Subject: [PATCH 5/5] most: video: set V4L2_CAP_DEVICE_CAPS flag
+
+Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+---
+ driver/aim-v4l2/video.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/aim-v4l2/video.c b/aim-v4l2/video.c
+index 6405a03..db75d4d 100644
+--- a/aim-v4l2/video.c
++++ b/aim-v4l2/video.c
+@@ -265,6 +265,7 @@ static int vidioc_querycap(struct file *file, void *priv,
+ 
+ 	cap->device_caps =
+ 	cap->capabilities =
++		V4L2_CAP_DEVICE_CAPS |
+ 		V4L2_CAP_READWRITE |
+ 		V4L2_CAP_TUNER |
+ 		V4L2_CAP_VIDEO_CAPTURE;
+-- 
+2.7.4
+
