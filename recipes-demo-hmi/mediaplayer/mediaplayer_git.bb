@@ -15,6 +15,6 @@ S  = "${WORKDIR}/git"
 inherit qmake5 aglwgt
 
 # build-time dependencies
-DEPENDS += "sqlite3 qtquickcontrols2 qtmultimedia"
+DEPENDS += "sqlite3 qtquickcontrols2 qtmultimedia agl-service-mediascanner"
 
-RDEPENDS_${PN} += "qtmultimedia qtmultimedia-qmlplugins lightmediascanner"
+RDEPENDS_${PN} += "qtmultimedia qtmultimedia-qmlplugins"
