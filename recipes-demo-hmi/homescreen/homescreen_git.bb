@@ -16,7 +16,11 @@ LIC_FILES_CHKSUM = "file://homescreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c9
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=https;branch=dab \
            file://dbus-homescreen.conf.in"
+
 SRCREV  = "b9889b160ecc43dcde07fe9d8a96373196c539ab"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
+
+
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 

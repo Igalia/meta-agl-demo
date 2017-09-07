@@ -13,6 +13,7 @@ SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/radio;protocol=https;bra
            file://presets-FOSDEM.conf \
 "
 SRCREV  = "2f266ec84ecc46df1858dd170842fe20e427aa92"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"

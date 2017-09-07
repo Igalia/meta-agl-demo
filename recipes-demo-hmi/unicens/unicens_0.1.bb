@@ -15,7 +15,9 @@ SRC_URI += "file://0001-Support-booting-by-systemd.patch \
 
 S = "${WORKDIR}/git"
 SRCREV = "98de71566c669330284fb5c707b7f05abd893862"
-PV = "0.1+git${SRCREV}"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
+
+PV = "0.1+git${SRCPV}"
 
 do_install() {
     install -m 0755 -d ${D}/usr/AGL/most

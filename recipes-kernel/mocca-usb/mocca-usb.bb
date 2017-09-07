@@ -6,9 +6,11 @@ inherit module
 
 PV = "0.1"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/can-lin/;protocol=https"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/can-lin/;protocol=https;branch=dab"
 S = "${WORKDIR}/git/Usb-Driver"
+
 SRCREV = "02ba272c0eb51b06160307b6cb71f91684772c8c"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.

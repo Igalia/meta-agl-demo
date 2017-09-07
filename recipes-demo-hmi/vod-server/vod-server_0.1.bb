@@ -11,7 +11,9 @@ SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch \
 
 S = "${WORKDIR}/git"
 SRCREV = "38a2c807b3128c5a84538334c6ba18fe95a55734"
-PV = "0.1+git${SRCREV}"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
+
+PV = "0.1+git${SRCPV}"
 
 do_install() {
         install -m 0755 -d ${D}${bindir}
