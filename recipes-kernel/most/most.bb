@@ -12,6 +12,8 @@ SRC_URI_append_porter = " file://0001-aim-network-3.10.31-ltsi-backport.patch \
 			 "
 S = "${WORKDIR}/git/driver"
 SRCREV = "c52aecbce20ccc47ee91a9bd33cf413772b3487a"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
+
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.

@@ -7,7 +7,9 @@ LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/mediaplayer;protocol=https;branch=dab"
-SRCREV  = "71b6e40301a2e23edfeaea5c33187db14c4d8917"
+
+SRCREV  = "fc2ca7417ce2eefb1a35f19872b181a0f600e99d"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"

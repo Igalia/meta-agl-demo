@@ -12,6 +12,9 @@ LIC_FILES_CHKSUM = "file://homescreenappframeworkbinderagl/LICENSE;md5=ae6497158
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/homescreenappframeworkbinderagl.git;protocol=https;branch=dab"
 SRCREV  = "33ef2deaf16b5de25041db8eaf3f97602026a501"
+SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
+
+
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 
