@@ -1,5 +1,5 @@
-SUMMARY     = "Low CAN demo HTTP5 UI"
-DESCRIPTION = "AGL HTTP5 UI to display car metric (speed, rpm, ...) on AGL Distribution"
+SUMMARY     = "Low CAN demo HTML5 UI"
+DESCRIPTION = "AGL HTML5 UI to display car metric (speed, rpm, ...) on AGL Distribution"
 HOMEPAGE    = "https://github.com/iotbzh/low-can-demo"
 
 LICENSE     = "Apache-2.0"
