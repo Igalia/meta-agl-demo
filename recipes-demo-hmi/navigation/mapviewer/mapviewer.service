@@ -1,6 +1,6 @@
 [Unit]
 Conflicts=getty@tty1.service
-After=weston.service
+After=weston.service HomeScreen.service
 
 # map viewr is a child application which can work with navigation.
 # This app requires mapdata. It has to be stored at /var/mapdata/navi_data_UK .
@@ -17,6 +17,7 @@ ExecStartPost=/usr/AGL/mapviewer/mapviewer-settings.sh
 
 ExecStop=/usr/bin/killall -s KILL mapview
 Type=simple
+Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

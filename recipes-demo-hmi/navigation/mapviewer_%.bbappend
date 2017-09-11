@@ -15,7 +15,8 @@ do_install_append() {
 
     # Install systemd unit files
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
-        install -m 644 -p -D ${WORKDIR}/mapviewer.service ${D}${systemd_system_unitdir}/mapviewer.service
+        install -d ${D}${systemd_user_unitdir}
+        install -m 644 -p -D ${WORKDIR}/mapviewer.service ${D}${systemd_user_unitdir}/mapviewer.service
     fi
 }
 
@@ -26,6 +27,6 @@ do_install_append() {
 #SYSTEMD_SERVICE_${PN} = "mapviewer.service"
 
 FILES_${PN} += " \
-    ${systemd_system_unitdir}/mapviewer.service \
+    ${systemd_user_unitdir}/mapviewer.service \
     /usr/AGL/mapviewer/ \
     "
