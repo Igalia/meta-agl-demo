@@ -1,0 +1,61 @@
+From 90a51301038e492875ac02ed48fa86e699849e06 Mon Sep 17 00:00:00 2001
+From: Damian Hobson-Garcia <dhobsong@igel.co.jp>
+Date: Tue, 9 May 2017 18:07:52 +0900
+Subject: [PATCH 4/4] gst-record: Specify bytesused and length of VSP input
+ buffer
+
+The bytesused=0 setting has been deprecated in newer kernels.
+---
+ libweston/gst-recorder.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/libweston/gst-recorder.c b/libweston/gst-recorder.c
+index d2cf8dc..7dafd95 100644
+--- a/libweston/gst-recorder.c
++++ b/libweston/gst-recorder.c
+@@ -484,7 +484,7 @@ vsp_request_buffers(vsp_data_t *vsp, vsp_port_n port, unsigned int num)
+ 
+ /* ...enqueue dmafd buffer */
+ static int
+-vsp_input_buffer_queue_dmafd(vsp_data_t *vsp, int i, int dmafd)
++vsp_input_buffer_queue_dmafd(vsp_data_t *vsp, int i, int dmafd, int bytesused)
+ {
+ 	vsp_media_pad_t    *pad = &vsp->input;
+ 	struct v4l2_buffer  buf;
+@@ -499,6 +499,8 @@ vsp_input_buffer_queue_dmafd(vsp_data_t *vsp, int i, int dmafd)
+ 	buf.m.planes = planes;
+ 	buf.length = 1;
+ 	buf.m.planes[0].m.fd = dmafd;
++	buf.m.planes[0].bytesused = bytesused;
++	buf.m.planes[0].length = bytesused;
+ 
+ 	/* ...submit buffer */
+ 	if (ioctl(pad->fd, VIDIOC_QBUF, &buf) < 0) {
+@@ -1098,6 +1100,7 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ 	GstMapInfo info;
+ 	int ysize;
+ 	int csize;
++	int rgbsize;
+ 
+         /* get GST buffer */
+ 	if (gst_recorder_omx_buffer_acquire(r, &buf, &info) < 0) {
+@@ -1111,6 +1114,7 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ #else
+ 	csize = ysize / 2;
+ #endif
++	rgbsize = stride * r->set->height;
+ 
+ 	pthread_mutex_lock(&r->vsp->mutex);
+ 	/* setup vsp */
+@@ -1139,7 +1143,7 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ 	}
+ 
+ 	/* queue input vsp buffer */
+-	if (vsp_input_buffer_queue_dmafd(r->vsp, 0, fd) < 0) {
++	if (vsp_input_buffer_queue_dmafd(r->vsp, 0, fd, rgbsize) < 0) {
+ 		weston_log("VSP: failed to queue input buffer\n");
+ 		goto err_vsp;
+ 	}
+-- 
+2.9.2
+

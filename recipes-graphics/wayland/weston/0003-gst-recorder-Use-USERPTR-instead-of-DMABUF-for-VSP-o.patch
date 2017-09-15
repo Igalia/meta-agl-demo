@@ -1,0 +1,261 @@
+From f450d78f49ab55149b6b64251dd4c4f1ad04c9aa Mon Sep 17 00:00:00 2001
+From: Damian Hobson-Garcia <dhobsong@igel.co.jp>
+Date: Thu, 11 May 2017 12:05:56 +0900
+Subject: [PATCH 3/4] gst-recorder: Use USERPTR instead of DMABUF for VSP
+ output
+
+The RCar-Gen3 encoder requires buffers to be allocated and managed
+externally when using dmabuf buffers.  Since different sized buffers
+are required for each output, the VSP cannot allocate these buffers
+externally.  The encoder provides its own buffers in USERPTR mode, so
+switch to that.
+---
+ libweston/gst-recorder.c | 100 +++++++++++++++++++++++++++++------------------
+ 1 file changed, 63 insertions(+), 37 deletions(-)
+
+diff --git a/libweston/gst-recorder.c b/libweston/gst-recorder.c
+index d46d4f0..d2cf8dc 100644
+--- a/libweston/gst-recorder.c
++++ b/libweston/gst-recorder.c
+@@ -311,7 +311,7 @@ vsp_init(const char *devname)
+ 		weston_log("failed to open subdev '%s'\n", buf);
+ 		goto error_media;
+ 	}
+-	else if ((vsp->output.fd = open(media_entity_get_devname(entity), O_RDWR | O_NONBLOCK)) < 0)
++	else if ((vsp->output.fd = open(media_entity_get_devname(entity), O_RDWR )) < 0)
+ 	{
+ 		weston_log("failed to open device '%s'\n", media_entity_get_devname(entity));
+ 		goto error_media;
+@@ -464,7 +464,8 @@ vsp_request_buffers(vsp_data_t *vsp, vsp_port_n port, unsigned int num)
+ 	memset(&reqbuf, 0, sizeof(reqbuf));
+ 	reqbuf.type = (port == VSP_PORT_INPUT) ?
+ 		V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE : V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	reqbuf.memory = V4L2_MEMORY_DMABUF;
++	reqbuf.memory = (port == VSP_PORT_INPUT) ?
++		V4L2_MEMORY_DMABUF : V4L2_MEMORY_USERPTR;
+ 	reqbuf.count = num;
+ 	if (ioctl(fd, VIDIOC_REQBUFS, &reqbuf) < 0) {
+ 		weston_log("VSP: %s REQBUFS failed: %d\n",
+@@ -536,7 +537,8 @@ vsp_input_buffer_dequeue_dmafd(vsp_data_t *vsp)
+ 
+ /* ...enqueue output buffer */
+ static int
+-vsp_output_buffer_queue_dmafd(vsp_data_t *vsp, int i, int dmafd[])
++vsp_output_buffer_queue_userptr(vsp_data_t *vsp, int i, void * omx_mem,
++		int y_plane_size, int c_plane_size)
+ {
+ 	vsp_media_pad_t    *pad = &vsp->output;
+ 	struct v4l2_plane   planes[2];
+@@ -546,16 +548,23 @@ vsp_output_buffer_queue_dmafd(vsp_data_t *vsp, int i, int dmafd[])
+ 	memset(&buf, 0, sizeof(buf));
+ 	memset(planes, 0, sizeof(planes));
+ 	buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	buf.memory = V4L2_MEMORY_DMABUF;
++	buf.memory = V4L2_MEMORY_USERPTR;
+ 	buf.index = i;
+ 	buf.m.planes = planes;
+ 	buf.length = VSP_OUTPUT_BUFFERS_PLANE;
+-	buf.m.planes[0].m.fd = dmafd[0];
+-	buf.m.planes[1].m.fd = dmafd[1];
++
++	buf.m.planes[0].m.userptr = (unsigned long) omx_mem;
++	buf.m.planes[1].m.userptr = (unsigned long) omx_mem + y_plane_size;
++
++	buf.m.planes[0].bytesused = y_plane_size;
++	buf.m.planes[0].length = y_plane_size;
++
++	buf.m.planes[1].bytesused = c_plane_size;
++	buf.m.planes[1].length = c_plane_size;
+ 
+ 	/* ...submit buffer */
+ 	if (ioctl(pad->fd, VIDIOC_QBUF, &buf) < 0) {
+-		weston_log("VSP: output dmafd queue failed: %d\n", errno);
++		weston_log("VSP: output buffer queue failed: %d\n", errno);
+ 		return -1;
+ 	}
+ 
+@@ -564,7 +573,7 @@ vsp_output_buffer_queue_dmafd(vsp_data_t *vsp, int i, int dmafd[])
+ 
+ /* ...dequeue output buffer */
+ static int
+-vsp_output_buffer_dequeue_dmafd(vsp_data_t *vsp)
++vsp_output_buffer_dequeue_userptr(vsp_data_t *vsp)
+ {
+ 	vsp_media_pad_t    *pad = &vsp->output;
+ 	struct v4l2_buffer  buf;
+@@ -574,12 +583,12 @@ vsp_output_buffer_dequeue_dmafd(vsp_data_t *vsp)
+ 	memset(&buf, 0, sizeof(buf));
+ 	memset(planes, 0, sizeof(planes));
+ 	buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	buf.memory = V4L2_MEMORY_DMABUF;
++	buf.memory = V4L2_MEMORY_USERPTR;
+ 	buf.m.planes = planes;
+ 	buf.length = VSP_OUTPUT_BUFFERS_PLANE;
+ 
+ 	if (ioctl(pad->fd, VIDIOC_DQBUF, &buf) < 0) {
+-		weston_log("VSP: output dmafd de-queue failed: %d\n", errno);
++		weston_log("VSP: output buffer de-queue failed: %d\n", errno);
+ 		return -1;
+ 	}
+ 
+@@ -876,33 +885,25 @@ err:
+ }
+ 
+ static int
+-gst_recorder_omx_buffer_acquire(struct gst_recorder *r, GstBuffer **ret_buf, int fd[])
++gst_recorder_omx_buffer_acquire(struct gst_recorder *r, GstBuffer **ret_buf, GstMapInfo *info)
+ {
+-	unsigned int i;
+ 	GstFlowReturn ret;
+ 	GstBuffer *buf;
+-	guint n_mem;
+-	GstMemory *mem;
+ 
+ 	ret = gst_buffer_pool_acquire_buffer(r->omx_pool, &buf, NULL);
+ 	if (ret != GST_FLOW_OK) {
+-		weston_log("OMX buffer acquire failed\n");
+-		return -1;
++		weston_log("GStreamer buffer acquire failed\n");
++		goto err_release;
+ 	}
+ 
+-	n_mem = gst_buffer_n_memory(buf);
+-	if (n_mem < 1) {
+-		weston_log("Buffer with no mem!\n");
++	if (!gst_buffer_is_writable(buf)) {
++		weston_log("GStreamer buffer not writable\n");
+ 		goto err_release;
+ 	}
+ 
+-	for (i = 0; i < n_mem; i++) {
+-		mem = gst_buffer_peek_memory (buf, i);
+-		if (!gst_is_dmabuf_memory (mem)) {
+-			weston_log("Mem not dmabuf\n");
+-			goto err_release;
+-		}
+-		fd[i] = gst_dmabuf_memory_get_fd (mem);
++	if (!gst_buffer_map(buf, info, GST_MAP_WRITE)) {
++		weston_log("Cannot map GStreamer buffer\n");
++		goto err_release;
+ 	}
+ 
+ 	*ret_buf = buf;
+@@ -956,7 +957,7 @@ gst_recorder_create(struct gst_recorder_settings *settings)
+ 
+ 	/* omx */
+ 	ptr += sprintf(ptr,
+-		"omxh264enc target-bitrate=%d control-rate=2 name=my_encoder ! "
++		"omxh264enc target-bitrate=%d control-rate=2 no-copy=true name=my_encoder ! "
+ 		"video/x-h264,width=%d,height=%d ! ",
+ 		r->set->bitrate, r->set->crop.width, r->set->crop.height);
+ 
+@@ -1009,6 +1010,12 @@ gst_recorder_create(struct gst_recorder_settings *settings)
+ 					"framerate", GST_TYPE_FRACTION, 0, DEFAULT_FPS,
+ 					NULL), NULL);
+ 
++	g_object_set(G_OBJECT(r->appsrc),
++			"stream-type", 0,
++			"format", GST_FORMAT_TIME,
++			"is-live", TRUE,
++			NULL);
++
+ 	r->appsrc_pad = gst_element_get_static_pad(GST_ELEMENT_CAST(r->appsrc), "src");
+ 	if (!r->appsrc_pad)
+ 		weston_log("Failed to get src0 pad of appsrc\n");
+@@ -1088,14 +1095,23 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ {
+ 	int ret;
+ 	GstBuffer *buf;
+-	int omx_fd[2];
++	GstMapInfo info;
++	int ysize;
++	int csize;
+ 
+         /* get GST buffer */
+-	if (gst_recorder_omx_buffer_acquire(r, &buf, omx_fd) < 0) {
++	if (gst_recorder_omx_buffer_acquire(r, &buf, &info) < 0) {
+ 		weston_log("VSP: can not acquire GST buffer, dropping frame\n");
+ 		return 0;
+ 	}
+ 
++	ysize = r->set->crop.width * r->set->crop.height;
++#ifdef VSP_OUTPUT_NV16
++	csize = ysize;
++#else
++	csize = ysize / 2;
++#endif
++
+ 	pthread_mutex_lock(&r->vsp->mutex);
+ 	/* setup vsp */
+ 	if (vsp_set_formats(r->vsp, r->set->width, r->set->height, &r->set->crop) < 0) {
+@@ -1116,7 +1132,7 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ 	}
+ 
+ 	/* queue output biffer */
+-	if (vsp_output_buffer_queue_dmafd(r->vsp, 0, omx_fd) < 0) {
++	if (vsp_output_buffer_queue_userptr(r->vsp, 0, info.data, ysize, csize) < 0) {
+ 		weston_log("can not queue OMX buffer %d to VSP\n", 0);
+ 		gst_recorder_omx_buffer_release(r, buf);
+ 		goto err_vsp;
+@@ -1147,11 +1163,15 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ 	}
+ 
+ 	/* dequeue output */
+-	if (vsp_output_buffer_dequeue_dmafd(r->vsp) < 0) {
+-		weston_log("VSP: failed to dequeu output buffer\n");
++	if (vsp_output_buffer_dequeue_userptr(r->vsp) < 0) {
++		weston_log("VSP: failed to dequeue output buffer\n");
++		gst_buffer_unmap(buf, &info);
+ 		gst_recorder_omx_buffer_release(r, buf);
+-		/* fall through */
+ 	} else {
++
++		gst_buffer_unmap(buf, &info);
++		gst_buffer_set_size(buf, ysize + csize);
++
+ 		/* set timestamp */
+ 		gst_recorder_set_timestamp(r, buf);
+ 
+@@ -1174,6 +1194,7 @@ gst_recorder_process_dmafd(struct gst_recorder *r, int fd, int stride)
+ 	vsp_request_buffers(r->vsp, VSP_PORT_OUTPUT, 0);
+ 
+ 	pthread_mutex_unlock(&r->vsp->mutex);
++	close(fd);
+ 	return 0;
+ 
+ err_vsp:
+@@ -1181,6 +1202,7 @@ err_vsp:
+ 	/* finish vsp here */
+ err:
+ 	pthread_mutex_unlock(&r->vsp->mutex);
++	close(fd);
+ 	return -1;
+ }
+ 
+@@ -1197,9 +1219,13 @@ gst_recorder_frame_dmafd(struct gst_recorder *r, int fd, int stride)
+ 		goto unlock;
+ 	}
+ 		
+-	/* The mutex is never released while encoding, so this point should
+-	 * never be reached if input.valid is true. */
+-	assert(!r->input.valid);
++	/* It is possible that the frame callback can be called mutiple
++	 * times before the worker thread wakes up.  In this case
++	 * drop all buf the first frame */
++	if(r->input.valid) {
++		close(fd);
++		goto unlock;
++	}
+ 
+ 	r->input.prime_fd = fd;
+ 	r->input.stride = stride;
+@@ -1209,5 +1235,5 @@ gst_recorder_frame_dmafd(struct gst_recorder *r, int fd, int stride)
+ unlock:
+ 	pthread_mutex_unlock(&r->mutex);
+ 
+-	return 0;
++	return ret;
+ }
+-- 
+2.9.2
+

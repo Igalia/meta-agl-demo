@@ -1,0 +1,470 @@
+From b6d084f68434fea7402d4989d4d8344523b1a939 Mon Sep 17 00:00:00 2001
+From: Harunobu Kurokawa <harunobu.kurokawa.dn@renesas.com>
+Date: Thu, 10 Aug 2017 15:42:38 +0900
+Subject: [PATCH 1/4] Add virtual output support
+
+This patch is ported to weston 2.0.0.
+
+----------
+Author: Damian Hobson-Garcia <dhobsong@igel.co.jp>
+Date:   Thu Apr 27 16:47:00 2017 +0900
+
+Following patch ported to Weston 1.11 with minor updates
+  ----------
+  Author: Grigory Kletsko <grigory.kletsko@cogentembedded.com>
+  Date:   Wed Nov 2 17:14:43 2016 +0300
+
+  To enable virtual output set "virtual" property in core section
+  to desirable number of virtual outputs. Then add settings to
+  each virtual output in output sections. Name of the outputs
+  will be virtual1, virtual2... etc.
+  ------------
+---
+ libweston/compositor-drm.c | 352 +++++++++++++++++++++++++++++++++++++++++++++
+ libweston/compositor-drm.h |   1 +
+ 2 files changed, 353 insertions(+)
+
+diff --git a/libweston/compositor-drm.c b/libweston/compositor-drm.c
+index 1d38f05..d0f07e9 100644
+--- a/libweston/compositor-drm.c
++++ b/libweston/compositor-drm.c
+@@ -182,6 +182,11 @@ struct drm_output {
+ 
+ 	struct vaapi_recorder *recorder;
+ 	struct wl_listener recorder_frame_listener;
++
++	/* not real output device */
++	int virtual;
++	/* Timer for updating frame */
++	struct wl_event_source *virtual_finish_frame_timer;
+ };
+ 
+ /*
+@@ -211,6 +216,9 @@ struct drm_sprite {
+ 
+ static struct gl_renderer_interface *gl_renderer;
+ 
++static int
++recorder_enable(struct drm_backend *b, struct drm_output *output);
++
+ static const char default_seat[] = "seat0";
+ 
+ static inline struct drm_output *
+@@ -2347,6 +2355,99 @@ connector_get_current_mode(drmModeConnector *connector, int drm_fd,
+ }
+ 
+ static int
++virtual_output_set_mode(struct weston_output *base,
++		    enum weston_drm_backend_output_mode mode,
++		    const char *modeline)
++{
++	struct drm_output *output = to_drm_output(base);
++	struct drm_backend *b = to_drm_backend(base->compositor);
++	struct weston_config *config = wet_get_config(b->compositor);
++
++	struct drm_mode *drm_mode, *next, *current;
++	char *s;
++	int valid_mode;
++	int recorded_output;
++	int width, height, scale, fps;
++	struct weston_config_section *section;
++	uint32_t transform;
++	drmModeModeInfo crtc_mode;
++
++	output->base.make = "CogentEmbedded,Inc";
++
++	section = weston_config_get_section(config, "output", "name",
++					    output->base.name);
++
++	weston_config_section_get_bool(section, "recorder", &recorded_output, 0);
++
++	if (recorded_output) {
++		output->base.model = "Virtual RTP Display";
++	} else {
++		output->base.model = "Virtual Display";
++	}
++
++	output->base.serial_number = "";
++	wl_list_init(&output->base.mode_list);
++
++	if (mode == WESTON_DRM_BACKEND_OUTPUT_PREFERRED) {
++		if (modeline && sscanf(modeline, "%dx%d@%d", &width, &height, &fps) >= 3)
++			valid_mode = 1;
++	}
++
++	weston_config_section_get_int(section, "scale", &scale, 1);
++	weston_config_section_get_string(section, "transform", &s, "normal");
++	if (weston_parse_transform(s, &transform) < 0)
++		weston_log("Invalid transform \"%s\" for output %s\n",
++			   s, output->base.name);
++	free(s);
++
++	weston_config_section_get_string(section, "seat", &s, "");
++	free(s);
++
++	output->original_crtc = NULL;
++	output->dpms_prop = NULL;
++
++	/* set static mode */
++	if (valid_mode) {
++		/* TODO: calculate proper mode settings to get desirable framerate */
++		drmModeModeInfo static_drm_mode = {
++			width * height * fps,
++			width, 0, 0, width, width,
++			height, 0, 0, height, height,
++			fps * 1000,
++			0, //flags
++			0, //type
++			"virtual"
++		};
++		drm_mode = drm_output_add_mode(output, &static_drm_mode);
++		if (!drm_mode)
++			goto err_free;
++
++		drm_mode->base.refresh = fps * 1000;
++	}
++
++	current = drm_output_choose_initial_mode(b, output, mode, &modeline,
++						 &crtc_mode);
++	if (!current)
++		goto err_free;
++	output->base.current_mode = &current->base;
++	output->base.current_mode->flags |= WL_OUTPUT_MODE_CURRENT;
++
++	return 0;
++
++err_free:
++	drmModeFreeCrtc(output->original_crtc);
++	output->original_crtc = NULL;
++
++	wl_list_for_each_safe(drm_mode, next, &output->base.mode_list,
++							base.link) {
++		wl_list_remove(&drm_mode->base.link);
++		free(drm_mode);
++	}
++
++	return -1;
++}
++
++static int
+ drm_output_set_mode(struct weston_output *base,
+ 		    enum weston_drm_backend_output_mode mode,
+ 		    const char *modeline)
+@@ -2357,6 +2458,8 @@ drm_output_set_mode(struct weston_output *base,
+ 	struct drm_mode *drm_mode, *next, *current;
+ 	drmModeModeInfo crtc_mode;
+ 	int i;
++	if ( output->virtual == 1 )
++		return virtual_output_set_mode(base, mode, modeline);
+ 
+ 	output->base.make = "unknown";
+ 	output->base.model = "unknown";
+@@ -2453,6 +2556,10 @@ drm_output_enable(struct weston_output *base)
+ 		weston_log("Failed to initialize backlight\n");
+ 	}
+ 
++	/* enable GST recording-streaming */
++	if (b->enable_recorder)
++		recorder_enable(b, output);
++
+ 	output->base.start_repaint_loop = drm_output_start_repaint_loop;
+ 	output->base.repaint = drm_output_repaint;
+ 	output->base.assign_planes = drm_assign_planes;
+@@ -2630,6 +2737,227 @@ create_output_for_connector(struct drm_backend *b,
+ }
+ 
+ static void
++virtual_output_deinit(struct weston_output *base)
++{
++	struct drm_output *output = to_drm_output(base);
++	struct drm_backend *b = to_drm_backend(base->compositor);
++
++	if (b->use_pixman)
++		drm_output_fini_pixman(output);
++	else
++		drm_output_fini_egl(output);
++
++	weston_plane_release(&output->fb_plane);
++	weston_plane_release(&output->cursor_plane);
++}
++
++static void
++virtual_output_destroy(struct weston_output *base)
++{
++	struct drm_output *output = to_drm_output(base);
++
++	if (output->base.enabled)
++		virtual_output_deinit(&output->base);
++
++	weston_output_destroy(&output->base);
++
++	free(output);
++}
++
++static void
++virtual_output_start_repaint_loop(struct weston_output *output)
++{
++	struct timespec now;
++
++	weston_compositor_read_presentation_clock(output->compositor, &now);
++	weston_output_finish_frame(output, &now, WP_PRESENTATION_FEEDBACK_INVALID);
++}
++
++
++static int
++virtual_output_repaint(struct weston_output *output_base,
++		   pixman_region32_t *damage)
++{
++	struct drm_output *output = (struct drm_output *) output_base;
++	struct timespec ts;
++	uint32_t msec_next;
++	uint32_t msec_current;
++
++	msec_next = (output->base.frame_time + 1000000UL / output->base.current_mode->refresh) ;
++
++	if (output->disable_pending || output->destroy_pending)
++		return -1;
++
++	if (!output->next)
++		drm_output_render(output, damage);
++	if (!output->next)
++		return -1;
++
++	drm_output_set_cursor(output);
++
++	output->page_flip_pending = 1;
++
++	weston_compositor_read_presentation_clock(output_base->compositor, &ts);
++
++	msec_current = ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
++
++	/*
++	 * If we somehow late with updating frame, then fireup timer immediately (1 msec)
++	 */
++	wl_event_source_timer_update(output->virtual_finish_frame_timer, (msec_next > msec_current)  ?
++				     msec_next - msec_current : 1);
++
++	return 0;
++}
++
++static int
++virtual_finish_frame_handler(void *data)
++{
++	struct drm_output *output = (struct drm_output *) data;
++	struct timespec ts;
++
++	/* We don't set page_flip_pending on start_repaint_loop, in that case
++	 * we just want to page flip to the current buffer to get an accurate
++	 * timestamp */
++	if (output->page_flip_pending) {
++		drm_output_release_fb(output, output->current);
++		output->current = output->next;
++		output->next = NULL;
++	}
++
++	output->page_flip_pending = 0;
++
++	if (output->destroy_pending)
++		drm_output_destroy(&output->base);
++	else if (!output->vblank_pending) {
++		weston_compositor_read_presentation_clock(output->base.compositor, &ts);
++
++		weston_output_finish_frame(&output->base, &ts,
++			WP_PRESENTATION_FEEDBACK_INVALID);
++
++		/* We can't call this from frame_notify, because the output's
++		 * repaint needed flag is cleared just after that */
++		if (output->recorder)
++			weston_output_schedule_repaint(&output->base);
++	}
++
++	return 1;
++}
++
++static int
++virtual_output_enable(struct weston_output *base)
++{
++	struct drm_output *output = to_drm_output(base);
++	struct drm_backend *b = to_drm_backend(base->compositor);
++	struct weston_mode *m;
++
++	if (b->use_pixman) {
++		if (drm_output_init_pixman(output, b) < 0) {
++			weston_log("Failed to init output pixman state\n");
++			goto err_free;
++		}
++	} else if (drm_output_init_egl(output, b) < 0) {
++		weston_log("Failed to init output gl state\n");
++		goto err_free;
++	}
++
++	output->base.start_repaint_loop = virtual_output_start_repaint_loop;
++	output->base.repaint = virtual_output_repaint;
++	output->base.assign_planes = NULL;
++	output->base.set_dpms = NULL;
++	output->base.switch_mode = drm_output_switch_mode;
++
++	output->base.gamma_size = 0;
++	output->base.set_gamma = drm_output_set_gamma;
++
++	output->base.subpixel = WL_OUTPUT_SUBPIXEL_NONE; //drm_subpixel_to_wayland(connector->subpixel);
++
++	weston_plane_init(&output->cursor_plane, b->compositor,
++			  INT32_MIN, INT32_MIN);
++	weston_plane_init(&output->fb_plane, b->compositor, 0, 0);
++
++	weston_compositor_stack_plane(b->compositor, &output->cursor_plane, NULL);
++	weston_compositor_stack_plane(b->compositor, &output->fb_plane,
++				      &b->compositor->primary_plane);
++
++	weston_log("Output %s, ()\n",
++		   output->base.name);
++	wl_list_for_each(m, &output->base.mode_list, link)
++		weston_log_continue(STAMP_SPACE "mode %dx%d@%.1f\n",
++				    m->width, m->height, m->refresh / 1000.0);
++
++	/* enable GST recording-streaming */
++	if (b->enable_recorder)
++		recorder_enable(b, output);
++
++	return 0;
++
++err_free:
++
++	return -1;
++}
++
++
++static int
++virtual_output_disable(struct weston_output *base)
++{
++	struct drm_output *output = to_drm_output(base);
++
++	if (output->base.enabled)
++		virtual_output_deinit(&output->base);
++
++	output->disable_pending = 0;
++
++	weston_log("Disabling output %s\n", output->base.name);
++
++	return 0;
++}
++
++/*
++ * Virtual output connector that could be used for simulating output
++ * device for clients and/or streaming of video
++ */
++static int
++create_output_for_virtual_connector(struct drm_backend *b,
++				    struct udev_device *drm_device)
++{
++	struct wl_event_loop *loop;
++	struct drm_output *output;
++	static int virtual_id = 1; /* as other outputs numbered */
++	char name[32], *s;
++
++	output = zalloc(sizeof *output);
++	if (output == NULL)
++		return -1;
++
++	output->pipe = 0;
++	output->connector_id = 0;
++
++	/* this is virtual output */
++	output->virtual = 1;
++
++	output->backlight = NULL;
++
++	loop = wl_display_get_event_loop(b->compositor->wl_display);
++	output->virtual_finish_frame_timer = wl_event_loop_add_timer(loop, virtual_finish_frame_handler, output);
++
++	output->base.enable = virtual_output_enable;
++	output->base.destroy = virtual_output_destroy;
++	output->base.disable = virtual_output_disable;
++
++	output->destroy_pending = 0;
++	output->disable_pending = 0;
++	output->original_crtc = NULL;
++	snprintf(name, 32, "virtual%d", virtual_id++);
++	output->base.name = strdup(name);
++
++	weston_output_init(&output->base, b->compositor);
++	weston_compositor_add_pending_output(&output->base, b->compositor);
++
++	return 0;
++}
++
++static void
+ create_sprites(struct drm_backend *b)
+ {
+ 	struct drm_sprite *sprite;
+@@ -2701,9 +3029,12 @@ destroy_sprites(struct drm_backend *backend)
+ static int
+ create_outputs(struct drm_backend *b, struct udev_device *drm_device)
+ {
++	struct weston_config_section *section;
++	struct weston_config *config = wet_get_config(b->compositor);
+ 	drmModeConnector *connector;
+ 	drmModeRes *resources;
+ 	int i;
++	int virtual;
+ 
+ 	resources = drmModeGetResources(b->drm.fd);
+ 	if (!resources) {
+@@ -2735,6 +3066,14 @@ create_outputs(struct drm_backend *b, struct udev_device *drm_device)
+ 		}
+ 	}
+ 
++	section = weston_config_get_section(config, "core", NULL, NULL);
++	weston_config_section_get_int(section, "virtual", &virtual, 0);
++
++	for (i = 0; i < virtual; i++) {
++		if (create_output_for_virtual_connector(b, drm_device) < 0)
++			continue;
++	}
++
+ 	if (wl_list_empty(&b->compositor->output_list) &&
+ 	    wl_list_empty(&b->compositor->pending_output_list))
+ 		weston_log("No currently active connector found.\n");
+@@ -3181,6 +3520,12 @@ renderer_switch_binding(struct weston_keyboard *keyboard, uint32_t time,
+ 	switch_to_gl_renderer(b);
+ }
+ 
++static const struct weston_drm_output_api virtual_api = {
++	virtual_output_set_mode,
++	drm_output_set_gbm_format,
++	drm_output_set_seat,
++};
++
+ static const struct weston_drm_output_api api = {
+ 	drm_output_set_mode,
+ 	drm_output_set_gbm_format,
+@@ -3346,6 +3691,13 @@ drm_backend_create(struct weston_compositor *compositor,
+ 		goto err_udev_monitor;
+ 	}
+ 
++	ret = weston_plugin_api_register(compositor, WESTON_DRM_VIRTUAL_OUTPUT_API_NAME,
++					 &virtual_api, sizeof(virtual_api));
++
++	if (ret < 0) {
++		weston_log("Failed to register output API.\n");
++		goto err_udev_monitor;
++	}
+ 	return b;
+ 
+ err_udev_monitor:
+diff --git a/libweston/compositor-drm.h b/libweston/compositor-drm.h
+index 2e2995a..00171c8 100644
+--- a/libweston/compositor-drm.h
++++ b/libweston/compositor-drm.h
+@@ -53,6 +53,7 @@ enum weston_drm_backend_output_mode {
+ };
+ 
+ #define WESTON_DRM_OUTPUT_API_NAME "weston_drm_output_api_v1"
++#define WESTON_DRM_VIRTUAL_OUTPUT_API_NAME "weston_virtual_output_api_v1"
+ 
+ struct weston_drm_output_api {
+ 	/** The mode to be used by the output. Refer to the documentation
+-- 
+2.9.2
+
