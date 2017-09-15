@@ -16,7 +16,3 @@ PACKAGECONFIG[wayland]="-qpa wayland-egl -no-qpa-platform-guard"
 
 # Temporarily fix bug due to binutils 2.28
 QT_CONFIG_FLAGS_append = " -no-use-gold-linker"
-
-# hotfix for RPM folder clash 
-#   file /opt/poky-agl/4.90.0+snapshot/sysroots/x86_64-aglsdk-linux/environment-setup.d conflicts between attempted installs of nativesdk-cmake-3.7.2-r0.x86_64_nativesdk and nativesdk-qtbase-tools-5.8.0+git0+49dc9aa409-r0.x86_64_nativesdk
-DIRFILES_class-nativesdk = ""
