@@ -8,3 +8,6 @@ SRC_URI_append = " \
 	    file://0002-most-pass-parent-devcie-to-snd_card_new.patch \
 	   "
 
+SRC_URI_remove_porter = " \
+            file://0002-most-pass-parent-devcie-to-snd_card_new.patch \
+           "
