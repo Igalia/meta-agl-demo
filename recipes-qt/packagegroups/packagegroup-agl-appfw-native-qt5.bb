@@ -20,6 +20,7 @@ RDEPENDS_${PN} += "\
     qtdeclarative \
     qtdeclarative-qmlplugins \
     qtdeclarative-tools \
+    qtcharts \
     qtwayland \
     qtwayland-plugins \
     qtwayland-tools \
