@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/phone;protocol=https;branch=dab"
 
-SRCREV  = "8d587e0062c6d6373e7e2102423562391fcd14f2"
+SRCREV  = "28f6028329b573001a16e2792f73a9efaafecf3f"
 SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
 
 PV = "1.0+git${SRCPV}"

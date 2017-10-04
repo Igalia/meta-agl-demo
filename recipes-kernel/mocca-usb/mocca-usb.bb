@@ -9,7 +9,7 @@ PV = "0.1"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/can-lin/;protocol=https;branch=dab"
 S = "${WORKDIR}/git/Usb-Driver"
 
-SRCREV = "02ba272c0eb51b06160307b6cb71f91684772c8c"
+SRCREV = "b330168fd3e8043795ab2b9574be12f91ddf0661"
 SRCREV_dab = "refs/tags/${DISTRO_BRANCH_VERSION_TAG}"
 
 # The inherit of module.bbclass will automatically name module packages with
