@@ -1,7 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 DEPENDS_append_koelsch = " libegl"
-DEPENDS_append_porter = " libegl"
+#DEPENDS_append_porter = " libegl"
+DEPENDS_append_porter = " ${@base_conditional('PREFERRED_PROVIDER_virtual/egl', 'mesa', 'mesa', 'libegl', d)}"
 
 PACKAGECONFIG_WAYLAND = "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)}"
 PACKAGECONFIG_GL = "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2', '', d)}"

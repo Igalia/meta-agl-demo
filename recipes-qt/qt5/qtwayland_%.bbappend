@@ -31,4 +31,4 @@ SRC_URI_append_checkforkrogoth = "\
 
 
 DEPENDS_append_koelsch = " libegl gles-user-module"
-DEPENDS_append_porter = " libegl gles-user-module"
+DEPENDS_append_porter = " ${@base_conditional('PREFERRED_PROVIDER_virtual/egl', 'mesa', 'mesa', 'libegl gles-user-module', d)}"
