@@ -4,7 +4,7 @@ pathtoname() {
 	udevadm info -p /sys/"$1" | awk -v FS== '/DEVNAME/ {print $2}'
 }
 
-MOUNT_OPTIONS="ro,sync"
+MOUNT_OPTIONS="ro,flush"
 
 rmdir /media/* &> /dev/null || true
 for DEVNAME in $(udisks --enumerate-device-files|grep -e sd[a-z][0-9]); do
