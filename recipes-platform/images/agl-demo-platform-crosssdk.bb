@@ -17,3 +17,30 @@ inherit populate_sdk populate_sdk_qt5
 # Both exec "createrepo" on the same directory, and so one of them
 # can failed (randomly).
 addtask do_populate_sdk after do_rootfs
+
+# native tools to support Chromium build inside SDK (SPEC-942)
+TOOLCHAIN_HOST_TASK += " \
+    nativesdk-gn \
+    nativesdk-ninja \
+    nativesdk-gperf \
+    nativesdk-zlib \
+    nativesdk-xz \
+    nativesdk-nspr-dev \
+    nativesdk-nss-dev \
+    "
+
+# required dependencies for Chromium build inside SDK (SPEC-942)
+TOOLCHAIN_TARGET_TASK += " \
+    pciutils-dev \
+    pulseaudio-dev \
+    cairo-dev \
+    nss-dev \
+    cups-dev \
+    gconf-dev \
+    libexif-dev \
+    pango-dev \
+    libdrm-dev  \
+    libssp-dev \
+    ffmpeg-dev \
+    "
+
