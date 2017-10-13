@@ -41,7 +41,7 @@ TOOLCHAIN_TARGET_TASK += " \
     pango-dev \
     libdrm-dev  \
     libssp-dev \
-    ffmpeg-dev \
+    ${@bb.utils.contains('LICENSE_FLAGS_WHITELIST', 'commercial', 'ffmpeg-dev', '', d)} \
     "
 
 # Add wayland-scanner to SDK (SPEC-945)
