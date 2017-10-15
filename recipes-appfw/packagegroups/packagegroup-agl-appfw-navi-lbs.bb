@@ -10,7 +10,8 @@ PACKAGES = "\
     packagegroup-agl-appfw-navi-lbs \
     "
 
-ALLOW_EMPTY_${PN} = "1"
-
 RDEPENDS_${PN} += "\
+    agl-service-gps \
+    agl-service-geoclue \
+    agl-service-geofence \
     "
