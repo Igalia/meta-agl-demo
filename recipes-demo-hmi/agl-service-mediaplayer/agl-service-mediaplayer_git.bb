@@ -12,7 +12,7 @@ SRCREV  = "${AUTOREV}"
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
-DEPENDS = "json-c gstreamer1.0"
+DEPENDS = "json-c gstreamer1.0 gstreamer1.0-plugins-base"
 RDEPENDS_${PN} = "agl-service-mediascanner gstreamer1.0-plugins-bad-waylandsink"
 
 inherit cmake aglwgt pkgconfig
