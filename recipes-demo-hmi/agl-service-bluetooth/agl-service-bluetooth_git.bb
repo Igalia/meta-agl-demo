@@ -13,3 +13,4 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 inherit cmake aglwgt pkgconfig
+
