@@ -3,7 +3,6 @@ HOMEPAGE = "http://projects.genivi.org/audio-manager/home"
 LICENSE = "MPLv2"
 SECTION = "multimedia"
 DEPENDS = "audiomanager libxml2 dbus pulseaudio"
-RDEPENDS_${PN} = "audiomanager-plugins-config"
 
 LIC_FILES_CHKSUM = "file://PluginControlInterfaceGeneric/LICENSE.txt;md5=815ca599c9df247a0c7f619bab123dad"
 
@@ -57,3 +56,5 @@ do_install_append() {
     rm -rf ${D}${sysconfdir}/audiomanager/control/*.xml
     rm -rf ${D}${sysconfdir}/audiomanager/control/customtypes.xsd
 }
+
+RDEPENDS_${PN} = "virtual/audiomanager-plugins-config"

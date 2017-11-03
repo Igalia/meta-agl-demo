@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-
-SRC_URI += "file://0006-auto-load-module-router.patch"
-SRC_URI += "file://0001-disable-module-role-cork-by-default.patch"
+# Add .include directive to default.pa so optional configuration can be added
+do_install_append () {
+    echo -n "\n.include ${sysconfdir}/pulse/default.d\n" >> ${D}${sysconfdir}/pulse/default.pa
+}
