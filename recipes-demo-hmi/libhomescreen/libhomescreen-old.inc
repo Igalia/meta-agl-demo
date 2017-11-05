@@ -4,7 +4,7 @@ DEPENDS += " glib-2.0 "
 
 inherit qmake5 pkgconfig
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/libhomescreen.git;protocol=http \
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/libhomescreen.git;protocol=https;branch=${AGL_BRANCH} \
            file://homescreen.pc.in"
 SRCREV  = "f5c14333d2170ae9babed53ea530828569a830ff"
 S       = "${WORKDIR}/git/"

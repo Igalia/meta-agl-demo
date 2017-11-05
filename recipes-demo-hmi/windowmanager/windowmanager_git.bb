@@ -12,11 +12,11 @@ DEPENDS = " qtbase "
 DEPENDS += " wayland-ivi-extension "
 
 LIC_FILES_CHKSUM = "file://windowmanager/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "${AUTOREV}"
+SRCREV  = "${AGL_DEFAULT_REVISION}"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/windowmanager.git;protocol=http"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/windowmanager.git;protocol=https;branch=${AGL_BRANCH}"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 

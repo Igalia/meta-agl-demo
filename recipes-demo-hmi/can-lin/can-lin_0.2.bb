@@ -2,7 +2,7 @@ DESCRIPTION = "CAN-LIN Application"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/most-can-demo-bin;protocol=https"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/most-can-demo-bin;protocol=https;branch=${AGL_BRANCH}"
 SRC_URI += "file://hvac-demo.service"
 
 S = "${WORKDIR}/git"

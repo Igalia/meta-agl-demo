@@ -6,8 +6,8 @@ SECTION     = "apps"
 LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/als-meter-demo;protocol=https;branch=master"
-SRCREV = "aa15796ee333339673a8b4ac5468050a9a5b7f93"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/als-meter-demo;protocol=https;branch=${AGL_BRANCH}"
+SRCREV = "${AGL_APP_REVISION}"
 
 PV = "0.1+git${SRCPV}"
 S  = "${WORKDIR}/git"
