@@ -1,0 +1,36 @@
+From a45781fbd39426c0be6d57dcce7ce4679ee63b87 Mon Sep 17 00:00:00 2001
+From: Matt Ranostay <matt.ranostay@konsulko.com>
+Date: Fri, 3 Nov 2017 16:53:34 -0700
+Subject: [PATCH] cmake: fix search paths for OE building
+
+For gcc-6 -isystem breaks #include_next so put recipes
+staging include directory before others
+
+Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 175791651..c5a214102 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -113,6 +113,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+   endif()
+ endif()
+ 
++include_directories(BEFORE ${STAGING_DIR_HOST}/usr/include/)
+ include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/include/)
+ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+ include_directories(SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/third_party/sol2/)
+@@ -589,7 +590,6 @@ if (ENABLE_STXXL)
+ endif()
+ 
+ add_definitions(${OSRM_DEFINES})
+-include_directories(SYSTEM ${DEPENDENCIES_INCLUDE_DIRS})
+ 
+ set(BOOST_BASE_LIBRARIES
+    ${Boost_DATE_TIME_LIBRARY}
+-- 
+2.14.2
+
