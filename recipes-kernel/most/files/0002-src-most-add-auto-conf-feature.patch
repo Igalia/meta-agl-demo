@@ -1,0 +1,472 @@
+From 9cb7cb85f59509ac445116e9458c502cf6cb74e6 Mon Sep 17 00:00:00 2001
+From: Christian Gromm <christian.gromm@microchip.com>
+Date: Thu, 9 Nov 2017 13:20:23 +0100
+Subject: [PATCH 2/2] src: most: add auto conf feature
+
+This patch adds the auto configuration feature to the driver
+sources. It is needed to have the driver configured automatically
+upon start up w/o the need for userspace to set up sysfs.
+
+Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+---
+ driver/Makefile           |   3 +
+ driver/default_conf.c     | 162 ++++++++++++++++++++++++++++++++++++++++++++++
+ driver/include/mostcore.h |  64 ++++++++++++++++++
+ driver/mostcore/core.c    | 120 ++++++++++++++++++++++++++++------
+ 4 files changed, 331 insertions(+), 18 deletions(-)
+ create mode 100644 driver/default_conf.c
+
+diff --git a/Makefile b/Makefile
+index e77a4b6..6d74ebe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,6 +6,9 @@ obj-m := mostcore.o
+ mostcore-y := mostcore/core.o
+ CFLAGS_core.o := -I$(src)/include/
+ 
++obj-m += default_conf.o
++CFLAGL_default_conf.o := -I$(src)/include
++
+ obj-m += aim_cdev.o
+ aim_cdev-y := aim-cdev/cdev.o
+ CFLAGS_cdev.o := -I$(src)/include/
+diff --git a/default_conf.c b/default_conf.c
+new file mode 100644
+index 0000000..adb1786
+--- /dev/null
++++ b/default_conf.c
+@@ -0,0 +1,162 @@
++/*
++ * default_conf.c - Default configuration for the MOST channels.
++ *
++ * Copyright (C) 2017, Microchip Technology Germany II GmbH & Co. KG
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * This file is licensed under GPLv2.
++ */
++
++#include "include/mostcore.h"
++#include <linux/module.h>
++
++static struct most_config_probe config_probes[] = {
++
++	/* OS81118 Control */
++	{
++		.ch_name = "ep8f",
++		.cfg = {
++			.direction = MOST_CH_RX,
++			.data_type = MOST_CH_CONTROL,
++			.num_buffers = 16,
++			.buffer_size = 64,
++		},
++		.aim_name = "cdev",
++		.aim_param = "inic-usb-crx",
++	},
++	{
++		.ch_name = "ep0f",
++		.cfg = {
++			.direction = MOST_CH_TX,
++			.data_type = MOST_CH_CONTROL,
++			.num_buffers = 16,
++			.buffer_size = 64,
++		},
++		.aim_name = "cdev",
++		.aim_param = "inic-usb-ctx",
++	},
++	/* OS81118 Async */
++	{
++		.ch_name = "ep8e",
++		.cfg = {
++			.direction = MOST_CH_RX,
++			.data_type = MOST_CH_ASYNC,
++			.num_buffers = 20,
++			.buffer_size = 1522,
++		},
++		.aim_name = "networking",
++		.aim_param = "inic-usb-arx",
++	},
++	{
++		.ch_name = "ep0e",
++		.cfg = {
++			.direction = MOST_CH_TX,
++			.data_type = MOST_CH_ASYNC,
++			.num_buffers = 20,
++			.buffer_size = 1522,
++		},
++		.aim_name = "networking",
++		.aim_param = "inic-usb-atx",
++	},
++	/* OS81210 Control */
++	{
++		.ch_name = "ep87",
++		.cfg = {
++			.direction = MOST_CH_RX,
++			.data_type = MOST_CH_CONTROL,
++			.num_buffers = 16,
++			.buffer_size = 64,
++		},
++		.aim_name = "cdev",
++		.aim_param = "inic-usb-crx",
++	},
++	{
++		.ch_name = "ep07",
++		.cfg = {
++			.direction = MOST_CH_TX,
++			.data_type = MOST_CH_CONTROL,
++			.num_buffers = 16,
++			.buffer_size = 64,
++		},
++		.aim_name = "cdev",
++		.aim_param = "inic-usb-ctx",
++	},
++	/* OS81210 Async */
++	{
++		.ch_name = "ep86",
++		.cfg = {
++			.direction = MOST_CH_RX,
++			.data_type = MOST_CH_ASYNC,
++			.num_buffers = 20,
++			.buffer_size = 1522,
++		},
++		.aim_name = "networking",
++		.aim_param = "inic-usb-arx",
++	},
++	{
++		.ch_name = "ep06",
++		.cfg = {
++			.direction = MOST_CH_TX,
++			.data_type = MOST_CH_ASYNC,
++			.num_buffers = 20,
++			.buffer_size = 1522,
++		},
++		.aim_name = "networking",
++		.aim_param = "inic-usb-atx",
++	},
++	/* Streaming channels (common for all INICs) */
++	{
++		.ch_name = "ep01",
++		.cfg = {
++			.direction = MOST_CH_TX,
++			.data_type = MOST_CH_SYNC,
++			.num_buffers = 8,
++			.buffer_size = 2 * 12 * 42,
++			.subbuffer_size = 12,
++			.packets_per_xact = 42,
++		},
++		.aim_name = "sound",
++		.aim_param = "ep01-6ch.6x16",
++	},
++	{
++		.ch_name = "ep02",
++		.cfg = {
++			.direction = MOST_CH_TX,
++			.data_type = MOST_CH_ISOC,
++			.num_buffers = 8,
++			.buffer_size = 40 * 188,
++			.subbuffer_size = 188,
++			.packets_per_xact = 2,
++		},
++		.aim_name = "cdev",
++		.aim_param = "inic-usb-itx1",
++	},
++	
++	/* sentinel */
++	{}
++};
++
++static struct most_config_set config_set = {
++	.probes = config_probes
++};
++
++static int __init mod_init(void)
++{
++	most_register_config_set(&config_set);
++	return 0;
++}
++
++static void __exit mod_exit(void)
++{
++	most_deregister_config_set(&config_set);
++}
++
++module_init(mod_init);
++module_exit(mod_exit);
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Andrey Shvetsov <andrey.shvetsov@k2l.de>");
++MODULE_DESCRIPTION("Default configuration for the MOST channels");
+diff --git a/include/mostcore.h b/include/mostcore.h
+index dc87121..3c00efb 100644
+--- a/include/mostcore.h
++++ b/include/mostcore.h
+@@ -145,6 +145,39 @@ struct most_channel_config {
+ 	u16 dbr_size;
+ };
+ 
++/**
++ * struct most_config_probe - matching rule, channel configuration and
++ *     the optional AIM name used for the automatic configuration and linking
++ *     of the channel
++ * @dev_name: optional matching device id
++ *     ("usb_device 1-1:1.0," "dim2-12345678", etc.)
++ * @ch_name: matching channel name ("ep8f", "ca2", etc.)
++ * @cfg: configuration that will be applied for the found channel
++ * @aim_name: optional name of the AIM that will be linked to the channel
++ *     ("cdev", "networking", "v4l", "sound")
++ * @aim_param: AIM dependent parameter (it is the character device name
++ *     for the cdev AIM, PCM format for the audio AIM, etc.)
++ */
++struct most_config_probe {
++	const char *dev_name;
++	const char *ch_name;
++	struct most_channel_config cfg;
++	const char *aim_name;
++	const char *aim_param;
++};
++
++/**
++ * struct most_config_set - the configuration set containing
++ *     several automatic configurations for the different channels
++ * @probes: list of the matching rules and the configurations,
++ *     that must be ended with the empty structure
++ * @list: list head used by the MostCore
++ */
++struct most_config_set {
++	const struct most_config_probe *probes;
++	struct list_head list;
++};
++
+ /*
+  * struct mbo - MOST Buffer Object.
+  * @context: context for core completion handler
+@@ -285,6 +318,37 @@ struct most_aim {
+ };
+ 
+ /**
++ * most_register_config_set - registers the configuration set
++ *
++ * @cfg_set: configuration set to be registered for the future probes
++ *
++ * The function registers the given configuration set.
++ *
++ * It is possible to register or deregister several configuration sets
++ * independently.  Different configuration sets may contain the
++ * overlapped matching rules but later registered configuration set has
++ * the higher priority over the prior registered set.
++ *
++ * The only the first matched configuration is applied for each
++ * channel.
++ *
++ * The configuration for the channel is applied at the time of
++ * registration of the parent most_interface.
++ */
++void most_register_config_set(struct most_config_set *cfg_set);
++
++/**
++ * most_deregister_config_set - deregisters the prior registered
++ *     configuration set
++ *
++ * @cfg_set: configuration set to be deregistered
++ *
++ * The calling of this function does not change the current
++ * configuration of the channels.
++ */
++void most_deregister_config_set(struct most_config_set *cfg_set);
++
++/**
+  * most_register_interface - Registers instance of the interface.
+  * @iface: Pointer to the interface instance description.
+  *
+diff --git a/mostcore/core.c b/mostcore/core.c
+index 9e0a352..6035cf0 100644
+--- a/mostcore/core.c
++++ b/mostcore/core.c
+@@ -36,6 +36,8 @@ static struct class *most_class;
+ static struct device *core_dev;
+ static struct ida mdev_id;
+ static int dummy_num_buffers;
++static struct list_head config_probes;
++struct mutex config_probes_mt; /* config_probes */
+ 
+ struct most_c_aim_obj {
+ 	struct most_aim *ptr;
+@@ -918,6 +920,30 @@ most_c_obj *get_channel_by_name(char *mdev, char *mdev_ch)
+ 	return c;
+ }
+ 
++static int link_channel_to_aim(struct most_c_obj *c, struct most_aim *aim,
++			       char *aim_param)
++{
++	int ret;
++	struct most_aim **aim_ptr;
++
++	if (!c->aim0.ptr)
++		aim_ptr = &c->aim0.ptr;
++	else if (!c->aim1.ptr)
++		aim_ptr = &c->aim1.ptr;
++	else
++		return -ENOSPC;
++
++	*aim_ptr = aim;
++	ret = aim->probe_channel(c->iface, c->channel_id,
++				 &c->cfg, &c->kobj, aim_param);
++	if (ret) {
++		*aim_ptr = NULL;
++		return ret;
++	}
++
++	return 0;
++}
++
+ /**
+  * add_link_store - store() function for add_link attribute
+  * @aim_obj: pointer to AIM object
+@@ -946,45 +972,33 @@ static ssize_t add_link_store(struct most_aim_obj *aim_obj,
+ 			      size_t len)
+ {
+ 	struct most_c_obj *c;
+-	struct most_aim **aim_ptr;
+ 	char buffer[STRING_SIZE];
+ 	char *mdev;
+ 	char *mdev_ch;
+-	char *mdev_devnod;
++	char *aim_param;
+ 	char devnod_buf[STRING_SIZE];
+ 	int ret;
+ 	size_t max_len = min_t(size_t, len + 1, STRING_SIZE);
+ 
+ 	strlcpy(buffer, buf, max_len);
+ 
+-	ret = split_string(buffer, &mdev, &mdev_ch, &mdev_devnod);
++	ret = split_string(buffer, &mdev, &mdev_ch, &aim_param);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!mdev_devnod || *mdev_devnod == 0) {
++	if (!aim_param || *aim_param == 0) {
+ 		snprintf(devnod_buf, sizeof(devnod_buf), "%s-%s", mdev,
+ 			 mdev_ch);
+-		mdev_devnod = devnod_buf;
++		aim_param = devnod_buf;
+ 	}
+ 
+ 	c = get_channel_by_name(mdev, mdev_ch);
+ 	if (IS_ERR(c))
+ 		return -ENODEV;
+ 
+-	if (!c->aim0.ptr)
+-		aim_ptr = &c->aim0.ptr;
+-	else if (!c->aim1.ptr)
+-		aim_ptr = &c->aim1.ptr;
+-	else
+-		return -ENOSPC;
+-
+-	*aim_ptr = aim_obj->driver;
+-	ret = aim_obj->driver->probe_channel(c->iface, c->channel_id,
+-					     &c->cfg, &c->kobj, mdev_devnod);
+-	if (ret) {
+-		*aim_ptr = NULL;
++	ret = link_channel_to_aim(c, aim_obj->driver, aim_param);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	return len;
+ }
+@@ -1679,6 +1693,73 @@ int most_deregister_aim(struct most_aim *aim)
+ }
+ EXPORT_SYMBOL_GPL(most_deregister_aim);
+ 
++void most_register_config_set(struct most_config_set *cfg_set)
++{
++	mutex_lock(&config_probes_mt);
++	list_add(&cfg_set->list, &config_probes);
++	mutex_unlock(&config_probes_mt);
++}
++EXPORT_SYMBOL(most_register_config_set);
++
++void most_deregister_config_set(struct most_config_set *cfg_set)
++{
++	mutex_lock(&config_probes_mt);
++	list_del(&cfg_set->list);
++	mutex_unlock(&config_probes_mt);
++}
++EXPORT_SYMBOL(most_deregister_config_set);
++
++static int probe_aim(struct most_c_obj *c,
++		     const char *aim_name, const char *aim_param)
++{
++	struct most_aim_obj *aim_obj;
++	char buf[STRING_SIZE];
++
++	list_for_each_entry(aim_obj, &aim_list, list) {
++		if (!strcmp(aim_obj->driver->name, aim_name)) {
++			strlcpy(buf, aim_param ? aim_param : "", sizeof(buf));
++			return link_channel_to_aim(c, aim_obj->driver, buf);
++		}
++	}
++	return 0;
++}
++
++static bool probe_config_set(struct most_c_obj *c,
++			     const char *dev_name, const char *ch_name,
++			     const struct most_config_probe *p)
++{
++	int err;
++
++	for (; p->ch_name; p++) {
++		if ((p->dev_name && strcmp(dev_name, p->dev_name)) ||
++		    strcmp(ch_name, p->ch_name))
++			continue;
++
++		c->cfg = p->cfg;
++		if (p->aim_name) {
++			err = probe_aim(c, p->aim_name, p->aim_param);
++			if (err)
++				pr_err("failed to autolink %s to %s: %d\n",
++				       ch_name, p->aim_name, err);
++		}
++		return true;
++	}
++	return false;
++}
++
++static void find_configuration(struct most_c_obj *c, const char *dev_name,
++			       const char *ch_name)
++{
++	struct most_config_set *plist;
++
++	mutex_lock(&config_probes_mt);
++	list_for_each_entry(plist, &config_probes, list) {
++		if (probe_config_set(c, dev_name, ch_name, plist->probes))
++			break;
++	}
++	mutex_unlock(&config_probes_mt);
++}
++
+ /**
+  * most_register_interface - registers an interface with core
+  * @iface: pointer to the instance of the interface description.
+@@ -1777,6 +1858,7 @@ struct kobject *most_register_interface(struct most_interface *iface)
+ 		mutex_init(&c->start_mutex);
+ 		mutex_init(&c->nq_mutex);
+ 		list_add_tail(&c->list, &inst->channel_list);
++		find_configuration(c, iface->description, channel_name);
+ 	}
+ 	pr_info("registered new MOST device mdev%d (%s)\n",
+ 		inst->dev_id, iface->description);
+@@ -1880,6 +1962,8 @@ static int __init most_init(void)
+ 	pr_info("init()\n");
+ 	INIT_LIST_HEAD(&instance_list);
+ 	INIT_LIST_HEAD(&aim_list);
++	INIT_LIST_HEAD(&config_probes);
++	mutex_init(&config_probes_mt);
+ 	ida_init(&mdev_id);
+ 
+ 	err = bus_register(&most_bus);
+-- 
+2.7.4
+

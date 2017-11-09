@@ -1,0 +1,33 @@
+From d297f3ec0c45a6cfff6d83d8f0eb1c4a5ed0b95f Mon Sep 17 00:00:00 2001
+From: Christian Gromm <christian.gromm@microchip.com>
+Date: Thu, 9 Nov 2017 11:31:27 +0100
+Subject: [PATCH 1/2] src: most: net: add skb_put_data function
+
+This patch adds the function skb_put_data. It is needed to backport
+the sources to kernel versions prior to 4.13.
+
+Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+---
+ driver/aim-network/networking.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/aim-network/networking.c b/aim-network/networking.c
+index 936f013..9c3d1eb 100644
+--- a/aim-network/networking.c
++++ b/aim-network/networking.c
+@@ -419,6 +419,12 @@ put_nd:
+ 	return 0;
+ }
+ 
++static inline void skb_put_data(struct sk_buff *skb, const void *data,
++				unsigned int len)
++{
++	memcpy(skb_put(skb, len), data, len);
++}
++
+ static int aim_rx_data(struct mbo *mbo)
+ {
+ 	const u32 zero = 0;
+-- 
+2.7.4
+
