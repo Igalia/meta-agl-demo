@@ -1,3 +1,11 @@
+SUMMARY     = "AGL Home Screen Library"
+DESCRIPTION = "libhomescreen"
+HOMEPAGE    = "http://docs.automotivelinux.org"
+LICENSE     = "Apache-2.0"
+SECTION     = "libs"
+
+BBCLASSEXTEND = " nativesdk"
+
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 DEPENDS = "af-binder json-c"
@@ -9,3 +17,4 @@ SRCREV = "390902a6b002c6af183c939749fdebfcc4b3e839"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = "agl-service-homescreen-2017"
+PROVIDES += "virtual/libhomescreen"
