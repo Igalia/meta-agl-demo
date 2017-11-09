@@ -21,6 +21,7 @@ HOMESCREEN-NEW = "packagegroup-hmi-framework packagegroup-hmi-framework-dev"
 
 RDEPENDS_${PN} += "\
     packagegroup-agl-appfw \
+    libqtappfw \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-hmi-framework', '${HOMESCREEN-NEW}', '${HOMESCREEN-OLD}', d)} \
     udisks \
     ${SMARTDEVICELINK} \
