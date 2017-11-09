@@ -6,7 +6,7 @@ inherit module
 
 PV = "0.1"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https;branch=master"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/most;protocol=https;branch=${AGL_BRANCH}"
 
 S = "${WORKDIR}/git/driver"
 SRCREV = "794e6dc552e626eb6dd506baf941873414d9ef73"
