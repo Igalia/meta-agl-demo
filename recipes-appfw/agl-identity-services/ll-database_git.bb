@@ -14,5 +14,4 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git/ll-database-binding"
 
 DEPENDS += " af-binder json-c gdbm "
-RDEPENDS_${PN} += " json-c gdbm "
 
