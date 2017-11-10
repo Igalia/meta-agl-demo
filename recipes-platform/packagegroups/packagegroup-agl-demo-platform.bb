@@ -56,6 +56,7 @@ AGL_APPS = " \
     "
 
 RDEPENDS_${PN}_append = " \
+    libnfc \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
     linux-firmware-ralink \
