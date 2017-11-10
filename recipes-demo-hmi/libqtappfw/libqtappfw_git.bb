@@ -4,11 +4,11 @@ HOMEPAGE    = "http://docs.automotivelinux.org"
 LICENSE     = "Apache-2.0"
 SECTION     = "libs"
 
-BBCLASSEXTEND = " nativesdk"
+BBCLASSEXTEND = "nativesdk"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-DEPENDS += " qtbase qtwebsockets "
+DEPENDS += "qtbase qtwebsockets"
 
 inherit cmake_qt5
 
@@ -18,18 +18,3 @@ S       = "${WORKDIR}/git/"
 
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
-
-FILES_${PN} = "\
-	${libdir}/libqtappfw.so.* \
-"
-FILES_${PN}-dev = "\
-	${includedir}/qtappfw/message.h \
-	${includedir}/qtappfw/messageengine.h \
-	${includedir}/qtappfw/telephonymessage.h \
-	${includedir}/qtappfw/telephony.h \
-	${libdir}/libqtappfw.so \
-	${libdir}/pkgconfig/qtappfw.pc \
-"
-FILES_${PN}-dbg += "\
-	${libdir}/.debug/libqtappfw.so.* \
-"
