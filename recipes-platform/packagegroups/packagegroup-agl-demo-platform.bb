@@ -54,6 +54,7 @@ AGL_APPS = " \
     settings \
     high-level-viwi-service \
     low-can-demo \
+    agl-spotify-app \
     "
 
 RDEPENDS_${PN}_append = " \
