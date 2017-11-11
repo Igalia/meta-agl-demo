@@ -3,25 +3,17 @@ HOMEPAGE = "https://gitlab.com/iotbzh/aia-binding"
 SECTION = "base"
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=3b83ef96387f14655fc854ddc3c6bd57"
+LIC_FILES_CHKSUM = "file://../LICENSE.txt;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 SRC_URI = "gitsm://github.com/iotbzh/aia-binding.git;protocol=https;branch=master-next \
            file://main.conf"
-SRCREV  = "2ffcc61a750a2bf4598662b4612283fdc9d2a4e4"
+SRCREV  = "${AUTOREV}"
+PV = "1.0+git${SRCPV}"
 
-inherit cmake systemd
+inherit cmake aglwgt pkgconfig
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/git/agl-identity-service"
 
 DEPENDS = "curl af-binder json-c systemd"
-
-do_install_append () {
-    install -d ${D}${systemd_user_unitdir}
-    install -m 0644 ${B}/agl-identity-agent.service ${D}${systemd_user_unitdir}
-
-    install -d ${D}${sysconfdir}/systemd/user/default.target.wants
-    ln -sf ${systemd_user_unitdir}/agl-identity-agent.service ${D}${sysconfdir}/systemd/user/default.target.wants
-}
-
-FILES_${PN} += "${systemd_user_unitdir}"
+RDEPENDS_${PN} += "ll-database nfc-binding agl-spotify-binding"
 
