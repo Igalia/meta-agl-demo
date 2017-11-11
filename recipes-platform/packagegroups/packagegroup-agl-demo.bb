@@ -19,10 +19,16 @@ HOMESCREEN-OLD = "homescreen"
 # packages from hmi-framework aka homescreen-2017
 HOMESCREEN-NEW = "packagegroup-hmi-framework packagegroup-hmi-framework-dev"
 
+# old audio package
+AUDIO-OLD = "audiomanager"
+# packages from new 4A framework
+AUDIO-NEW = "packagegroup-agl-audio"
+
 RDEPENDS_${PN} += "\
     packagegroup-agl-appfw \
     libqtappfw \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-hmi-framework', '${HOMESCREEN-NEW}', '${HOMESCREEN-OLD}', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '${AUDIO-NEW}', '${AUDIO-OLD}', d)} \
     udisks \
     ${SMARTDEVICELINK} \
     "
