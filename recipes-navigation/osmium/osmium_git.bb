@@ -3,7 +3,7 @@ DESCRIPTION = "Fast and flexible C++ library for working with OpenStreetMap data
 HOMEPAGE    = "http://osmcode.org/libosmium"
 SECTION     = "apps"
 
-LICENSE     = "BSD"
+LICENSE     = "BSL-1.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e4224ccaecb14d942c71d31bef20d78c"
 
 SRC_URI = "git://github.com/osmcode/libosmium.git;protocol=http"
