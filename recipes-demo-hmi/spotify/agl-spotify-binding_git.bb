@@ -16,12 +16,13 @@ S = "${WORKDIR}/git"
 DEPENDS += " af-binder json-c systemd curl "
 
 do_install() {
-	install -d ${D}/usr/libexec/spotify/
+	install -d ${D}/usr/libexec/spotify/credentials
 	install -m 0755 ${S}/src/playspot ${D}/usr/libexec/spotify/playspot
+	install -m 0755 ${S}/src/credentials/* ${D}/usr/libexec/spotify/credentials
+	install -m 0755 ${S}/librespot-bin/README ${D}/usr/libexec/spotify/README
+	install -m 0755 ${S}/librespot-bin/LICENSE ${D}/usr/libexec/spotify/LICENSE
 }
 
 do_install_append_m3ulcb() {
 	install -m 0755 ${S}/librespot-bin/librespot_m3ulcb ${D}/usr/libexec/spotify/librespot
-	install -m 0755 ${S}/librespot-bin/README ${D}/usr/libexec/spotify/README
-	install -m 0755 ${S}/librespot-bin/LICENSE ${D}/usr/libexec/spotify/LICENSE
 }
