@@ -1,3 +1,3 @@
 RDEPENDS_${PN} += "\
-    virtual/pulseaudio-config \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '' , 'virtual/pulseaudio-config', d)} \
     "
