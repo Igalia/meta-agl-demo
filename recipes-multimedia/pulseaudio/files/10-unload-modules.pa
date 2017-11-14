@@ -1,7 +1,4 @@
-.ifexists module-router.so
 unload-module module-role-cork
 unload-module module-device-restore
 unload-module module-stream-restore
 unload-module module-card-restore
-load-module module-router
-.endif
