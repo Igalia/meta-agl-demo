@@ -13,6 +13,11 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS += "qtquickcontrols2 homescreen libqtappfw qtmultimedia"
+DEPENDS += "qtquickcontrols2 \
+            qtmultimedia \
+            libqtappfw \
+            virtual/libhomescreen \
+            qlibwindowmanager \
+"
 
 inherit qmake5 aglwgt

@@ -12,7 +12,11 @@ SRCREV  = "${AGL_APP_REVISION}"
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
-inherit qmake5 aglwgt
-
 # build-time dependencies
-DEPENDS += "qtquickcontrols2 pulseaudio"
+DEPENDS += "qtquickcontrols2 \
+            pulseaudio \
+            virtual/libhomescreen \
+            qlibwindowmanager \
+"
+
+inherit qmake5 aglwgt

@@ -12,10 +12,15 @@ SRCREV  = "${AGL_APP_REVISION}"
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
-inherit qmake5 aglwgt
-
 # build-time dependencies
-DEPENDS += "sqlite3 qtquickcontrols2 qtmultimedia"
+DEPENDS += "sqlite3 \
+            qtquickcontrols2 \
+            qtmultimedia \
+            virtual/libhomescreen \
+            qlibwindowmanager \
+"
+
+inherit qmake5 aglwgt
 
 RDEPENDS_${PN} += "qtmultimedia \
                    qtmultimedia-qmlplugins \
