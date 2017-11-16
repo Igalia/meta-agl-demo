@@ -14,6 +14,7 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS += " af-binder json-c systemd curl "
+RDEPENDS_${PN} += "libasound"
 
 do_install() {
 	install -d ${D}/usr/libexec/spotify/credentials
