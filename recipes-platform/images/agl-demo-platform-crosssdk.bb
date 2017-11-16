@@ -49,3 +49,5 @@ TOOLCHAIN_TARGET_TASK += " \
 # wayland-scanner is in nativesdk-wayland-dev !
 # option: add also nativesdk-qtwayland-tools
 TOOLCHAIN_HOST_TASK_append = " nativesdk-wayland nativesdk-wayland-dev"
+
+TOOLCHAIN_HOST_TASK_append = " nativesdk-perl-modules "
