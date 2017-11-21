@@ -21,3 +21,8 @@ RDEPENDS_${PN} += " \
 	qtquickcontrols2-qmlplugins \
 	qtsvg-plugins \
 "
+
+do_install_append_class-target() {
+    install -d ${D}/${sysconfdir}/afm/unit.env.d
+    echo "QT_QUICK_CONTROLS_STYLE=AGL" > ${D}${sysconfdir}/afm/unit.env.d/qtquickcontrols2-style
+}
