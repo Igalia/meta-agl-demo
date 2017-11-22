@@ -1,0 +1,10 @@
+[Unit]
+Description=Driver configuration for Unicens2
+After=systemd-modules-load.service
+Requires=systemd-modules-load.service
+
+[Service]
+ExecStart=/usr/bin/unicens-config.sh
+
+[Install]
+WantedBy=default.target

@@ -31,6 +31,7 @@ MOST_DRIVERS_remove_porter = "most"
 MOST_HVAC = " "
 MOST_HVAC_append = " \
     ${MOST_DRIVERS} \
+    unicens-config \
     "
 
 # can-lin is a binary and only for porter :(
