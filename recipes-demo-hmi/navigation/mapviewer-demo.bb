@@ -26,6 +26,7 @@ do_install() {
 
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/weston-mapviewer-demo.service ${D}${systemd_system_unitdir}
+    sed -i "s:/home/root:${ROOT_HOME}:" ${D}${systemd_system_unitdir}/weston-mapviewer-demo.service
 }
 
 ## DO NOT ENABLE 'weston-mapviewer-demo.service' BY DEFAULT

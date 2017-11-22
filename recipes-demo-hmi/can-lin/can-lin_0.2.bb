@@ -27,13 +27,13 @@ do_install() {
 
         # Execute install manually for root user on behalf of systemctl script
         # because it doesn't support user mode of systemd.
-        install -m 0755 -d ${D}/home/root/.config/systemd/user/default.target.wants/
-        ln -sf ${systemd_user_unitdir}/hvac-demo.service ${D}/home/root/.config/systemd/user/default.target.wants/hvac-demo.service
+        install -m 0755 -d ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/
+        ln -sf ${systemd_user_unitdir}/hvac-demo.service ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/hvac-demo.service
 }
 
 FILES_${PN} += " \
     ${bindir}/OptoLyzerMoccaApp \
     /usr/AGL/most/vod-client \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}/hvac-demo.service', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '/home/root/.config/systemd/user/default.target.wants/hvac-demo.service', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${ROOT_HOME}/.config/systemd/user/default.target.wants/hvac-demo.service', '', d)} \
     "

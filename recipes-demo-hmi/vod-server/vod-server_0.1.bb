@@ -24,12 +24,13 @@ do_install() {
 
             # Execute install manually for root user on behalf of systemctl script
             # because it doesn't support user mode of systemd.
-            install -m 0755 -d ${D}/home/root/.config/systemd/user/default.target.wants/
-            ln -sf ${systemd_user_unitdir}/vod-demo.service ${D}/home/root/.config/systemd/user/default.target.wants/vod-demo.service
+            install -m 0755 -d ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/
+            ln -sf ${systemd_user_unitdir}/vod-demo.service ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/vod-demo.service
+            sed -i "s:/home/root:${ROOT_HOME}:" ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/vod-demo.service
         fi
 }
 
 FILES_${PN} += " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}/vod-demo.service', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '/home/root/.config/systemd/user/default.target.wants/vod-demo.service', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${ROOT_HOME}/.config/systemd/user/default.target.wants/vod-demo.service', '', d)} \
     "

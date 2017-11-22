@@ -34,9 +34,9 @@ do_install() {
 
         # Execute install manually for root user on behalf of systemctl script
         # because it doesn't support user mode of systemd.
-        install -m 0755 -d ${D}/home/root/.config/systemd/user/default.target.wants/
-        ln -sf ${systemd_user_unitdir}/most-network-startup.service ${D}/home/root/.config/systemd/user/default.target.wants/most-network-startup.service
-        ln -sf ${systemd_user_unitdir}/most-network-manager.service ${D}/home/root/.config/systemd/user/default.target.wants/most-network-manager.service
+        install -m 0755 -d ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/
+        ln -sf ${systemd_user_unitdir}/most-network-startup.service ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/most-network-startup.service
+        ln -sf ${systemd_user_unitdir}/most-network-manager.service ${D}${ROOT_HOME}/.config/systemd/user/default.target.wants/most-network-manager.service
     fi
 }
 
@@ -44,6 +44,6 @@ FILES_${PN} += " \
     /usr/AGL/most \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}/most-network-startup.service', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}/most-network-manager.service', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '/home/root/.config/systemd/user/default.target.wants/most-network-startup.service', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '/home/root/.config/systemd/user/default.target.wants/most-network-manager.service', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${ROOT_HOME}/.config/systemd/user/default.target.wants/most-network-startup.service', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${ROOT_HOME}/.config/systemd/user/default.target.wants/most-network-manager.service', '', d)} \
     "
