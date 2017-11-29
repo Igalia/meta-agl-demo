@@ -111,8 +111,8 @@ echo tx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_direction 2>
 echo isoc > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_datatype 2>/dev/null
 echo 8 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_number_of_buffers 2>/dev/null
 echo 7520 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_buffer_size 2>/dev/null
-echo 188 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep01/set_subbuffer_size 2>/dev/null
-echo 2 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep01/set_packets_per_xact 2>/dev/null
+echo 188 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_subbuffer_size 2>/dev/null
+echo 2 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_packets_per_xact 2>/dev/null
 
 echo mdev2:ep02:inic-usb-itx1 > /sys/devices/virtual/most/mostcore/aims/cdev/add_link 2>/dev/null
 
