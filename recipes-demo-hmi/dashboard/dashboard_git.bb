@@ -16,8 +16,3 @@ S  = "${WORKDIR}/git"
 DEPENDS += "qtquickcontrols2 virtual/libhomescreen qlibwindowmanager qttools-native"
 
 inherit qmake5 aglwgt
-
-do_configure_append() {
-    # Find native tools
-    sed -i 's:${STAGING_BINDIR}.*/lrelease:${OE_QMAKE_PATH_EXTERNAL_HOST_BINS}/lrelease:g' ${B}/app/Makefile
-}
