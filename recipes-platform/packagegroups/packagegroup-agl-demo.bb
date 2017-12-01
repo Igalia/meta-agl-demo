@@ -41,8 +41,7 @@ TTF_FONTS = " \
     ttf-dejavu-serif \
     "
 
-# Add webkit as workaround as webengine is broken right now
-EXTRA_APPS_append = " qtwebkit qtwebkit-examples-examples"
+EXTRA_APPS_append = " qtwebengine"
 #EXTRA_APPS_append = " qtsmarthome cinematicexperience qt5everywheredemo qt5-demo-extrafiles"
 #IMAGE_INSTALL_append = " qtwebengine-examples"
 
