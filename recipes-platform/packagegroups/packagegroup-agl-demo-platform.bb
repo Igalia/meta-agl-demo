@@ -32,6 +32,7 @@ MOST_HVAC = " "
 MOST_HVAC_append = " \
     ${MOST_DRIVERS} \
     unicens-config \
+    agl-service-unicens \
     "
 
 # can-lin is a binary and only for porter :(
