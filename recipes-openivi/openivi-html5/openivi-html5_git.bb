@@ -16,8 +16,8 @@ PV = "0.1"
 
 S = "${WORKDIR}/git"
 
-RDEPENDS_${PN} = "qtbase qtwebkit inputeventmanager windowmanager"
-DEPENDS = "qtbase-native qtbase qtwebkit"
+RDEPENDS_${PN} = "qtbase qtwebengine inputeventmanager windowmanager"
+DEPENDS = "qtbase-native qtbase qtwebengine"
 
 EXTRA_OECMAKE = " -DCMAKE_DISABLE_FIND_PACKAGE_X11=TRUE "
 
