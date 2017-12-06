@@ -21,6 +21,8 @@ SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://download_mapdata_uk.sh \
 "
 
+RPROVIDES_${PN} = "virtual/navigation"
+
 # To avoid C++ library link failure
 SECURITY_CFLAGS = ""
 
