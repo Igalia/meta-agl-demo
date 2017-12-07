@@ -15,7 +15,7 @@ do
                 $LMC set surface $SURFACEID source region 0 0 384 368
                 $LMC set surface $SURFACEID destination region 0 0 384 368
                 $LMC set surface $SURFACEID visibility 1
-                $LMC set layer 1000 render order $SURFACEID
+                $LMC set layer 11001 render order $SURFACEID
                 exit
             fi
         fi
