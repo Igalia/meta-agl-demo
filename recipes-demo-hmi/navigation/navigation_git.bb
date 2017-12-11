@@ -15,6 +15,9 @@ DEPENDS = " \
 RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat openssl \
                    wayland libdbus-c++ af-main "
 
+RDEPENDS_${PN} += " agl-service-navigation "
+
+
 SRCREV="acbb9ea0678bd2f21f268000332a4786e87fb3f6"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://download_mapdata_jp.sh \
