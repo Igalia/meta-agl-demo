@@ -18,10 +18,11 @@ RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat 
 RDEPENDS_${PN} += " agl-service-navigation "
 
 
-SRCREV="acbb9ea0678bd2f21f268000332a4786e87fb3f6"
+SRCREV="051e504db0e30d3160d63ef67b0225227e5da94d"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
+         file://org.agl.naviapi.conf \
 "
 
 RPROVIDES_${PN} = "virtual/navigation"
@@ -39,6 +40,9 @@ do_install_append() {
    install -d ${D}/usr/AGL/apps
    install -m 0755 ${WORKDIR}/download_mapdata_jp.sh ${D}/usr/AGL/apps/
    install -m 0755 ${WORKDIR}/download_mapdata_uk.sh ${D}/usr/AGL/apps/
+
+   install -d ${D}/etc/dbus-1/session.d/
+   install -m 0644 ${WORKDIR}/org.agl.naviapi.conf ${D}/etc/dbus-1/session.d/
 
    install -d ${D}/var/mapdata
 }
