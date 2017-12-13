@@ -39,6 +39,9 @@ TTF_FONTS = " \
     ttf-dejavu-sans \
     ttf-dejavu-sans-mono \
     ttf-dejavu-serif \
+    source-han-sans-cn-fonts \
+    source-han-sans-jp-fonts \
+    source-han-sans-tw-fonts \
     "
 
 EXTRA_APPS_append = " qtwebengine"
