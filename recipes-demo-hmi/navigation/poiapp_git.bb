@@ -9,14 +9,14 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=947b2d60ca3872e172034438e9801200"
 inherit cmake_qt5 pkgconfig
 inherit aglwgt
 
-DEPENDS += " qtbase libdbus-c++ json-c \
+DEPENDS += " qtbase json-c libnaviapi-agl \
            "
 
-RDEPENDS_${PN} =  " qtbase libdbus-c++ json-c \
+RDEPENDS_${PN} =  " qtbase \
                   "
 
-SRCREV  = "b0e059007de776450c91c983a2bcac20414617e9"
-SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=agl \
+SRCREV = "833cdb678636677c33088d67f9ebfdb6125ca900"
+SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=eel \
           "
 
 S = "${WORKDIR}/git"
