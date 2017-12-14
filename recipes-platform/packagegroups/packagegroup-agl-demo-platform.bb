@@ -57,6 +57,11 @@ AGL_APPS = " \
     low-can-demo \
     "
 
+AGL_APIS = " \
+    libnaviapi-agl \
+    "
+
+
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
@@ -64,6 +69,7 @@ RDEPENDS_${PN}_append = " \
     ${MAPVIEWER} \
     ${MOST_HVAC} \
     ${AGL_APPS} \
+    ${AGL_APIS} \
     "
 
 
