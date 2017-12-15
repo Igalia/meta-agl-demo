@@ -54,6 +54,7 @@ AGL_APPS = " \
     radio \
     settings \
     high-level-viwi-service \
+    agl-service-signal-composer \
     low-can-demo \
     "
 
