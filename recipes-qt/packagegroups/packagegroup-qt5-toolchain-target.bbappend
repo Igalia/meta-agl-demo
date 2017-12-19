@@ -8,3 +8,11 @@ RDEPENDS_${PN} += " \
 	qtquickcontrols2-mkspecs \
 	qtquickcontrols2-qmlplugins \
 "
+
+# remove dependency on qtwebkit (still added to SDK by packagegroup-qt5-toolchain-target)
+# see SPEC-1159
+RDEPENDS_${PN}_remove = " \
+    qtwebkit-dev \
+    qtwebkit-mkspecs \
+    qtwebkit-qmlplugins \
+"
