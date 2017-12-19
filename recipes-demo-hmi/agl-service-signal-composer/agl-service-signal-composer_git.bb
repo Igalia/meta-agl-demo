@@ -8,8 +8,11 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7ca
 
 inherit cmake pkgconfig aglwgt
 
+DEPENDS += "lua lua-native"
+RDEPENDS_${PN} += "lua"
+
 SRC_URI = "gitsm://git.automotivelinux.org/apps/agl-service-signal-composer;protocol=https;branch=${AGL_BRANCH}"
-SRCREV = "35096ad54a6ab61ef3a74cb85a285ec00c1e2da0"
+SRCREV = "ecfa70966642816a2506473bbd1d8dff7ba99e8e"
 
 PV = "4.0-RC5+git${SRCPV}"
 S  = "${WORKDIR}/git"
