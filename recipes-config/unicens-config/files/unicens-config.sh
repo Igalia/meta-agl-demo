@@ -60,38 +60,39 @@ echo mdev1:ep0e:inic-usb-atx > /sys/devices/virtual/most/mostcore/aims/networkin
 ## chip: Durango
 ##aim: cdev
 ##name: inic-usb-crx
-echo rx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep87/set_direction 2>/dev/null
-echo control > /sys/devices/virtual/most/mostcore/devices/mdev2/ep87/set_datatype 2>/dev/null
-echo 16 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep87/set_number_of_buffers 2>/dev/null
-echo 64 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep87/set_buffer_size 2>/dev/null
+echo rx > /sys/devices/virtual/most/mostcore/devices/mdev0/ep87/set_direction 2>/dev/null
+echo control > /sys/devices/virtual/most/mostcore/devices/mdev0/ep87/set_datatype 2>/dev/null
+echo 16 > /sys/devices/virtual/most/mostcore/devices/mdev0/ep87/set_number_of_buffers 2>/dev/null
+echo 64 > /sys/devices/virtual/most/mostcore/devices/mdev0/ep87/set_buffer_size 2>/dev/null
 
-echo mdev0:ep8f:inic-usb-crx > /sys/devices/virtual/most/mostcore/aims/cdev/add_link 2>/dev/null
+echo mdev0:ep87:inic-usb-crx > /sys/devices/virtual/most/mostcore/aims/cdev/add_link 2>/dev/null
 #aim: cdev
 #name: inic-usb-ctx
-echo tx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep07/set_direction 2>/dev/null
-echo control > /sys/devices/virtual/most/mostcore/devices/mdev2/ep07/set_datatype 2>/dev/null
-echo 16 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep07/set_number_of_buffers 2>/dev/null
-echo 64 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep07/set_buffer_size 2>/dev/null
+echo tx > /sys/devices/virtual/most/mostcore/devices/mdev0/ep07/set_direction 2>/dev/null
+echo control > /sys/devices/virtual/most/mostcore/devices/mdev0/ep07/set_datatype 2>/dev/null
+echo 16 > /sys/devices/virtual/most/mostcore/devices/mdev0/ep07/set_number_of_buffers 2>/dev/null
+echo 64 > /sys/devices/virtual/most/mostcore/devices/mdev0/ep07/set_buffer_size 2>/dev/null
 
 echo mdev0:ep07:inic-usb-ctx > /sys/devices/virtual/most/mostcore/aims/cdev/add_link 2>/dev/null
 ###########################################
-## interface: mdev0
+## interface: mdev1
+## chip: Durango
 ## aim: networking
 ##name: inic-usb-arx
-echo rx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep86/set_direction 2>/dev/null
-echo async > /sys/devices/virtual/most/mostcore/devices/mdev2/ep86/set_datatype 2>/dev/null
-echo 20 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep86/set_number_of_buffers 2>/dev/null
-echo 1522 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep86/set_buffer_size 2>/dev/null
+echo rx > /sys/devices/virtual/most/mostcore/devices/mdev1/ep86/set_direction 2>/dev/null
+echo async > /sys/devices/virtual/most/mostcore/devices/mdev1/ep86/set_datatype 2>/dev/null
+echo 20 > /sys/devices/virtual/most/mostcore/devices/mdev1/ep86/set_number_of_buffers 2>/dev/null
+echo 1522 > /sys/devices/virtual/most/mostcore/devices/mdev1/ep86/set_buffer_size 2>/dev/null
 
-echo mdev0:ep86:inic-usb-arx > /sys/devices/virtual/most/mostcore/aims/networking/add_link 2>/dev/null
+echo mdev1:ep86:inic-usb-arx > /sys/devices/virtual/most/mostcore/aims/networking/add_link 2>/dev/null
 #aim: networking
 #name: inic-usb-atx
-echo tx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep06/set_direction 2>/dev/null
-echo async > /sys/devices/virtual/most/mostcore/devices/mdev2/ep06/set_datatype 2>/dev/null
-echo 20 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep06/set_number_of_buffers 2>/dev/null
-echo 1522 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep06/set_buffer_size 2>/dev/null
+echo tx > /sys/devices/virtual/most/mostcore/devices/mdev1/ep06/set_direction 2>/dev/null
+echo async > /sys/devices/virtual/most/mostcore/devices/mdev1/ep06/set_datatype 2>/dev/null
+echo 20 > /sys/devices/virtual/most/mostcore/devices/mdev1/ep06/set_number_of_buffers 2>/dev/null
+echo 1522 > /sys/devices/virtual/most/mostcore/devices/mdev1/ep06/set_buffer_size 2>/dev/null
 
-echo mdev0:ep06:inic-usb-atx > /sys/devices/virtual/most/mostcore/aims/networking/add_link 2>/dev/null
+echo mdev1:ep06:inic-usb-atx > /sys/devices/virtual/most/mostcore/aims/networking/add_link 2>/dev/null
 
 ##########################################
 # interface: mdev2
