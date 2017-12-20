@@ -11,8 +11,7 @@ SRC_URI += "file://0001-Fix-cross-compilation-with-yocto.patch \
             file://vod-demo.service"
 
 S = "${WORKDIR}/git"
-#SRCREV = "8c5f2324d7aa61669324aec1a0ad091fe1379489"
-SRCREV = "${AGL_DEFAULT_REVISION}"
+SRCREV = "faafe61dd5f88859a005a59082d57339089ddca1"
 
 do_install() {
         install -m 0755 -d ${D}${bindir}
