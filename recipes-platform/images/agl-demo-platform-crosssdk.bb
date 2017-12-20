@@ -27,6 +27,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-xz \
     nativesdk-nspr-dev \
     nativesdk-nss-dev \
+    nativesdk-lua \
     "
 
 # required dependencies for Chromium build inside SDK (SPEC-942)
