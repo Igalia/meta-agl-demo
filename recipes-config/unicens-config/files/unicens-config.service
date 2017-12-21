@@ -4,6 +4,7 @@ After=systemd-modules-load.service
 Requires=systemd-modules-load.service
 
 [Service]
+Type=oneshot
 ExecStart=/usr/bin/unicens-config.sh
 
 [Install]
