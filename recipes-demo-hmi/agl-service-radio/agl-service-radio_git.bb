@@ -21,6 +21,8 @@ DEPENDS = "rtl-sdr glib-2.0 pulseaudio alsa-lib"
 
 inherit cmake aglwgt pkgconfig
 
+EXTRA_OECMAKE_append_m3ulcb = " -DHAVE_KINGFISHER=1"
+
 do_install_append() {
 	if ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', 'true', 'false', d)}; then
 		install -d ${D}${systemd_user_unitdir}/afm-service-agl-service-radio@1.0.service.d
