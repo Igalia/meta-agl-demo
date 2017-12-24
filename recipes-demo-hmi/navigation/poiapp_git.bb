@@ -10,13 +10,14 @@ inherit cmake_qt5 pkgconfig
 inherit aglwgt
 
 DEPENDS += " qtbase json-c libnaviapi-agl \
+             af-binder qlibwindowmanager virtual/libhomescreen \
            "
 
 RDEPENDS_${PN} =  " qtbase \
                   "
 
-SRCREV = "833cdb678636677c33088d67f9ebfdb6125ca900"
-SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=eel \
+SRCREV = "d7afe75ebd4041b1d52f8a5066e38e6e2e5c91b7"
+SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=agl \
           "
 
 S = "${WORKDIR}/git"
