@@ -1,1 +1,0 @@
-PNBLACKLIST[libdbus-c++] = ""
