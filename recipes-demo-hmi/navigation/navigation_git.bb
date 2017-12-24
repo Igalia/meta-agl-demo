@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM="file://LICENSE;md5=3595e9c703a847d990664d2b396a9df0 \
 
 DEPENDS = " \
           glib-2.0 freetype sqlite3 wayland zlib expat openssl virtual/libgles2 virtual/libgl virtual/egl \
-          wayland libdbus-c++ af-main \
+          wayland libdbus-c++ af-main af-binder libwindowmanager virtual/libhomescreen \
           "
 
 RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat openssl \
@@ -18,7 +18,7 @@ RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat 
 RDEPENDS_${PN} += " agl-service-navigation "
 
 
-SRCREV="051e504db0e30d3160d63ef67b0225227e5da94d"
+SRCREV="9782027a3b062fc99533b3d01562c147d86efc11"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
