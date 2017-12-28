@@ -7,7 +7,7 @@ LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/hvac;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "${AGL_APP_REVISION}"
+SRCREV  = "816759c563a8360af421d4eee2c188e5b3792840"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
