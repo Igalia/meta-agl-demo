@@ -10,6 +10,7 @@ After=weston.service HomeScreen.service
 Environment=NAVI_DATA_DIR=/var/mapdata/navi_data_UK/japan_TR9 XDG_RUNTIME_DIR=/run/user/0
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/mapview
+ExecStartPost=/bin/sleep 2
 ExecStartPost=/usr/bin/LayerManagerControl create layer 11001 1920 1080
 ExecStartPost=/usr/bin/LayerManagerControl set layer 11001 visibility 1
 ExecStartPost=/usr/bin/LayerManagerControl set screen 1 render order 11001
