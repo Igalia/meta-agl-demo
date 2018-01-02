@@ -62,11 +62,13 @@ AGL_APIS = " \
     libnaviapi-agl \
     "
 
+QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
     linux-firmware-ralink \
+    ${QTAGLEXTRAS} \
     ${MAPVIEWER} \
     ${MOST_HVAC} \
     ${AGL_APPS} \
