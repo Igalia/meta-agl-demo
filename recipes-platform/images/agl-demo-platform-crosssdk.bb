@@ -42,6 +42,8 @@ TOOLCHAIN_TARGET_TASK += " \
     pango-dev \
     libdrm-dev  \
     libssp-dev \
+    lua-dev \
+    lua-staticdev \
     ${@bb.utils.contains('LICENSE_FLAGS_WHITELIST', 'commercial', 'ffmpeg-dev', '', d)} \
     "
 
