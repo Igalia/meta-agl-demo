@@ -12,6 +12,7 @@ SRCREV  = "${AGL_APP_REVISION}"
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
-DEPENDS = "json-c lightmediascanner"
+DEPENDS = "json-c sqlite3"
+RDEPENDS_${PN} = "lightmediascanner"
 
 inherit cmake aglwgt pkgconfig
