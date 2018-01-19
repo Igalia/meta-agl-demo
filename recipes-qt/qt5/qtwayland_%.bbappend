@@ -32,3 +32,5 @@ SRC_URI_append_checkforkrogoth = "\
 
 DEPENDS_append_koelsch = " libegl gles-user-module"
 DEPENDS_append_porter = " ${@base_conditional('PREFERRED_PROVIDER_virtual/egl', 'mesa', 'mesa', 'libegl gles-user-module', d)}"
+
+SRC_URI_append = " file://0099_qtwayland_no_evdev.patch "
