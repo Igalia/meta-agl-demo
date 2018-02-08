@@ -11,7 +11,7 @@ SRCREV  = "${AGL_APP_REVISION}"
 inherit cmake aglwgt pkgconfig
 
 PV = "1.0+git${SRCPV}"
-S = "${WORKDIR}/git/ll-database-binding"
+S = "${WORKDIR}/git"
 
 DEPENDS += " af-binder json-c gdbm "
 
