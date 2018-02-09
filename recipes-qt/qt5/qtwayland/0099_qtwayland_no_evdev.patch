@@ -6,7 +6,7 @@ index f0cdaf32..64b60218 100644
  
  QMAKE_USE += wayland-client wayland-server
  
--qtConfig(xkbcommon-evdev)
+-qtConfig(xkbcommon-evdev): \
 -    QMAKE_USE += xkbcommon_evdev
 -
  WAYLANDCLIENTSOURCES += \
