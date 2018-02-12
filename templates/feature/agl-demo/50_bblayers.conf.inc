@@ -8,6 +8,5 @@ BBLAYERS =+ " \
 #-------------------------------------------------
 BBLAYERS =+ " \
    ${METADIR}/meta-qt5 \
-   ${METADIR}/meta-gplv2 \
 "
 
