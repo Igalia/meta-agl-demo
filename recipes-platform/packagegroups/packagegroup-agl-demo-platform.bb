@@ -20,7 +20,8 @@ RDEPENDS_${PN} += "\
     "
 
 MOST_DRIVERS = " "
-MOST_DRIVERS_append = " \
+# temporarily disabled on rocko to fix the build
+MOST_DRIVERS_append_fixbrokenrocko = " \
     mocca-usb \
     most \
     "
