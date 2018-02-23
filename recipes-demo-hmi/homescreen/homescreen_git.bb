@@ -14,9 +14,9 @@ RDEPENDS_${PN} = " \
 
 LIC_FILES_CHKSUM = "file://homescreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=https;branch=${AGL_BRANCH} \
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/staging/homescreen-2017;protocol=https;branch=sandbox/ctxnop/4avolume \
            file://dbus-homescreen.conf.in"
-SRCREV  = "${AGL_APP_REVISION}"
+SRCREV  = "d2f071d5d8c5c21c4f438bf5a822fbaddb2d97ce"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 
