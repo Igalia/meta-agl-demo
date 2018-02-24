@@ -13,5 +13,6 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 DEPENDS = "json-c gpsd"
+RDEPENDS_${PN} = "libgps"
 
 inherit cmake aglwgt pkgconfig
