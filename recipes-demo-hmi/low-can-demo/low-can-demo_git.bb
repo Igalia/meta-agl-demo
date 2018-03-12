@@ -12,7 +12,7 @@ PV = "4.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # Run-time dependencies
-RDEPENDS_${PN} += " low-level-can-service"
+RDEPENDS_${PN} += " agl-service-can-low-level"
 
 inherit cmake aglwgt
 
