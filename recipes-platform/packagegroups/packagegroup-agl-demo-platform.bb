@@ -58,6 +58,10 @@ AGL_APIS = " \
     libnaviapi-agl \
     "
 
+AGL_HTML5_APPS = " \
+    afm-widget-examples \
+    "
+
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
 RDEPENDS_${PN}_append = " \
@@ -68,6 +72,7 @@ RDEPENDS_${PN}_append = " \
     ${MAPVIEWER} \
     ${MOST_HVAC} \
     ${AGL_APPS} \
+    ${AGL_HTML5_APPS} \
     ${AGL_APIS} \
     "
 

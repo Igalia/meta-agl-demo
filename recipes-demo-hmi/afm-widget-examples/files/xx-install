@@ -1,0 +1,8 @@
+#!/bin/bash
+
+[[ "$(basename "$0")" = "xx-install" ]] && exit 0
+name=$(basename "$0" | sed 's:^[^-]*-::;s:\.sh::')
+wgt="/usr/AGL/apps/autoinstall/$name.wgt"
+[[ -f "$wgt" ]] && afm-install install "$wgt" && exit 0
+echo "Can't install $wgt" >&2
+exit 1
