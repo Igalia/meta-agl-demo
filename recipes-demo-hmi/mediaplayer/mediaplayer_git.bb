@@ -13,9 +13,10 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS += "sqlite3 \
-            qtquickcontrols2 \
+DEPENDS += "qtquickcontrols2 \
             qtmultimedia \
+            qtwebsockets \
+            libqtappfw \
             virtual/libhomescreen \
             qlibwindowmanager \
 "
@@ -24,4 +25,6 @@ inherit qmake5 aglwgt
 
 RDEPENDS_${PN} += "qtmultimedia \
                    qtmultimedia-qmlplugins \
-                   agl-service-mediascanner"
+                   agl-service-mediaplayer \
+                   agl-service-bluetooth \
+"
