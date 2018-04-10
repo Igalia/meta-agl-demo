@@ -12,4 +12,7 @@ SRCREV  = "${AGL_APP_REVISION}"
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
+DEPENDS = "glib-2.0 json-c"
+RDEPENDS_${PN} = "agl-service-data-persistence"
+
 inherit cmake aglwgt pkgconfig
