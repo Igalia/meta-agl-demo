@@ -8,4 +8,4 @@ BusName=org.freedesktop.UDisks
 ExecStart=/usr/libexec/udisks-daemon --no-debug
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

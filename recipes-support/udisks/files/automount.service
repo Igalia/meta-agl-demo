@@ -1,9 +1,9 @@
 [Unit]
 Description=Automount Disk Manager
-After=udisk.service
+After=udisks.service
 
 [Service]
 ExecStart=/usr/libexec/automount.sh
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
