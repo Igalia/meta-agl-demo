@@ -13,7 +13,7 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS += "qtquickcontrols2"
+DEPENDS += "libqtappfw qtquickcontrols2 qtwebsockets"
 DEPENDS += "virtual/libhomescreen qlibwindowmanager qtvirtualkeyboard"
 
 # runtime dependencies
