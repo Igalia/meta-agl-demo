@@ -13,5 +13,6 @@ params = [
      "/usr/bin/web-runtime.qml"
 ]
 EOC
+export LD_PRELOAD=/usr/lib/libEGL.so
 /usr/bin/runxdg "$port" "$token"
 rm -rf $AFM_APP_INSTALL_DIR
