@@ -16,6 +16,7 @@ RDEPENDS_${PN} += "\
     "
 
 RDEPENDS_${PN} += "\
+    packagegroup-agl-image-weston \
     packagegroup-agl-demo \
     "
 
