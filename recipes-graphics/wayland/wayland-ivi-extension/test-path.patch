@@ -1,0 +1,55 @@
+From fbe0d0fd35ff79561dc2da853f1b0903bfde428d Mon Sep 17 00:00:00 2001
+From: Changhyeok Bae <changhyeok.bae@gmail.com>
+Date: Thu, 1 Jun 2017 07:45:20 +0000
+Subject: [PATCH] test patch
+
+---
+ ivi-input-api/test/CMakeLists.txt           | 9 +++++----
+ ivi-layermanagement-api/test/CMakeLists.txt | 7 ++++---
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/ivi-input-api/test/CMakeLists.txt b/ivi-input-api/test/CMakeLists.txt
+index db05d0f..db3b745 100644
+--- a/ivi-input-api/test/CMakeLists.txt
++++ b/ivi-input-api/test/CMakeLists.txt
+@@ -65,12 +65,13 @@ IF(BUILD_ILM_API_TESTS)
+ 
+     ADD_DEPENDENCIES(${PROJECT_NAME} ${LIBS})
+ 
+-    INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
++    INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test)
++    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test/ivi-layermanagement-api)
+ 
+     # use CTest
+     ENABLE_TESTING()
+-    ADD_TEST(ilmCommon  ${PROJECT_NAME})
+-    ADD_TEST(ilmControl ${PROJECT_NAME})
+-    ADD_TEST(ilmInput ${PROJECT_NAME})
++    ADD_TEST(ilmCommon  {CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmControl {CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmInput   {CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
+ 
+ ENDIF()
+diff --git a/ivi-layermanagement-api/test/CMakeLists.txt b/ivi-layermanagement-api/test/CMakeLists.txt
+index fe9a0a4..090d734 100644
+--- a/ivi-layermanagement-api/test/CMakeLists.txt
++++ b/ivi-layermanagement-api/test/CMakeLists.txt
+@@ -63,11 +63,12 @@ IF(BUILD_ILM_API_TESTS)
+ 
+     ADD_DEPENDENCIES(${PROJECT_NAME} ${LIBS})
+ 
+-    INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
++    INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test)
++    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/test/ivi-layermanagement-api)
+ 
+     # use CTest
+     ENABLE_TESTING()
+-    ADD_TEST(ilmCommon  ${PROJECT_NAME})
+-    ADD_TEST(ilmControl ${PROJECT_NAME})
++    ADD_TEST(ilmCommon  ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
++    ADD_TEST(ilmControl ${CMAKE_INSTALL_LIBEXECDIR}/test/${PROJECT_NAME})
+ 
+ ENDIF() 
+-- 
+2.7.4
+

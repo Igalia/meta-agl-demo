@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3610fa9..8b4614d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -34,7 +34,7 @@ add_subdirectory(ivi-layermanagement-api/ilmCommon)
+ add_subdirectory(ivi-layermanagement-api/ilmClient)
+ add_subdirectory(ivi-layermanagement-api/ilmControl)
+ add_subdirectory(ivi-layermanagement-api/test)
+-add_subdirectory(ivi-layermanagement-examples)
++#add_subdirectory(ivi-layermanagement-examples)
+ 
+ if(WITH_ILM_INPUT)
+     add_subdirectory(ivi-input-api/ilmInput)

@@ -1,0 +1,69 @@
+From 26f2f7ce78ba2002809048b227ad9c35921a9cd8 Mon Sep 17 00:00:00 2001
+From: Emre Ucan <eucan@de.adit-jv.com>
+Date: Fri, 24 Nov 2017 16:27:01 +0100
+Subject: [PATCH 2/2] ivi-controller: load id-agent module
+
+Signed-off-by: Emre Ucan <eucan@de.adit-jv.com>
+---
+ weston-ivi-shell/src/ivi-controller.c | 39 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/weston-ivi-shell/src/ivi-controller.c b/weston-ivi-shell/src/ivi-controller.c
+index 312a978..47b6de2 100644
+--- a/weston-ivi-shell/src/ivi-controller.c
++++ b/weston-ivi-shell/src/ivi-controller.c
+@@ -1518,6 +1518,40 @@ load_input_module(struct weston_compositor *ec,
+     return 0;
+ }
+ 
++static int load_id_agent_module(struct weston_compositor *ec,
++                  const struct ivi_layout_interface *interface,
++                  size_t interface_version)
++{
++    struct weston_config *config = wet_get_config(ec);
++    struct weston_config_section *section;
++    char *id_agent_module = NULL;
++
++    int (*id_agent_module_init)(struct weston_compositor *ec,
++                             const struct ivi_layout_interface *interface,
++                             size_t interface_version);
++
++    section = weston_config_get_section(config, "ivi-shell", NULL, NULL);
++
++    if (weston_config_section_get_string(section, "id-agent-module",
++                                         &id_agent_module, NULL) < 0) {
++        weston_log("ivi-controller: No id-agent-module set\n");
++        return 0;
++    }
++
++    id_agent_module_init = wet_load_module_entrypoint(id_agent_module, "id_agent_module_init");
++    if (!id_agent_module_init)
++        return -1;
++
++    if (id_agent_module_init(ec, interface,
++                             sizeof(struct ivi_layout_interface)) != 0) {
++        weston_log("ivi-controller: Initialization of id agent module fails\n");
++        return -1;
++    }
++
++    free(id_agent_module);
++    return 0;
++}
++
+ WL_EXPORT int
+ controller_module_init(struct weston_compositor *compositor,
+ 		       int *argc, char *argv[],
+@@ -1555,5 +1589,10 @@ controller_module_init(struct weston_compositor *compositor,
+         return -1;
+     }
+ 
++    if (load_id_agent_module(compositor, interface, interface_version) < 0) {
++        free(shell);
++        return -1;
++    }
++
+     return 0;
+ }
+-- 
+2.13.6
+

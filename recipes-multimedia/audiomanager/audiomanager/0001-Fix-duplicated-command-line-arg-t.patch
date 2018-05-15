@@ -1,0 +1,25 @@
+From c4b6030f575e38dfc9cca7dfd029d207f3af6a13 Mon Sep 17 00:00:00 2001
+From: "Andre Moreira Magalhaes (andrunko)" <andre.magalhaes@collabora.co.uk>
+Date: Thu, 5 May 2016 00:01:19 -0300
+Subject: [PATCH] Fix duplicated command line arg -t.
+
+---
+ AudioManagerDaemon/src/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/AudioManagerDaemon/src/main.cpp b/AudioManagerDaemon/src/main.cpp
+index 795795d..67c0977 100755
+--- a/AudioManagerDaemon/src/main.cpp
++++ b/AudioManagerDaemon/src/main.cpp
+@@ -87,7 +87,7 @@ TCLAP::ValueArg<std::string> commandPluginDir("l","CommandPluginDir","path for l
+ TCLAP::ValueArg<std::string> databasePath ("p","databasePath","path for sqlite database (default is in memory)",false,":memory:","string");
+ TCLAP::ValueArg<unsigned int> telnetPort ("t","telnetport","The port that is used for telnet",false,DEFAULT_TELNETPORT,"int");
+ TCLAP::ValueArg<unsigned int> maxConnections ("m","maxConnections","Maximal number of connections for telnet",false,MAX_TELNETCONNECTIONS,"int");
+-TCLAP::SwitchArg dbusWrapperTypeBool ("t","dbusType","DbusType to be used by CAmDbusWrapper: if option is selected, DBUS_SYSTEM is used otherwise DBUS_SESSION",false);
++TCLAP::SwitchArg dbusWrapperTypeBool ("T","dbusType","DbusType to be used by CAmDbusWrapper: if option is selected, DBUS_SYSTEM is used otherwise DBUS_SESSION",false);
+ TCLAP::SwitchArg enableNoDLTDebug ("V","logDlt","print DLT logs to stdout",false);
+ TCLAP::SwitchArg currentSettings("i","currentSettings","print current settings and exit",false);
+ TCLAP::SwitchArg daemonizeAM("d","daemonize","daemonize Audiomanager. Better use systemd...",false);
+-- 
+2.5.0
+

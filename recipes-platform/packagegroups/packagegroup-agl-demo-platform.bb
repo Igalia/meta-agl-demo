@@ -16,13 +16,12 @@ RDEPENDS_${PN} += "\
     "
 
 RDEPENDS_${PN} += "\
-    packagegroup-agl-image-weston \
+    packagegroup-agl-profile-graphical-qt5 \
     packagegroup-agl-demo \
     "
 
 MOST_DRIVERS = " "
-# temporarily disabled on rocko to fix the build
-MOST_DRIVERS_append_fixbrokenrocko = " \
+MOST_DRIVERS_append_BROKENonIntelQemuRpi3 = " \
     mocca-usb \
     most \
     "

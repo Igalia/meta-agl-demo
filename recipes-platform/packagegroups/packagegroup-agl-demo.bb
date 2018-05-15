@@ -25,13 +25,14 @@ AUDIO-OLD = "audiomanager"
 AUDIO-NEW = "packagegroup-agl-audio"
 
 RDEPENDS_${PN} += "\
-    packagegroup-agl-appfw \
     libqtappfw \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-hmi-framework', '${HOMESCREEN-NEW}', '${HOMESCREEN-OLD}', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '${AUDIO-NEW}', '${AUDIO-OLD}', d)} \
     udisks \
     ${SMARTDEVICELINK} \
     "
+#    packagegroup-agl-appfw \
+#
 
 # fonts
 TTF_FONTS = " \
@@ -62,4 +63,7 @@ RDEPENDS_${PN} += " \
     dhcp-client \
     ${TTF_FONTS} \
     ${EXTRA_APPS} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'webruntime', 'virtual/webruntime', '', d)} \
     "
+
+

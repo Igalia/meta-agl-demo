@@ -1,0 +1,264 @@
+From 8f67f40f7c6b6f62e094f0bdc5044793ae76b1c7 Mon Sep 17 00:00:00 2001
+From: Emre Ucan <eucan@de.adit-jv.com>
+Date: Fri, 24 Nov 2017 16:24:51 +0100
+Subject: [PATCH 1/2] simple-id-agent: initial commit
+
+it is a very simple id-agent plugin.
+It is possible to configure default surface id
+offset. Assigned ids would start
+from the given id offset.
+
+Please check the example weston.ini for loading
+and configuring the simple-id-agent
+
+Signed-off-by: Emre Ucan <eucan@de.adit-jv.com>
+---
+ CMakeLists.txt                                     |   1 +
+ id-agent-modules/simple-id-agent/CMakeLists.txt    |  72 ++++++++++++
+ .../simple-id-agent/src/simple-id-agent.c          | 124 +++++++++++++++++++++
+ id-agent-modules/simple-id-agent/weston.ini.in     |  11 ++
+ 4 files changed, 208 insertions(+)
+ create mode 100644 id-agent-modules/simple-id-agent/CMakeLists.txt
+ create mode 100644 id-agent-modules/simple-id-agent/src/simple-id-agent.c
+ create mode 100644 id-agent-modules/simple-id-agent/weston.ini.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bad85df..d07abf5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,6 +35,7 @@ add_subdirectory(ivi-layermanagement-api/ilmClient)
+ add_subdirectory(ivi-layermanagement-api/ilmControl)
+ add_subdirectory(ivi-layermanagement-api/test)
+ add_subdirectory(ivi-layermanagement-examples)
++add_subdirectory(id-agent-modules/simple-id-agent)
+ 
+ if(WITH_ILM_INPUT)
+     add_subdirectory(ivi-input-api/ilmInput)
+diff --git a/id-agent-modules/simple-id-agent/CMakeLists.txt b/id-agent-modules/simple-id-agent/CMakeLists.txt
+new file mode 100644
+index 0000000..8290722
+--- /dev/null
++++ b/id-agent-modules/simple-id-agent/CMakeLists.txt
+@@ -0,0 +1,72 @@
++############################################################################
++#
++# Copyright (C) 2013 DENSO CORPORATION
++# Copyright 2014 BMW Car IT GmbH
++#
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#		http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++############################################################################
++
++cmake_minimum_required (VERSION 2.6)
++
++project(simple-id-agent)
++
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(WAYLAND_SERVER wayland-server>=1.13.0 REQUIRED)
++pkg_check_modules(WESTON weston>=2.0.0 REQUIRED)
++pkg_check_modules(PIXMAN pixman-1 REQUIRED)
++
++find_package(Threads REQUIRED)
++
++GET_TARGET_PROPERTY(IVI_EXTENSION_INCLUDE_DIRS ivi-extension-protocol INCLUDE_DIRECTORIES)
++
++include_directories(
++    src
++    ${IVI_EXTENSION_INCLUDE_DIRS}
++    ${WAYLAND_SERVER_INCLUDE_DIRS}
++    ${WESTON_INCLUDE_DIRS}
++    ${PIXMAN_INCLUDE_DIRS}
++)
++
++link_directories(
++    ${WAYLAND_SERVER_LIBRARY_DIRS}
++    ${PIXMAN_LIBRARY_DIRS}
++)
++
++add_library(${PROJECT_NAME} MODULE
++    src/simple-id-agent.c
++)
++
++set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
++
++add_dependencies(${PROJECT_NAME}
++    ivi-extension-protocol
++    ${WAYLAND_SERVER_LIBRARIES}
++    ${PIXMAN_LIBRARIES}
++)
++
++set(LIBS
++    ${LIBS}
++    ivi-extension-protocol
++    ${WAYLAND_SERVER_LIBRARIES}
++)
++
++set(CMAKE_C_LDFLAGS "-module -avoid-version")
++
++target_link_libraries(${PROJECT_NAME} ${LIBS})
++
++install (
++    TARGETS             ${PROJECT_NAME}
++    LIBRARY DESTINATION lib${LIB_SUFFIX}/weston
++)
+diff --git a/id-agent-modules/simple-id-agent/src/simple-id-agent.c b/id-agent-modules/simple-id-agent/src/simple-id-agent.c
+new file mode 100644
+index 0000000..3c9e989
+--- /dev/null
++++ b/id-agent-modules/simple-id-agent/src/simple-id-agent.c
+@@ -0,0 +1,124 @@
++/*
++ * Copyright (C) 2017 Advanced Driver Information Technology Joint Venture GmbH
++ *
++ * Permission to use, copy, modify, distribute, and sell this software and
++ * its documentation for any purpose is hereby granted without fee, provided
++ * that the above copyright notice appear in all copies and that both that
++ * copyright notice and this permission notice appear in supporting
++ * documentation, and that the name of the copyright holders not be used in
++ * advertising or publicity pertaining to distribution of the software
++ * without specific, written prior permission.  The copyright holders make
++ * no representations about the suitability of this software for any
++ * purpose.  It is provided "as is" without express or implied warranty.
++ *
++ * THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
++ * SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
++ * FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
++ * SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
++ * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
++ * CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
++ * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ */
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include <limits.h>
++
++#include <weston.h>
++#include <weston/ivi-layout-export.h>
++
++struct ivi_id_agent
++{
++    uint32_t default_id_offset;
++    uint32_t last_assigned_id;
++    struct weston_compositor *compositor;
++    const struct ivi_layout_interface *interface;
++    struct wl_listener desktop_surface_configured;
++};
++
++static void
++desktop_surface_event_configure(struct wl_listener *listener,
++        void *data)
++{
++    struct ivi_id_agent *ida = wl_container_of(listener, ida,
++            desktop_surface_configured);
++    struct ivi_layout_surface *layout_surface =
++            (struct ivi_layout_surface *) data;
++    uint32_t tmp_id;
++
++    tmp_id = ++ida->last_assigned_id;
++
++    /* Find an unused id */
++    while(ida->interface->get_surface_from_id(tmp_id)) {
++        weston_log("simple-id-agent: surface id: %d is already used\n", tmp_id);
++        tmp_id++;
++    }
++
++    ida->last_assigned_id = tmp_id;
++
++    if (ida->interface->surface_set_id(layout_surface, ida->last_assigned_id) != 0)
++        weston_log("simple-id-agent: failed to set surface id :%d\n", ida->last_assigned_id);
++}
++
++static void
++deinit(struct ivi_id_agent *ida)
++{
++    wl_list_remove(&ida->desktop_surface_configured.link);
++    free(ida);
++}
++
++static int32_t
++read_config(struct ivi_id_agent *ida)
++{
++    struct weston_config *config = NULL;
++    struct weston_config_section *section = NULL;
++    const char *name = NULL;
++
++    config = wet_get_config(ida->compositor);
++    if (!config)
++        return -1;
++
++    section = weston_config_get_section(config, "id-agent", NULL, NULL);
++
++    if (section) {
++
++        weston_config_section_get_uint(section, "default-id-offset",
++                &ida->default_id_offset, 0);
++
++    } else {
++        ida->default_id_offset = 0;
++    }
++
++    return 0;
++}
++
++WL_EXPORT int32_t
++id_agent_module_init(struct weston_compositor *ec,
++                             const struct ivi_layout_interface *interface,
++                             size_t interface_version)
++{
++    struct ivi_id_agent *ida;
++
++    ida = calloc(1, sizeof *ida);
++    if (ida == NULL) {
++        weston_log("failed to allocate ivi_id_agent\n");
++        return -1;
++    }
++
++    ida->compositor = ec;
++    ida->interface = interface;
++    ida->desktop_surface_configured.notify = desktop_surface_event_configure;
++    ida->interface->add_listener_configure_desktop_surface(&ida->desktop_surface_configured);
++
++    if(read_config(ida) != 0) {
++        deinit(ida);
++        return -1;
++    }
++
++    ida->last_assigned_id = ida->default_id_offset;
++
++    weston_log("id_agent_module_init: success\n");
++
++    return 0;
++}
+diff --git a/id-agent-modules/simple-id-agent/weston.ini.in b/id-agent-modules/simple-id-agent/weston.ini.in
+new file mode 100644
+index 0000000..b5e5fa1
+--- /dev/null
++++ b/id-agent-modules/simple-id-agent/weston.ini.in
+@@ -0,0 +1,11 @@
++[core]
++shell=ivi-shell.so
++require-input=false
++
++[ivi-shell]
++ivi-module=ivi-controller.so
++ivi-input-module=ivi-input-controller.so
++id-agent-module=simple-id-agent.so
++
++[id-agent]
++default-id-offset=10
+-- 
+2.13.6
+
