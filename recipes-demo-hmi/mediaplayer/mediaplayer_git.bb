@@ -14,7 +14,6 @@ S  = "${WORKDIR}/git"
 
 # build-time dependencies
 DEPENDS += "qtquickcontrols2 \
-            qtmultimedia \
             qtwebsockets \
             libqtappfw \
             virtual/libhomescreen \
@@ -23,8 +22,4 @@ DEPENDS += "qtquickcontrols2 \
 
 inherit qmake5 aglwgt
 
-RDEPENDS_${PN} += "qtmultimedia \
-                   qtmultimedia-qmlplugins \
-                   agl-service-mediaplayer \
-                   agl-service-bluetooth \
-"
+RDEPENDS_${PN} += "agl-service-mediaplayer agl-service-bluetooth"
