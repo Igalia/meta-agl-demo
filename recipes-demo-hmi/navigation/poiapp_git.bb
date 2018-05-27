@@ -15,8 +15,8 @@ DEPENDS += " qtbase libdbus-c++ json-c \
 RDEPENDS_${PN} =  " qtbase libdbus-c++ json-c \
                   "
 
-SRCREV  = "b0e059007de776450c91c983a2bcac20414617e9"
-SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=agl \
+SRCREV  = "4ecdbfc4bcb0f13708c80d56d7d901d578237ce3"
+SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=dab \
           "
 
 S = "${WORKDIR}/git"
