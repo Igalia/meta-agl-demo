@@ -1,0 +1,31 @@
+From 97af4843a4705cd7d5b6b69abb9002fd974a5b94 Mon Sep 17 00:00:00 2001
+From: Tadao Tanikawa <tanikawa.tadao@jp.panasonic.com>
+Date: Fri, 12 Jan 2018 01:53:01 +0900
+Subject: [PATCH] Resolve weston cursh when repeat touching very quickly
+
+Weston sometimes crush while the user repeat touching very
+quickly icons/shortcuts on HomeScreen.
+
+Signed-off-by: Tadao Tanikawa <tanikawa.tadao@jp.panasonic.com>
+---
+ ivi-input-modules/ivi-input-controller/src/ivi-input-controller.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/ivi-input-modules/ivi-input-controller/src/ivi-input-controller.c b/ivi-input-modules/ivi-input-controller/src/ivi-input-controller.c
+index b0fe37d..f1a31d0 100644
+--- a/ivi-input-modules/ivi-input-controller/src/ivi-input-controller.c
++++ b/ivi-input-modules/ivi-input-controller/src/ivi-input-controller.c
+@@ -557,6 +557,10 @@ touch_grab_up(struct weston_touch_grab *grab, uint32_t time, int touch_id)
+     const struct ivi_layout_interface *interface =
+         seat->input_ctx->ivi_layout_interface;
+ 
++    /* if touch device has no focused view, there is nothing to do*/
++    if (grab->touch->focus == NULL)
++        return;
++
+     /* For each surface_ctx, check for focus and send */
+     wl_list_for_each(surf_ctx, &seat->input_ctx->surface_list, link) {
+         struct weston_surface *surf, *send_surf;
+-- 
+2.7.4
+

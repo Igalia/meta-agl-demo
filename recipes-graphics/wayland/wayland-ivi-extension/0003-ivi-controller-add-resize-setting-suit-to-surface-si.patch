@@ -1,0 +1,62 @@
+From 525b5bf65303d661f44c01b11bafd5ba90976850 Mon Sep 17 00:00:00 2001
+From: Wataru Mizuno <wmizuno@jp.adit-jv.com>
+Date: Wed, 6 Dec 2017 19:35:51 +0900
+Subject: [PATCH] ivi-controller: add resize setting suit to surface size
+
+The ivi-controller resizes surface size like desktop usecase.
+
+When window manager swicths the half size window to full size,
+resize was not working correctly.
+This patch fixs this issue by changing surface source region at
+the same timing of destination region is changed.
+
+This patch is not necessary later version of wayland-ivi-extension
+2.0 since this resize function has already been implemented by
+appropriate manner.
+
+Signed-off-by: Wataru Mizuno <wmizuno@jp.adit-jv.com>
+---
+ weston-ivi-shell/src/ivi-controller.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/weston-ivi-shell/src/ivi-controller.c b/weston-ivi-shell/src/ivi-controller.c
+index 312a978..9450cf2 100644
+--- a/weston-ivi-shell/src/ivi-controller.c
++++ b/weston-ivi-shell/src/ivi-controller.c
+@@ -1334,7 +1334,7 @@ surface_event_configure(struct wl_listener *listener, void *data)
+     struct ivisurface *ivisurf = NULL;
+     struct ivi_layout_surface *layout_surface =
+            (struct ivi_layout_surface *) data;
+-    const struct ivi_layout_surface_properties *prop;
++    struct weston_surface *w_surface;
+ 
+     ivisurf = get_surface(&shell->list_surface, layout_surface);
+     if (ivisurf == NULL) {
+@@ -1342,11 +1342,22 @@ surface_event_configure(struct wl_listener *listener, void *data)
+         return;
+     }
+ 
+-    prop = lyt->get_properties_of_surface(layout_surface);
++    w_surface = lyt->surface_get_weston_surface(layout_surface);
++    lyt->surface_set_destination_rectangle(layout_surface,
++					   ivisurf->prop->dest_x,
++					   ivisurf->prop->dest_y,
++					   w_surface->width,
++					   w_surface->height);
++    lyt->surface_set_source_rectangle(layout_surface,
++				      0,
++				      0,
++				      w_surface->width,
++				      w_surface->height);
++    lyt->commit_changes();
+ 
+     wl_resource_for_each(resource, &ivisurf->resource_list) {
+         send_surface_event(resource, ivisurf,
+-                           prop, IVI_NOTIFICATION_CONFIGURE);
++                           ivisurf->prop, IVI_NOTIFICATION_CONFIGURE);
+     }
+ }
+ 
+-- 
+2.7.4
+

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/qt5/qmlscene "$1" /usr/bin/web-runtime.qml
