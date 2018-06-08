@@ -22,7 +22,6 @@ RDEPENDS_${PN} += "\
 
 MOST_DRIVERS = " "
 MOST_DRIVERS_append_BROKENonIntelQemuRpi3 = " \
-    mocca-usb \
     most \
     "
 # Don't add MOST support when building for Porter
@@ -34,11 +33,6 @@ MOST_HVAC_append = " \
     ${MOST_DRIVERS} \
     unicens-config \
     agl-service-unicens \
-    "
-
-# can-lin is a binary and only for porter :(
-MOST_HVAC_append_porter = " \
-    can-lin \
     "
 
 # mapviewer and mapviewer-demo requires AGL CES2017 demo mock-up
