@@ -1,0 +1,35 @@
+From 490f8c205ae5c305e53f2ce4d97fcf5041a5105c Mon Sep 17 00:00:00 2001
+From: Yuichi Kusakabe <yuichi.kusakabe@denso-ten.com>
+Date: Thu, 14 Jun 2018 15:08:30 +0900
+Subject: [PATCH 3/3] [ALS2018]: enable PWM fan demo by lin transceiver
+
+Signed-off-by: Harunobu Kurokawa <harunobu.kurokawa.dn@renesas.com>
+Signed-off-by: Yuichi Kusakabe <yuichi.kusakabe@denso-ten.com>
+---
+ binding/hvac-demo-binding.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/binding/hvac-demo-binding.c b/binding/hvac-demo-binding.c
+index fdc9afc..cf8e7fb 100644
+--- a/binding/hvac-demo-binding.c
++++ b/binding/hvac-demo-binding.c
+@@ -38,7 +38,7 @@
+ #define GREEN "/sys/class/leds/blinkm-24-9-green/brightness"
+ #include <afb/afb-binding.h>
+ 
+-#define CAN_DEV "vcan0"
++#define CAN_DEV "sllin0"
+ 
+ #ifndef NULL
+ #define NULL 0
+@@ -463,6 +463,7 @@ static int write_can()
+ 
+         if(!can_handler.simulation)
+         {
++            usleep(100000);
+             rc = (int)sendto(can_handler.socket, &txCanFrame, sizeof(struct can_frame), 0,
+                     (struct sockaddr*)&can_handler.txAddress, sizeof(can_handler.txAddress));
+             if (rc < 0)
+-- 
+2.9.2
+
