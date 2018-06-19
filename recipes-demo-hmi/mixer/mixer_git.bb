@@ -7,7 +7,11 @@ LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/mixer;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "${AGL_APP_REVISION}"
+
+# 'legacy' version (eel_5.0.3) when 4A is not enabled
+SRCREV  = "eel_5.0.3"
+# 4A-aware mixer
+SRVREV_agl-audio-4a-framework = "${AGL_APP_REVISION}"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
