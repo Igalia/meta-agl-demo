@@ -57,7 +57,8 @@ PREFERRED_PROVIDER_virtual/webruntime = "web-runtime"
 
 RDEPENDS_${PN} += " \
     linux-firmware-ath9k \
-    can-utils \
+    libsocketcan \
+    canutils \
     iproute2 \
     python-curses \
     dhcp-client \
