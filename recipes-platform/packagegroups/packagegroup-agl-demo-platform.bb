@@ -42,7 +42,7 @@ AGL_APPS = " \
     dashboard \
     hvac \
     mediaplayer \
-    mixer \
+    virtual/mixer  \
     virtual/navigation \
     phone \
     poiapp \

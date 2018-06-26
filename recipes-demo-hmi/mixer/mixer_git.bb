@@ -10,8 +10,6 @@ SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/mixer;protocol=https;bra
 
 # 'legacy' version (eel_5.0.3) when 4A is not enabled
 SRCREV  = "eel_5.0.3"
-# 4A-aware mixer
-SRVREV_agl-audio-4a-framework = "${AGL_APP_REVISION}"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
@@ -22,5 +20,7 @@ DEPENDS += "qtquickcontrols2 \
             virtual/libhomescreen \
             qlibwindowmanager \
 "
+
+PROVIDES += "virtual/mixer"
 
 inherit qmake5 aglwgt
