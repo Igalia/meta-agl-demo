@@ -8,8 +8,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/mixer;protocol=https;branch=${AGL_BRANCH}"
 
-# 'legacy' version (eel_5.0.3) when 4A is not enabled
-SRCREV  = "eel_5.0.3"
+# 'legacy' version (eel_5.0.3 == master for CES'18) when 4A is not enabled
+SRCREV  = "d9bb450ee8898cb810027897a32afd3adcb05d9f"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
@@ -21,6 +21,6 @@ DEPENDS += "qtquickcontrols2 \
             qlibwindowmanager \
 "
 
-PROVIDES += "virtual/mixer"
+RPROVIDES_${PN} += "virtual/mixer"
 
 inherit qmake5 aglwgt
