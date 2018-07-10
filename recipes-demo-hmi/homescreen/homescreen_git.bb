@@ -1,44 +1,29 @@
 SUMMARY     = "AGL Home Screen Application"
-DESCRIPTION = "AGL Home Screen Application + SampleAppTimeDate"
+DESCRIPTION = "AGL Home Screen Application build with recipe method"
 HOMEPAGE    = "http://docs.automotivelinux.org"
 LICENSE     = "Apache-2.0"
 SECTION     = "apps"
-S           = "${WORKDIR}/git/"
-
-inherit qmake5 systemd pkgconfig
-DEPENDS = " qtbase qtdeclarative qtquickcontrols2 pulseaudio"
-RDEPENDS_${PN} = " \
-	homescreenappframeworkbinderagl \
-	inputeventmanager \
-	windowmanager"
-
 LIC_FILES_CHKSUM = "file://homescreen/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/apps/homescreen.git;protocol=https;branch=${AGL_BRANCH} \
-           file://dbus-homescreen.conf.in"
+DEPENDS = "\
+        qtbase \
+        qtdeclarative \
+        qtquickcontrols2 \
+        pulseaudio \
+        agl-service-homescreen-2017 \
+        agl-service-windowmanager-2017 \
+        agl-service-weather \
+        libqtappfw \
+        qlibwindowmanager \
+        virtual/libhomescreen \
+"
+
+inherit qmake5 systemd pkgconfig aglwgt
+
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/homescreen;protocol=https;branch=${AGL_BRANCH}"
 SRCREV  = "${AGL_APP_REVISION}"
-# PV needs to be modified with SRCPV to work AUTOREV correctly
-PV = "0.0+git${SRCPV}"
+
+PV      = "1.0+git${SRCPV}"
+S       = "${WORKDIR}/git/"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
-
-do_install() {
-    install -d ${D}/usr/AGL/${PN}
-    install -m 0755 ${B}/homescreen/HomeScreen ${D}/usr/AGL/${PN}/
-    install -m 0755 ${B}/sampleapptimedate/SampleAppTimeDate ${D}/usr/AGL/${PN}/
-
-# claneys: add dbus policy to make wifi/bluetooth status icon working as quick 
-# workaround. (jira.automotivelinux.org : SPEC-377)
-    install -d ${D}/etc/dbus-1/session.d
-    install -m 0644 ${WORKDIR}/dbus-homescreen.conf.in ${D}/etc/dbus-1/session.d/homescreen.conf
-
-    install -d ${D}${systemd_user_unitdir}
-    install -m 0644 ${S}/homescreen/conf/HomeScreen.service ${D}${systemd_user_unitdir}
-
-    install -d ${D}${sysconfdir}/systemd/user/default.target.wants
-    ln -sf ${systemd_user_unitdir}/HomeScreen.service ${D}${sysconfdir}/systemd/user/default.target.wants
-}
-
-FILES_${PN} += "/usr/AGL/${PN}/ ${systemd_user_unitdir}"
-FILES_${PN}-dbg += "/usr/AGL/${PN}/.debug"
-
