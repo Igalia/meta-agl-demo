@@ -7,8 +7,9 @@ LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 #SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/dashboard;protocol=https;branch=${AGL_BRANCH}"
+#SRCREV  = "${AGL_APP_REVISION}"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/dashboard;protocol=https;branch=sandbox/zheng_wenlong/qtaglextras"
-SRCREV  = "${AGL_APP_REVISION}"
+SRCREV  = "9c6150f2108554210fb1ecf77175b30db8b37026"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
