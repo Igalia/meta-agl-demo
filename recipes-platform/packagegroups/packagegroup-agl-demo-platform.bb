@@ -23,8 +23,6 @@ RDEPENDS_${PN} += "\
 MOST_DRIVERS = " \
     most \
     "
-# Don't add MOST support when building for Porter
-MOST_DRIVERS_remove_porter = "most"
 
 # HVAC dependencies depend on drivers above
 MOST_HVAC = " "
