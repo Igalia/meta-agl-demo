@@ -33,7 +33,7 @@ TOOLCHAIN_HOST_TASK += " \
 # required dependencies for Chromium build inside SDK (SPEC-942)
 TOOLCHAIN_TARGET_TASK += " \
     pciutils-dev \
-    pulseaudio-dev \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio-dev' , '', d)} \
     cairo-dev \
     nss-dev \
     cups-dev \
