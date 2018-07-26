@@ -20,8 +20,7 @@ RDEPENDS_${PN} += "\
     packagegroup-agl-demo \
     "
 
-MOST_DRIVERS = " "
-MOST_DRIVERS_append_BROKENonIntelQemuRpi3 = " \
+MOST_DRIVERS = " \
     most \
     "
 # Don't add MOST support when building for Porter
