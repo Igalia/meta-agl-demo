@@ -45,8 +45,7 @@ TTF_FONTS = " \
     source-han-sans-tw-fonts \
     "
 
-EXTRA_APPS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'qtwebengine', '', d)}"
-
+#EXTRA_APPS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'qtwebengine', '', d)}"
 #EXTRA_APPS_append = " qtsmarthome cinematicexperience qt5everywheredemo qt5-demo-extrafiles"
 #IMAGE_INSTALL_append = " qtwebengine-examples"
 
