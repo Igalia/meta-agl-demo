@@ -36,6 +36,7 @@ MOST_HVAC_append = " \
 
 # @Chris: This needs to be checked!
 MOST_HVAC_dra7xx-evm = ""
+MOST_HVAC_dragonboard-410c = ""
 
 # mapviewer and mapviewer-demo requires AGL CES2017 demo mock-up
 MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-mapviewer-demo", " mapviewer mapviewer-demo", "",d)}"
