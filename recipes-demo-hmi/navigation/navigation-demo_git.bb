@@ -26,6 +26,8 @@ RDEPENDS_${PN} = " \
              agl-service-gps \
              agl-service-geoclue \
              agl-service-geofence \
+             qtlocation \
+             qtvirtualkeyboard \
             "
 
 inherit qmake5 aglwgt
