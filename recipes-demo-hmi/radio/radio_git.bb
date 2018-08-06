@@ -7,12 +7,13 @@ LICENSE     = "Apache-2.0 & GPLv2+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984 \
                     file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/radio;protocol=https;branch=${AGL_BRANCH} \
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/radio;protocol=https;branch=sandbox/zheng_wenlong/use_appid \
            file://presets-ALS.conf \
            file://presets-CES.conf \
            file://presets-FOSDEM.conf \
 "
-SRCREV  = "${AGL_APP_REVISION}"
+#SRCREV  = "${AGL_APP_REVISION}"
+SRCREV  = "e7d32af5cfcef662bc9f77a3a592ce38936b6636"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"

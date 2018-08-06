@@ -6,8 +6,10 @@ SECTION     = "apps"
 LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/phone;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "${AGL_APP_REVISION}"
+#SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/phone;protocol=https;branch=${AGL_BRANCH}"
+#SRCREV  = "${AGL_APP_REVISION}"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/phone;protocol=https;branch=sandbox/zheng_wenlong/use_appid"
+SRCREV  = "f3f4d96b03f11f8fbbeefa93bdc8078dbd0489fd"
 
 PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
