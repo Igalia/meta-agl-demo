@@ -42,21 +42,23 @@ MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-mapviewer-demo", " map
 AGL_APPS = " \
     dashboard \
     hvac \
-    mediaplayer \
     virtual/mixer  \
-    virtual/navigation \
-    phone \
-    poiapp \
     radio \
     settings \
     high-level-viwi-service \
     agl-service-signal-composer \
     low-can-demo \
+    navigation-demo \
     "
 
 AGL_APIS = " \
-    libnaviapi-agl \
-    "
+           "
+#    mediaplayer \
+#    libnaviapi-agl \
+#    phone \
+#    virtual/navigation \
+#    poiapp \
+#    "
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
