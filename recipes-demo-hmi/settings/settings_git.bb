@@ -19,6 +19,6 @@ DEPENDS += "virtual/libhomescreen qlibwindowmanager qtvirtualkeyboard"
 # runtime dependencies
 RDEPENDS_${PN} += " \
             agl-service-bluetooth \
-            agl-service-wifi"
+            agl-service-network"
 
 inherit qmake5 aglwgt
