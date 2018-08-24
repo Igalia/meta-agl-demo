@@ -16,7 +16,7 @@ DEPENDS += " qtbase json-c libnaviapi-agl \
 RDEPENDS_${PN} =  " qtbase \
                   "
 
-SRCREV = "ab3cd1147be02f439cf1aa6be55ae723671c844a"
+SRCREV = "b3c6e38e8becf8f3f62e96db8f58345d3a1d88d6"
 SRC_URI = "git://github.com/AGLExport/genivi-navi-yelp-client.git;branch=agl \
           "
 
