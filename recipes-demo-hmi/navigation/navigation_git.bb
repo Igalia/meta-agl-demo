@@ -18,7 +18,7 @@ RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat 
 RDEPENDS_${PN} += " agl-service-navigation "
 
 
-SRCREV="9782027a3b062fc99533b3d01562c147d86efc11"
+SRCREV="66b2f6f062e0f141cdeecd449a2d7267078906d3"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
