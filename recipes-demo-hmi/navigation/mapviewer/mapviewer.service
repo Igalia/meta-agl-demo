@@ -7,7 +7,6 @@ After=weston.service HomeScreen.service
 # currently the position to be shown is 384x368 surface on screen 1 for CES2017 cluster demo.
 
 [Service]
-Environment=NAVI_DATA_DIR=/var/mapdata/navi_data_UK/japan_TR9 XDG_RUNTIME_DIR=/run/user/0
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/mapview
 ExecStartPost=/usr/bin/LayerManagerControl create layer 11001 1920 1080
