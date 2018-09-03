@@ -10,7 +10,7 @@ DEPENDS = "\
         qtdeclarative \
         qtquickcontrols2 \
         pulseaudio \
-        agl-service-homescreen-2017 \
+        agl-service-homescreen \
         agl-service-windowmanager-2017 \
         agl-service-weather \
         libqtappfw \

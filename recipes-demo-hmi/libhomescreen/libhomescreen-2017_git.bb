@@ -23,5 +23,5 @@ do_install_append() {
 	install -m 0644 ${WORKDIR}/org.agl.statusbar.conf  ${D}${sysconfdir}/dbus-1/session.d
 }
 
-RDEPENDS_${PN} = "agl-service-homescreen-2017"
+RDEPENDS_${PN} = "agl-service-homescreen"
 PROVIDES += "virtual/libhomescreen"
