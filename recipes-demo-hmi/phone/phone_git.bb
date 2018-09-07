@@ -16,7 +16,7 @@ S  = "${WORKDIR}/git"
 DEPENDS += "qtquickcontrols2 \
             qtmultimedia \
             libqtappfw \
-            virtual/libhomescreen \
+            libhomescreen \
             qlibwindowmanager \
 "
 

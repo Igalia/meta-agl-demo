@@ -10,7 +10,7 @@ inherit cmake_qt5 pkgconfig
 inherit aglwgt
 
 DEPENDS += " qtbase json-c libnaviapi-agl \
-             af-binder qlibwindowmanager virtual/libhomescreen \
+             af-binder qlibwindowmanager libhomescreen \
            "
 
 RDEPENDS_${PN} =  " qtbase \

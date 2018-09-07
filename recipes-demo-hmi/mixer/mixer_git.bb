@@ -17,7 +17,7 @@ S  = "${WORKDIR}/git"
 # build-time dependencies
 DEPENDS += "qtquickcontrols2 \
             pulseaudio \
-            virtual/libhomescreen \
+            libhomescreen \
             qlibwindowmanager \
 "
 

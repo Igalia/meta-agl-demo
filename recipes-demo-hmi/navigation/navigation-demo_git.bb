@@ -16,7 +16,7 @@ S  = "${WORKDIR}/git"
 RPROVIDES_${PN} = "virtual/navigation"
 
 DEPENDS  += "qtquickcontrols2 \
-             virtual/libhomescreen \
+             libhomescreen \
              qlibwindowmanager \
              qtvirtualkeyboard \
              qtlocation \

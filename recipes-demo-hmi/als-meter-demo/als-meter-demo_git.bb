@@ -13,7 +13,7 @@ PV = "0.1+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS += "qtquickcontrols2 opencv virtual/libhomescreen qlibwindowmanager"
+DEPENDS += "qtquickcontrols2 opencv libhomescreen qlibwindowmanager"
 
 # runtime dependencies
 RDEPENDS_${PN} += "agl-service-steering-wheel"

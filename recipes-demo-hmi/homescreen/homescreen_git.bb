@@ -15,7 +15,7 @@ DEPENDS = "\
         agl-service-weather \
         libqtappfw \
         qlibwindowmanager \
-        virtual/libhomescreen \
+        libhomescreen \
 "
 
 inherit qmake5 systemd pkgconfig aglwgt

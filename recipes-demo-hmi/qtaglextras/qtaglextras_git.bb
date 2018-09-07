@@ -1,7 +1,7 @@
 LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE-2.0.txt;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-DEPENDS += "qtbase qtdeclarative qtquickcontrols2 qlibwindowmanager virtual/libhomescreen"
+DEPENDS += "qtbase qtdeclarative qtquickcontrols2 qlibwindowmanager libhomescreen"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/qtaglextras;protocol=https;branch=${AGL_BRANCH}"
 SRCREV = "${AGL_DEFAULT_REVISION}"
