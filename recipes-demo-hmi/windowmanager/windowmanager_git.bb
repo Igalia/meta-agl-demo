@@ -12,7 +12,7 @@ DEPENDS = " qtbase "
 DEPENDS += " wayland-ivi-extension "
 
 LIC_FILES_CHKSUM = "file://windowmanager/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
-SRCREV  = "${AGL_DEFAULT_REVISION}"
+SRCREV  = "eeedc5e9e67917bd3346dbe5332e667757a3b28d"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 

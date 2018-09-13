@@ -11,7 +11,7 @@ DEPENDS = " qtbase "
 LIC_FILES_CHKSUM = "file://inputeventmanager/LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/inputeventmanager.git;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "${AGL_DEFAULT_REVISION}"
+SRCREV  = "b2f1646ac78cf61acd66c643b7638bd1b007d5a0"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 
