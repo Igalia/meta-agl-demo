@@ -14,5 +14,6 @@ S  = "${WORKDIR}/git"
 
 # build-time dependencies
 DEPENDS += "qtquickcontrols2 libhomescreen qlibwindowmanager qttools-native"
+RDEPENDS_${PN} = "agl-service-hvac"
 
 inherit qmake5 aglwgt
