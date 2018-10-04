@@ -10,7 +10,7 @@ DEPENDS = "\
         qtdeclarative \
         qtquickcontrols2 \
         agl-service-homescreen \
-        agl-service-windowmanager-2017 \
+        agl-service-windowmanager \
         agl-service-weather \
         libqtappfw \
         qlibwindowmanager \
