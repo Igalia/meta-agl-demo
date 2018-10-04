@@ -11,7 +11,7 @@ DEPENDS = "\
         qtquickcontrols2 \
         pulseaudio \
         agl-service-homescreen \
-        agl-service-windowmanager-2017 \
+        agl-service-windowmanager \
         agl-service-weather \
         libqtappfw \
         qlibwindowmanager \
