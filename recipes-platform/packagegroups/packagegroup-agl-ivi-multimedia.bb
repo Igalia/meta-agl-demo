@@ -17,5 +17,5 @@ RDEPENDS_${PN} += "\
     "
 
 RDEPENDS_${PN} += "\
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '' , 'virtual/pulseaudio-config', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '' , bb.utils.contains('DISTRO_FEATURES','pulseaudio','virtual/pulseaudio-config','',d), d)} \
     "
