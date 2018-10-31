@@ -22,6 +22,7 @@ RDEPENDS_${PN} += "\
 
 MOST_DRIVERS = " \
     most \
+    sllin \
     "
 
 # HVAC dependencies depend on drivers above
