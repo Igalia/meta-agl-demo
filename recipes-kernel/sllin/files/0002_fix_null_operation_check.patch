@@ -1,0 +1,176 @@
+diff --git a/sllin/sllin.c b/sllin/sllin.c
+index 2db896f..2969448 100644
+--- a/sllin/sllin.c
++++ b/sllin/sllin.c
+@@ -869,7 +869,6 @@ static int sllin_send_tx_buff(struct sllin *sl)
+ #else
+ 		remains = sl->tx_lim - sl->tx_cnt;
+ #endif
+-
+ 		res = tty->ops->write(tty, sl->tx_buff + sl->tx_cnt, remains);
+ 		if (res < 0)
+ 			goto error_in_write;
+@@ -916,10 +915,25 @@ static int sllin_send_break(struct sllin *sl)
+ 	unsigned long break_baud;
+ 	int res;
+ 
++	netdev_dbg(sl->dev, "%s()#<BREAK_BY_BAUD>  invoke.\n", __func__);
++	if (tty == NULL) {
++		netdev_dbg(sl->dev, "%s() tty == NULL.\n", __func__);
++		sl->lin_state = SLSTATE_IDLE;
++		return -1;
++	}
++	if (tty->ops == NULL) {
++		netdev_dbg(sl->dev, "%s() tty->ops == NULL.\n", __func__);
++		sl->lin_state = SLSTATE_IDLE;
++		return -1;
++	}
+ 	break_baud = ((sl->lin_baud * 2) / 3);
+ 	sltty_change_speed(tty, break_baud);
+ 
+-	tty->ops->flush_buffer(tty);
++	if (tty->ops->flush_buffer) {
++		tty->ops->flush_buffer(tty);
++	} else {
++		netdev_dbg(sl->dev, "%s() tty->ops->flush_buffer is NULL.\n", __func__);
++	}
+ 	sl->rx_cnt = SLLIN_BUFF_BREAK;
+ 
+ 	sl->rx_expect = SLLIN_BUFF_BREAK + 1;
+@@ -943,6 +957,17 @@ static int sllin_send_break(struct sllin *sl)
+ 	unsigned long usleep_range_min;
+ 	unsigned long usleep_range_max;
+ 
++	netdev_dbg(sl->dev, "%s() invoke.\n", __func__);
++	if (tty == NULL) {
++		netdev_dbg(sl->dev, "%s() tty == NULL.\n", __func__);
++		sl->lin_state = SLSTATE_IDLE;
++		return -1;
++	}
++	if (tty->ops == NULL) {
++		netdev_dbg(sl->dev, "%s() tty->ops == NULL.\n", __func__);
++		sl->lin_state = SLSTATE_IDLE;
++		return -1;
++	}
+ 	break_baud = ((sl->lin_baud * 2) / 3);
+ 	sl->rx_cnt = SLLIN_BUFF_BREAK;
+ 	sl->rx_expect = SLLIN_BUFF_BREAK + 1;
+@@ -950,21 +975,31 @@ static int sllin_send_break(struct sllin *sl)
+ 
+ 	/* Do the break ourselves; Inspired by
+ 	   http://lxr.linux.no/#linux+v3.1.2/drivers/tty/tty_io.c#L2452 */
+-	retval = tty->ops->break_ctl(tty, -1);
+-	if (retval)
+-		return retval;
++	if (tty->ops->break_ctl) {
++		retval = tty->ops->break_ctl(tty, -1);
++		if (retval)
++			return retval;
++	} else {
++		netdev_dbg(sl->dev, "%s() tty->ops->break_ctl is NULL.\n", __func__);
++	}
+ 
+ 	/* udelay(712); */
+ 	usleep_range_min = (1000000l * SLLIN_SAMPLES_PER_CHAR) / break_baud;
+ 	usleep_range_max = usleep_range_min + 50;
+ 	usleep_range(usleep_range_min, usleep_range_max);
+ 
+-	retval = tty->ops->break_ctl(tty, 0);
++	if(tty->ops->break_ctl) {
++		retval = tty->ops->break_ctl(tty, 0);
++	} 
+ 	usleep_range_min = (1000000l * 1 /* 1 bit */) / break_baud;
+ 	usleep_range_max = usleep_range_min + 30;
+ 	usleep_range(usleep_range_min, usleep_range_max);
+ 
+-	tty->ops->flush_buffer(tty);
++	if ( tty->ops->flush_buffer) {
++		tty->ops->flush_buffer(tty);
++	} else {
++		netdev_dbg(sl->dev, "%s() tty->ops->flush_buffer is NULL.\n", __func__);
++	}
+ 
+ 	sl->tx_cnt = SLLIN_BUFF_SYNC;
+ 
+@@ -1028,6 +1063,12 @@ static int sllin_kwthread(void *ptr)
+ 		int lin_dlc;
+ 		u8 lin_data_buff[SLLIN_DATA_MAX];
+ 
++		if (sl == NULL) {
++			pr_err("sllin: sl is NULL\n");
++		}
++		if (sl->dev == NULL) {
++			pr_err("sllin: sl->dev is NULL\n");
++		}
+ 
+ 		if ((sl->lin_state == SLSTATE_IDLE) && sl->lin_master &&
+ 			sl->id_to_send) {
+@@ -1036,6 +1077,7 @@ static int sllin_kwthread(void *ptr)
+ 			}
+ 		}
+ 
++		netdev_dbg(sl->dev, "sllin_kthread <WAIT_EVENT>\n");
+ 		wait_event_killable(sl->kwt_wq, kthread_should_stop() ||
+ 			test_bit(SLF_RXEVENT, &sl->flags) ||
+ 			test_bit(SLF_TXEVENT, &sl->flags) ||
+@@ -1046,6 +1088,7 @@ static int sllin_kwthread(void *ptr)
+ 				(sl->lin_state == SLSTATE_RESPONSE_WAIT))
+ 				&& test_bit(SLF_MSGEVENT, &sl->flags)));
+ 
++		netdev_dbg(sl->dev, "sllin_kthread <WAKEUPED>\n");
+ 		if (test_and_clear_bit(SLF_RXEVENT, &sl->flags)) {
+ 			netdev_dbg(sl->dev, "sllin_kthread RXEVENT\n");
+ 		}
+@@ -1078,21 +1121,25 @@ static int sllin_kwthread(void *ptr)
+ 			sl->lin_state = SLSTATE_IDLE;
+ 		}
+ 
++		netdev_dbg(sl->dev, "sllin_kthread: lin_state <%08x>\n",sl->lin_state);
+ 		switch (sl->lin_state) {
+ 		case SLSTATE_IDLE:
+ 			if (!test_bit(SLF_MSGEVENT, &sl->flags))
+ 				break;
+-
++			if (sl->tx_req_skb == NULL)
++				netdev_dbg(sl->dev, "sl->tx_req_skb == NULL\n");
++			if (sl->tx_req_skb->data == NULL)
++				netdev_dbg(sl->dev, "sl->tx_req_skb->data == NULL\n");
+ 			cf = (struct can_frame *)sl->tx_req_skb->data;
+ 
+ 			/* SFF RTR CAN frame -> LIN header */
+ 			if (cf->can_id & CAN_RTR_FLAG) {
+ 				struct sllin_conf_entry *sce;
+ 
+-				netdev_dbg(sl->dev, "%s: RTR SFF CAN frame, ID = %x\n",
+-					__func__, cf->can_id & LIN_ID_MASK);
+ 
+ 				sce = &sl->linfr_cache[cf->can_id & LIN_ID_MASK];
++				netdev_dbg(sl->dev, "%s: RTR SFF CAN frame, ID = %x dlc=%d\n",
++					__func__, cf->can_id & LIN_ID_MASK, sce->dlc);
+ 				spin_lock_irqsave(&sl->linfr_lock, flags);
+ 
+ 				/* Is there Slave response in linfr_cache to be sent? */
+@@ -1114,8 +1161,8 @@ static int sllin_kwthread(void *ptr)
+ 				spin_unlock_irqrestore(&sl->linfr_lock, flags);
+ 
+ 			} else { /* SFF NON-RTR CAN frame -> LIN header + LIN response */
+-				netdev_dbg(sl->dev, "%s: NON-RTR SFF CAN frame, ID = %x\n",
+-					__func__, (int)cf->can_id & LIN_ID_MASK);
++				netdev_dbg(sl->dev, "%s: NON-RTR SFF CAN frame, ID = %x\n dlc=%d",
++					__func__, (int)cf->can_id & LIN_ID_MASK, cf->can_dlc);
+ 
+ 				lin_data = cf->data;
+ 				lin_dlc = cf->can_dlc;
+@@ -1140,6 +1187,7 @@ static int sllin_kwthread(void *ptr)
+ 			hrtimer_start(&sl->rx_timer,
+ 				ktime_add(ktime_get(), sl->rx_timer_timeout),
+ 				HRTIMER_MODE_ABS);
++			netdev_dbg(sl->dev, "sllin_kthread: SLSTATE finish\n");
+ 			break;
+ 
+ 		case SLSTATE_BREAK_SENT:
+@@ -1654,3 +1702,4 @@ static void __exit sllin_exit(void)
+ 
+ module_init(sllin_init);
+ module_exit(sllin_exit);
++
