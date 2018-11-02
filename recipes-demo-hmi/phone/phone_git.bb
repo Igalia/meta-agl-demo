@@ -23,4 +23,4 @@ DEPENDS += "qtquickcontrols2 \
 inherit qmake5 aglwgt
 
 RDEPENDS_${PN} += "agl-service-bluetooth agl-service-bluetooth-pbap \
-                   qtmultimedia"
+                   agl-service-telephony qtmultimedia"
