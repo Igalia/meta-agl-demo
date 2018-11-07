@@ -1,0 +1,13 @@
+[Unit]
+Description = LIN DEMO startup
+After=afm-system-daemon.service
+ 
+[Service]
+Type=forking
+PIDFile=/var/run/lin_ldattach
+ExecStart=/usr/bin/start_lin_demo.sh
+RemainAfterExit=yes
+
+ 
+[Install]
+WantedBy=default.target
