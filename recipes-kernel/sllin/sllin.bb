@@ -31,6 +31,8 @@ SYSTEMD_SERVICE_${PN} = "sllin-demo.service"
 do_install_append () {
 	install -d 644 ${D}/${bindir}
 	install -m 755 ${WORKDIR}/start_lin_demo.sh ${D}/${bindir}/start_lin_demo.sh
+	install -d ${D}${systemd_system_unitdir}
+	install -m 0644 ${WORKDIR}/sllin-demo.service ${D}${systemd_system_unitdir}/
 }
 
 FILES_${PN}_append = " ${bindir}/start_lin_demo.sh"
