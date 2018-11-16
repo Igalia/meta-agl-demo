@@ -22,4 +22,4 @@ DEPENDS += "qtquickcontrols2 \
 
 inherit qmake5 aglwgt
 
-RDEPENDS_${PN} += "agl-service-mediaplayer agl-service-bluetooth"
+RDEPENDS_${PN} += "agl-service-mediaplayer"
