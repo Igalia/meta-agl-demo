@@ -118,6 +118,18 @@ echo 4 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep81/set_subbuffer_siz
 echo 128 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep81/set_packets_per_xact 2>/dev/null
 
 echo mdev2:ep81:ep81-2ch.2x16 > /sys/devices/virtual/most/mostcore/aims/sound/add_link 2>/dev/null
+
+# interface: mdev2
+# aim: sound
+# name: ep82-2ch.2x16
+echo rx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep82/set_direction 2>/dev/null
+echo sync > /sys/devices/virtual/most/mostcore/devices/mdev2/ep82/set_datatype 2>/dev/null
+echo 8 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep82/set_number_of_buffers 2>/dev/null
+echo 2048 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep82/set_buffer_size 2>/dev/null
+echo 4 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep82/set_subbuffer_size 2>/dev/null
+echo 128 > /sys/devices/virtual/most/mostcore/devices/mdev2/ep82/set_packets_per_xact 2>/dev/null
+
+echo mdev2:ep82:ep82-2ch.2x16 > /sys/devices/virtual/most/mostcore/aims/sound/add_link 2>/dev/null
 ##aim: cdev
 ##name: inic-usb-itx1
 echo tx > /sys/devices/virtual/most/mostcore/devices/mdev2/ep02/set_direction 2>/dev/null
