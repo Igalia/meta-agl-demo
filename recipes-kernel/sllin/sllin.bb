@@ -16,6 +16,7 @@ SRC_URI_append = " \
 	file://0001_update_makefile.patch;pnum=2 \
 	file://0002_fix_null_operation_check.patch;pnum=2 \
 	file://0003-Allow-recent-kernels-newer-4.11.x-to-build.patch;pnum=2 \
+	file://0001-Disable-sllin-driver-debug-log.patch;pnum=2 \
 	file://sllin-demo.service \
 	file://start_lin_demo.sh \
 "

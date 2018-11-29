@@ -1,0 +1,27 @@
+From 04ffb4b8f828c19e914987e271aaf3aa7eab28bf Mon Sep 17 00:00:00 2001
+From: Yuichi Kusakabe <yuichi.kusakabe@denso-ten.com>
+Date: Thu, 29 Nov 2018 22:12:00 +0900
+Subject: [PATCH] Disable sllin driver debug log
+
+Signed-off-by: Yuichi Kusakabe <yuichi.kusakabe@denso-ten.com>
+---
+ sllin/sllin.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/sllin/sllin.c b/sllin/sllin.c
+index 77b2cb8..133d6e9 100644
+--- a/sllin/sllin.c
++++ b/sllin/sllin.c
+@@ -41,7 +41,9 @@
+  * Funded by:  Volkswagen Group Research
+  */
+ 
++#if 0
+ #define DEBUG			1 /* Enables pr_debug() printouts */
++#endif
+ 
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+-- 
+2.7.4
+
