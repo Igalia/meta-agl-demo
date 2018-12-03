@@ -37,9 +37,6 @@ MOST_HVAC_append = " \
 MOST_HVAC_dra7xx-evm = ""
 MOST_HVAC_dragonboard-410c = ""
 
-# mapviewer and mapviewer-demo requires AGL CES2017 demo mock-up
-MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-mapviewer-demo", " mapviewer mapviewer-demo", "",d)}"
-
 AGL_APPS = " \
     dashboard \
     hvac \
@@ -61,15 +58,18 @@ AGL_APIS = " \
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
+# mapviewer and mapviewer-demo are required for AGL cluster demo
+MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", " mapviewer mapviewer-demo", "",d)}"
+
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
     linux-firmware-ralink \
-    ${QTAGLEXTRAS} \
-    ${MAPVIEWER} \
     ${MOST_HVAC} \
     ${AGL_APPS} \
     ${AGL_APIS} \
+    ${QTAGLEXTRAS} \
+    ${MAPVIEWER} \
     "
 
 
