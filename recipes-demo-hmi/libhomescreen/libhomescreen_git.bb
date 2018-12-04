@@ -15,7 +15,7 @@ inherit cmake
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/libhomescreen.git;protocol=https;branch=${AGL_BRANCH} \
 	   file://org.agl.statusbar.conf \
 	  "
-SRCREV = "8bf11a8668902565b0e9a23e320777f5fb611848"
+SRCREV = "c0146077906057bf97688a617870228eaad0cf54"
 S = "${WORKDIR}/git"
 
 do_install_append() {
