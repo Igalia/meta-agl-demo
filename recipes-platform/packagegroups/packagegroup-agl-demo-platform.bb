@@ -61,6 +61,10 @@ QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qt
 # mapviewer and mapviewer-demo are required for AGL cluster demo
 MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", " mapviewer mapviewer-demo", "",d)}"
 
+# Preload navigation maps and poi API key for demo if requested
+DEMO_MAPS_LOCALE ?= "uk"
+DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " navigation-maps-${DEMO_MAPS_LOCALE} poiapp-api-key", "",d)}"
+
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
@@ -70,6 +74,7 @@ RDEPENDS_${PN}_append = " \
     ${AGL_APIS} \
     ${QTAGLEXTRAS} \
     ${MAPVIEWER} \
+    ${DEMO_PRELOAD} \
     "
 
 
