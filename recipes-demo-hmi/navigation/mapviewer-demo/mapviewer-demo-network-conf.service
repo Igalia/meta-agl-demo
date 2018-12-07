@@ -1,0 +1,15 @@
+[Unit]
+Description=Configure dedicated link for cluster demo network
+After=sys-subsystem-net-devices-eth1.device
+Requires=sys-subsystem-net-devices-eth1.device
+Before=network.target
+
+[Service]
+# Note that this is done as opposed to using connman as configuring an
+# interface on a second network separate from the rest of the interfaces
+# is non-trivial in connman and needs further investigation.
+ExecStart=/sbin/ifconfig eth1 192.168.20.93
+Type=oneshot
+
+[Install]
+WantedBy=network.target
