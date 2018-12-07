@@ -1,5 +1,5 @@
-SUMMARY     = "Setting files of mapviewer for the AGL Demonstrator @ CES2017"
-DESCRIPTION = "Setting files of mapviewer for the AGL Demonstrator @ CES2017"
+SUMMARY     = "Setting files of mapviewer for the AGL Demonstrator"
+DESCRIPTION = "Setting files of mapviewer for the AGL Demonstrator"
 LICENSE     = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
@@ -8,35 +8,36 @@ SECTION     = "apps"
 inherit systemd
 
 SRC_URI = " \
-        file://switch_off_mapviewer-demo.sh \
-        file://switch_on_mapviewer-demo.sh \
         file://weston-mapviewer-demo.ini \
-        file://weston-mapviewer-demo.service \
-        "
+        file://weston-mapviewer-demo.conf \
+        file://weston-ready.conf \
+        file://mapviewer-demo-network-conf.service \
+"
 
 do_install() {
-    # Map viewer demo
-    install -d ${D}/usr/AGL/${PN}
-    install -m 0755 ${WORKDIR}/switch_off_${PN}.sh ${D}/usr/AGL/${PN}
-    install -m 0755 ${WORKDIR}/switch_on_${PN}.sh ${D}/usr/AGL/${PN}
-
+    # Install tweaked weston configuration
     install -d ${D}${sysconfdir}/xdg/weston
     install -m 0644 ${WORKDIR}/weston-${PN}.ini ${D}${sysconfdir}/xdg/weston/weston-${PN}.ini
 
-    install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/weston-mapviewer-demo.service ${D}${systemd_system_unitdir}
-    sed -i "s:/home/root:${ROOT_HOME}:" ${D}${systemd_system_unitdir}/weston-mapviewer-demo.service
+    # Install weston service unit configuration over-ride drop-in
+    install -d ${D}${systemd_system_unitdir}/weston.service.d
+    install -m 0644 ${WORKDIR}/weston-mapviewer-demo.conf ${D}${systemd_system_unitdir}/weston.service.d
+
+    # Install cluster demo network configuration service unit
+    install -m 0644 ${WORKDIR}/mapviewer-demo-network-conf.service ${D}${systemd_system_unitdir}
+    # Add symlink to network.target.wants
+    install -d ${D}${sysconfdir}/systemd/system/network.target.wants
+    ln -s ${systemd_system_unitdir}/mapviewer-demo-network-conf.service ${D}${sysconfdir}/systemd/system/network.target.wants/
+
+    # Workaround for now to ensure that the windowmanager and its dependencies
+    # start after weston, which takes longer with gst-record enabled.
+    # This should be investigated a bit further and likely reworked into
+    # something more generically applicable.
+    install -d ${D}${sysconfdir}/systemd/system/afm-api-windowmanager@.service.d
+    install -m 0644 ${WORKDIR}/weston-ready.conf ${D}${sysconfdir}/systemd/system/afm-api-windowmanager@.service.d
 }
 
-## DO NOT ENABLE 'weston-mapviewer-demo.service' BY DEFAULT
-##
-## The 'weston-mapviewer-demo.service' is exclusive of default 'weston.ini',
-## it should be enabled/disabled by 'switch_on_mapviewer-demo.sh'/'switch_off_mapviewer-demo.sh'.
-##
-#SYSTEMD_SERVICE_${PN} = "weston-mapviewer-demo.service"
-
 FILES_${PN} += " \
-    ${systemd_system_unitdir} \
-    /usr/AGL/${PN}/ \
-    ${sysconfdir}/xdg/weston/${PN} \
-    "
+	${sysconfdir}/xdg/weston/ \
+	${systemd_system_unitdir} \
+"
