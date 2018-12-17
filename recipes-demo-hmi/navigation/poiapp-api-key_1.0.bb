@@ -9,9 +9,13 @@ do_fetch[noexec] = "1"
 do_unpack[noexec] = "1"
 do_compile[noexec] = "1"
 
+POIAPP_CLIENT_ID ?= ""
 POIAPP_API_KEY ?= ""
 
 do_install () {
     install -d ${D}${sysconfdir}
-    echo "${POIAPP_API_KEY}" > ${D}${sysconfdir}/poikey
+    echo "${POIAPP_CLIENT_ID}" > ${D}${sysconfdir}/poikey
+    echo "${POIAPP_API_KEY}" >> ${D}${sysconfdir}/poikey
 }
+
+PACKAGE_ARCH = "all"
