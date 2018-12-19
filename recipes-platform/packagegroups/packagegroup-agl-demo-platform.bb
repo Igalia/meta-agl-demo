@@ -66,10 +66,18 @@ DEMO_MAPS_LOCALE ?= "uk"
 DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " navigation-maps-${DEMO_MAPS_LOCALE} poiapp-api-key", "",d)}"
 
 # Hook for demo platform configuration
-# ATM, only used to disable btwilink module on M3ULCB + Kingfisher by default,
-# setting DEMO_ENABLE_BTWILINK to "true" in local.conf / site.conf re-enables.
+# ATM used for:
+# 1) Adding udev configuration and scripts for supporting USB attached
+#    I2C devices for RTC and HVAC LED support.
+# 2) Adding udev configuration and script for detecting Fiberdyne MOST
+#    attached amp and installing the required 4A HAL.
+# 3) Disabling btwilink module on M3ULCB + Kingfisher by default.  To
+#    re-enable, set DEMO_ENABLE_BTWILINK to "true" in local.conf/site.conf.
 DEMO_ENABLE_BTWILINK ?= ""
-DEMO_PLATFORM_CONF = ""
+DEMO_PLATFORM_CONF = " \
+    demo-i2c-udev-conf \
+    demo-most-udev-conf \
+"
 DEMO_PLATFORM_CONF_append_m3ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
 
 RDEPENDS_${PN}_append = " \

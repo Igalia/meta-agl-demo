@@ -1,0 +1,8 @@
+# Smallest rule, we might get more specific
+ACTION=="add", SUBSYSTEM=="sound", ENV{ID_VENDOR}=="Microchip-SMSC", ENV{ID_MODEL}=="OS8*", RUN+="/usr/sbin/enable-agl-demo-hal.sh"
+#, ENV{ID_MODEL}=="OS81210"
+#, ENV{ID_SERIAL}=="Microchip-SMSC_OS81210_0200-0000000C"
+#, ENV{ID_SERIAL}=="Microchip-SMSC_OS81210_0200-0000000C-02"
+#                   Microchip-SMSC_OS81118_0000-0000004C
+# Note: this will not work for a SOTA filesystem !!
+

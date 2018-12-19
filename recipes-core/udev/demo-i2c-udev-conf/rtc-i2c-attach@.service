@@ -1,0 +1,4 @@
+[Service]
+Type=oneshot
+ExecStartPre=/bin/echo '#i2c rtc device has been attached'
+ExecStart=/usr/sbin/rtc-i2c-attach.sh %i
