@@ -44,6 +44,9 @@ TOOLCHAIN_TARGET_TASK += " \
     libssp-dev \
     lua-dev \
     lua-staticdev \
+    libafb-helpers-staticdev \
+    libafb-helpers-qt-staticdev \
+    libappcontroller-staticdev \
     ${@bb.utils.contains('LICENSE_FLAGS_WHITELIST', 'commercial', 'ffmpeg-dev', '', d)} \
     "
 
