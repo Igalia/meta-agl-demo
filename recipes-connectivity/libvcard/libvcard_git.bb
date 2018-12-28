@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=f94eaed54ffa1718d593504bae740faf"
 
 DEPENDS += "qtbase"
 
-SRCREV = "4250e2468552ea01954244a2d9cd5d2b44b00042"
+SRCREV = "9b43ca01865f171cdd8a7d47b6da7c1a41c03e38"
 SRC_URI = "git://github.com/pol51/libvcard.git;protocol=https"
 
 PV = "1.0+gitr${SRCPV}"
