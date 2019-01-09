@@ -13,7 +13,7 @@ DEPENDS += "qtbase qtdeclarative qtwebsockets libvcard"
 inherit cmake_qt5
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/libqtappfw;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "cdfb8ce39e99616d84742c337213fc4bfebd1ad4"
+SRCREV  = "c101de36ef524ea322ca50ac7daa3d432ed4c47d"
 S       = "${WORKDIR}/git/"
 
 # PV needs to be modified with SRCPV to work AUTOREV correctly
