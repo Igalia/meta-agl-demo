@@ -1,0 +1,13 @@
+type: books
+books:
+-
+    id: meta-agl-demo
+    title: Meta AGL Demo
+    description: Meta AGL Demo documentation
+    keywords:
+    author: "AGL"
+    version: flounder
+    chapters:
+    - url: ../README.md
+      destination: meta-agl-demo.md
+      name: meta-agl-demo
