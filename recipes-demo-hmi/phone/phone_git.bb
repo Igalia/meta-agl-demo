@@ -14,13 +14,13 @@ S  = "${WORKDIR}/git"
 
 # build-time dependencies
 DEPENDS += "qtquickcontrols2 \
-            qtmultimedia \
             libqtappfw \
             libhomescreen \
             qlibwindowmanager \
+            gstreamer1.0 \
 "
 
 inherit qmake5 aglwgt
 
 RDEPENDS_${PN} += "agl-service-bluetooth agl-service-bluetooth-pbap \
-                   agl-service-telephony qtmultimedia"
+                   agl-service-telephony"
