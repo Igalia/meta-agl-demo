@@ -21,6 +21,7 @@ DEPENDS += " qtbase qtquickcontrols2 \
 
 RDEPENDS_${PN} += " qtlocation \
                     flite openjtalk \
+                    ondemandnavi-config \
                   "
 
 RPROVIDES_${PN} = "virtual/navigation"
