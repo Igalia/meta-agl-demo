@@ -14,3 +14,5 @@ SRC_URI = "git://github.com/AGLExport/agl-service-navigation;protocol=git;branch
 SRCREV  = "1f1ffc92fcc882aa5e885badbc91a3384f5d77b1"
 S = "${WORKDIR}/git"
 
+# FIXME: Remove once CMake+ninja issues are resolved
+OECMAKE_GENERATOR = "Unix Makefiles"

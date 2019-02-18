@@ -21,6 +21,7 @@ RDEPENDS_${PN} += " agl-service-navigation "
 SRCREV="5048c2e234febeb20df0b193e1bf1ac50f3896a5"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
          file://0001-add-4A-playback-support.patch \
+         file://0002-openssl-1.1-fixes.patch \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
          file://org.agl.naviapi.conf \
