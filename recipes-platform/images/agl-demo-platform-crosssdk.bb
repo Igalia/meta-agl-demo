@@ -42,7 +42,6 @@ TOOLCHAIN_TARGET_TASK += " \
     libexif-dev \
     pango-dev \
     libdrm-dev  \
-    libssp-dev \
     lua-dev \
     lua-staticdev \
     libafb-helpers-staticdev \
