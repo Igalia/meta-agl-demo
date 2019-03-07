@@ -1,1 +1,0 @@
-BBLAYERS =+ " ${METADIR}/meta-oic"
