@@ -49,11 +49,9 @@ The `meta-agl-demo` layer has the following base dependencies:
 
 ### Hardware Dependencies
 
-**WRITER NOTES:** The question remains is the R-Car Gen2 (Porter)
-board the only thing a person can build and run the DEMO on?
-
-Aside from the previously listed base dependencies, if you are using
-the Renesas R-Car Gen2 (Porter) board, these dependencies exist:
+Aside from the previously listed base dependencies, if you are using a
+[supported Renesas board](../../../../getting_started/en/dev/reference/machines/renesas.html)
+supported Renesas board, these dependencies exist:
 
 * AGL's `meta-renesas` Layer:
 
@@ -62,10 +60,6 @@ the Renesas R-Car Gen2 (Porter) board, these dependencies exist:
   - Tested Revision: 82611ccadef36ab0b8a6fd6fb1cf055e115f1ef5 (or later)
 
 ### Feature Dependencies
-
-**WRITER NOTES:** I don't know how these break out for organization.
-
-The following dependencies exist for specific AGL features:
 
 **The `agl-appfw-smack` Feature:**
 
@@ -122,9 +116,6 @@ The following dependencies exist for specific AGL features:
 
 
 ## Packagegroups
-
-**WRITER NOTES:** I am not sure if the packagegroup information applies any
-longer.  I am leaving it as is with some simple improvements to the writing.
 
 AGL DEMO Platform's 
 [packagegroups](https://www.yoctoproject.org/docs/2.4.4/dev-manual/dev-manual.html#usingpoky-extend-customimage-customtasks)
