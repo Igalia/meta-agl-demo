@@ -6,7 +6,7 @@ LICENSE     = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
 
 SRC_URI = "gitsm://github.com/iotbzh/low-can-demo.git;protocol=https"
-SRCREV  = "4b325a18b9d2d7906369eeb66044fadc9e1c692a"
+SRCREV  = "1ede0d61cf935a1739d3ba184896a71f4afdce1a"
 
 PV = "4.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
