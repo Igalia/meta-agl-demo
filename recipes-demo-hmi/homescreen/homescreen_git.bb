@@ -15,6 +15,7 @@ DEPENDS = "\
         libqtappfw \
         qlibwindowmanager \
         libhomescreen \
+	libafb-helpers-qt \
 "
 
 inherit qmake5 systemd pkgconfig aglwgt
