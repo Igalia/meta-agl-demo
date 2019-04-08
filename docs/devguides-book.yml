@@ -6,8 +6,8 @@ books:
     description: Meta AGL Demo documentation
     keywords:
     author: "AGL"
-    version: master
+    version: guppy
     chapters:
-    - url: ../README.md
+    - url: ../meta-agl-demo.md
       destination: meta-agl-demo.md
       name: meta-agl-demo
