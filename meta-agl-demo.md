@@ -1,14 +1,10 @@
 ## Introduction
 
-The `meta-agl-demo` layer is the IVI demo layer that uses the core 
-AGL infrastructure provided through profiles.
-The layer sits on top of the profiles as follows:
-
-profile-core <- profile-gfx <- profile-gfx-qt5
-
+The `meta-agl-demo` layer is the reference user interface layer for the DEMO
+platform of Automotive Grade Linux (AGL).
 The layer provides a reference platform and applications.
-The BitBake target name for the demo platform is `agl-demo-platform`,
-which is the full demo platform image.
+The BitBake target name for the DEMO platform is `agl-demo-platform`, which is
+the full DEMO platform image.
 
 ## Layer Dependencies
 
@@ -39,16 +35,16 @@ The `meta-agl-demo` layer has the following base dependencies:
     manifest file for the `AGL-repo` repository for revision
     information.
 
-  Specifically, out of `meta-openembedded`, these sub-layers are used:
+    Specifically, out of `meta-openembedded`, these sub-layers are used:
 
-  - `meta-oe`
-  - `meta-multimedia`
-  - `meta-efl`
-  - `meta-networking`
-  - `meta-python`
-  - `meta-ruby`
+    - `meta-oe`
+    - `meta-multimedia`
+    - `meta-efl`
+    - `meta-networking`
+    - `meta-python`
+    - `meta-ruby`
 
-* Yocto Project `meta-qt5` Layer from the 
+* Yocto Project `meta-qt5` Layer from the
   [OpenEmbedded Layer Index](https://layers.openembedded.org/layerindex/branch/master/layers/):
 
   - URI: https://github.com/meta-qt5/meta-qt5.git
@@ -57,23 +53,23 @@ The `meta-agl-demo` layer has the following base dependencies:
     manifest file for the `AGL-repo` repository for revision
     information.
 
+### Hardware Dependencies
+
+Aside from the previously listed base dependencies, if you are using a
+[supported Renesas board](../../../../getting_started/en/dev/reference/machines/renesas.html)
+supported Renesas board, these dependencies exist:
+
+* AGL's `meta-renesas` Layer:
+
+  - URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
+  - Branch: "agl-1.0-bsp-1.8.0"
+  - Tested Revision: 82611ccadef36ab0b8a6fd6fb1cf055e115f1ef5 (or later)
+
 ### Feature Dependencies
 
 The `meta-agl-demo` layer has the following AGL
 [feature](../../../../getting_started/en/dev/reference/image-workflow-initialize-build-environment.html#agl-features)
 dependencies:
-
-**The `agl-appfw-smack` Feature:**
-
-<!--
-* Yocto Project `meta-intel-iot-security` Layer from the OpenEmbedded Layer Index:
-
-  - URI: https://github.com/01org/meta-intel-iot-security
-  - Branch: "thud"
-  - Tested Revision: See the [`default.xml`](https://github.com/leon-anavi/AGL-repo/blob/master/default.xml)
-    manifest file for the `AGL-repo` repository for revision
-    information.
--->
 
 * Yocto Project `meta-security` Layer:
 
@@ -109,7 +105,6 @@ dependencies:
       - `meta-filesystems`
       - `meta-ruby`
 
-<!--
 * OpenEmbedded's `meta-rust` Layer:
 
   - URI: https://github.com/meta-rust/meta-rust
@@ -117,7 +112,6 @@ dependencies:
   - Tested Revision: See the `[default.xml](https://github.com/leon-anavi/AGL-repo/blob/master/default.xml)`
     manifest file for the `AGL-repo` repository for revision
     information.
--->
 
 **The `agl-netboot` Feature:**
 
@@ -142,16 +136,15 @@ the `packagegroup-agl-demo-platform` packagegroup
 [here](https://git.automotivelinux.org/AGL/meta-agl-demo/tree/recipes-platform/images/agl-demo-platform.bb).
 
 As meta-agl's design of packagegroups, the `agl-demo-platform.bb` recipe installs
-the `packagegroup-agl-demo-platform` packagegroup, which pulls in the following
-packages of the DEMO applications:
+only `packagegroup-agl-demo-platform` and the packages of the DEMO applications.
 
-  * `agl-demo-platform`
+``agl-demo-platform`` contains the following four packagegroups:
+
   * `packagegroup-agl-image-minimal`
   * `packagegroup-agl-image-ivi`
   * `packagegroup-ivi-common-core`
   * `packagegroup-agl-demo-platform`
 
-<!--
 ### packagegroup-agl-appfw*
 
 These packagegroups contain packages for the AGL distribution's
@@ -172,4 +165,4 @@ framework of AGL Distro.
 Because the `packagegroup-agl-demo-qt-examples` is not mandatory for
 the AGL Application Framework and the AGL DEMO, the packagegroup is added
 to the layer's `local.conf` file only when needed.
--->
+
