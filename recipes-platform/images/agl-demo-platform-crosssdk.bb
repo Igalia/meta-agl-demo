@@ -63,3 +63,10 @@ TOOLCHAIN_TARGET_TASK += " \
     libvcard-dev \
     libvcard-staticdev \
     "
+
+# Add mosquitto to support building the telematics demo application.
+# This is currently required for CI, as it uses agl-demo-platform-crosssdk
+# to build everything. An agenda item has been tabled for the May 2019 F2F
+# meeting to discuss the path forward (separate versus superset SDKs), this
+# should be reviewed after that.
+TOOLCHAIN_TARGET_TASK += "mosquitto-dev"
