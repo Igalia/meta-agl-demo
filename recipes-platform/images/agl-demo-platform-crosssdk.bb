@@ -34,7 +34,6 @@ TOOLCHAIN_HOST_TASK += " \
 TOOLCHAIN_TARGET_TASK += " \
     pciutils-dev \
     ${@bb.utils.contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio-dev' , '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', 'libavirt-staticdev' , '', d)} \
     cairo-dev \
     nss-dev \
     cups-dev \
@@ -50,6 +49,10 @@ TOOLCHAIN_TARGET_TASK += " \
     libappcontroller-staticdev \
     ${@bb.utils.contains('LICENSE_FLAGS_WHITELIST', 'commercial', 'ffmpeg-dev', '', d)} \
     "
+
+#    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', 'libavirt-staticdev' , '', d)} \
+#
+
 
 # Add wayland-scanner to SDK (SPEC-945)
 # Use TOOLCHAIN_HOST_TASK instead of adding to the packagegroup
