@@ -68,7 +68,7 @@ supported Renesas board, these dependencies exist:
 ### Feature Dependencies
 
 The `meta-agl-demo` layer has the following AGL
-[feature](../../../../getting_started/en/dev/reference/image-workflow-initialize-build-environment.html#agl-features)
+[feature](../getting_started/reference/getting-started/image-workflow-initialize-build-environment.html#agl-features)
 dependencies:
 
 * Yocto Project `meta-security` Layer:
