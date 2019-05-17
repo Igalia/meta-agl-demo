@@ -58,12 +58,6 @@ TOOLCHAIN_HOST_TASK_append = " nativesdk-wayland nativesdk-wayland-dev"
 
 TOOLCHAIN_HOST_TASK_append = " nativesdk-perl-modules "
 
-# Add libvcard to the SDK to support libqtappfw
-TOOLCHAIN_TARGET_TASK += " \
-    libvcard-dev \
-    libvcard-staticdev \
-    "
-
 # Add mosquitto to support building the telematics demo application.
 # This is currently required for CI, as it uses agl-demo-platform-crosssdk
 # to build everything. An agenda item has been tabled for the May 2019 F2F
