@@ -8,12 +8,12 @@ BBCLASSEXTEND = "nativesdk"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
-DEPENDS += "qtbase qtdeclarative qtwebsockets libvcard"
+DEPENDS += "qtbase qtdeclarative qtwebsockets"
 
 inherit cmake_qt5
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/libqtappfw;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "b95b16f5fe5671de805403b8067367e5de3044bc"
+SRCREV  = "fa307bc84a2aaaebaf9cff5fa26c2ccf9448d4ab"
 S       = "${WORKDIR}/git/"
 
 # PV needs to be modified with SRCPV to work AUTOREV correctly
