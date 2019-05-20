@@ -16,7 +16,7 @@ SRCREV  = "eeedc5e9e67917bd3346dbe5332e667757a3b28d"
 # PV needs to be modified with SRCPV to work AUTOREV correctly
 PV = "0.0+git${SRCPV}"
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/windowmanager.git;protocol=https;branch=${AGL_BRANCH}"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/windowmanager.git;protocol=https;branch=${AGL_BRANCH}"
 
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 

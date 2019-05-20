@@ -12,7 +12,7 @@ DEPENDS = "af-binder json-c"
 
 inherit cmake
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/p/src/libhomescreen.git;protocol=https;branch=${AGL_BRANCH} \
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/libhomescreen.git;protocol=https;branch=${AGL_BRANCH} \
 	   file://org.agl.statusbar.conf \
 	  "
 SRCREV = "44290c49e08fe52d6e3ed80720473577131090f4"
