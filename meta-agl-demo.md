@@ -21,12 +21,12 @@ The `meta-agl-demo` layer has the following base dependencies:
   - Branch: "thud"
   - Tested Revision: See the [`default.xml`](https://github.com/leon-anavi/AGL-repo/blob/master/default.xml)
     manifest file for the `AGL-repo` repository for revision
-    information.
+    information.<br/><br/>
 
 * AGL `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
-  - Branch: "flounder"
+  - Branch: "master"<br/><br/>
 
 * OpenEmbedded `meta-openembedded` Layer:
 
@@ -39,10 +39,8 @@ The `meta-agl-demo` layer has the following base dependencies:
 
     - `meta-oe`
     - `meta-multimedia`
-    - `meta-efl`
     - `meta-networking`
-    - `meta-python`
-    - `meta-ruby`
+    - `meta-python`<br/><br/>
 
 * Yocto Project `meta-qt5` Layer from the
   [OpenEmbedded Layer Index](https://layers.openembedded.org/layerindex/branch/master/layers/):
@@ -51,7 +49,7 @@ The `meta-agl-demo` layer has the following base dependencies:
   - Branch:   "thud"
   - Tested Revision: See the [`default.xml`](https://github.com/leon-anavi/AGL-repo/blob/master/default.xml)
     manifest file for the `AGL-repo` repository for revision
-    information.
+    information.<br/><br/>
 
 ### Hardware Dependencies
 
@@ -62,8 +60,6 @@ supported Renesas board, these dependencies exist:
 * AGL's `meta-renesas` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
-  - Branch: "agl-1.0-bsp-1.8.0"
-  - Tested Revision: 82611ccadef36ab0b8a6fd6fb1cf055e115f1ef5 (or later)
 
 ### Feature Dependencies
 
@@ -77,19 +73,19 @@ dependencies:
   - Branch: "master"
   - Tested Revision: See the [`default.xml`](https://github.com/leon-anavi/AGL-repo/blob/master/default.xml)
     manifest file for the `AGL-repo` repository for revision
-    information.
+    information.<br/><br/>
 
-* AGL's `meta-app-framework` Layer Within the `meta-agl-extra` Layer:
+* AGL's `meta-app-framework` Layer Within the `meta-agl` Layer:
 
-  - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-  - Branch: "master"
+  - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
+  - Branch: "master"<br/><br/>
 
 **The `agl-sota` Feature:**
 
 * AGL's `meta-sota` Layer Within the `meta-agl-extra` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-  - Branch: "master"
+  - Branch: "master"<br/><br/>
 
 * OpenEmbedded's `meta-openembedded` Layer:
 
@@ -99,19 +95,8 @@ dependencies:
     manifest file for the `AGL-repo` repository for revision
     information.
 
-    In particular, the `meta-openembedded` layer depends on the following
-    sub-layers:
-
-      - `meta-filesystems`
-      - `meta-ruby`
-
-* OpenEmbedded's `meta-rust` Layer:
-
-  - URI: https://github.com/meta-rust/meta-rust
-  - Branch: "thud"
-  - Tested Revision: See the `[default.xml](https://github.com/leon-anavi/AGL-repo/blob/master/default.xml)`
-    manifest file for the `AGL-repo` repository for revision
-    information.
+    In particular, the `meta-openembedded` layer depends on the
+    `meta-filesystems` sub-layer.<br/><br/>
 
 **The `agl-netboot` Feature:**
 
@@ -142,7 +127,6 @@ only `packagegroup-agl-demo-platform` and the packages of the DEMO applications.
 
   * `packagegroup-agl-image-minimal`
   * `packagegroup-agl-image-ivi`
-  * `packagegroup-ivi-common-core`
   * `packagegroup-agl-demo-platform`
 
 ### packagegroup-agl-appfw*
