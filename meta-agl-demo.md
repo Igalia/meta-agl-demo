@@ -18,34 +18,29 @@ The `meta-agl-demo` layer has the following base dependencies:
 * Yocto Project Release:
 
   - URI: git://git.yoctoproject.org/poky
-  - Branch: "rocko"
-  - Tested Revision: TBD
+  - Branch: "rocko"<br/><br/>
 
 * AGL `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-agl
-  - Branch: "flounder"
+  - Branch: "guppy"<br/><br/>
 
 * OpenEmbedded `meta-openembedded` Layer:
 
   - Branch: "rocko"
-  - Tested Revision: TBD
 
-  Specifically, out of `meta-openembedded`, these sub-layers are used:
+    Specifically, out of `meta-openembedded`, these sub-layers are used:
 
-  - `meta-oe`
-  - `meta-multimedia`
-  - `meta-efl`
-  - `meta-networking`
-  - `meta-python`
-  - `meta-ruby`
+    - `meta-oe`
+    - `meta-multimedia`
+    - `meta-networking`
+    - `meta-python`<br/><br/>
 
-* Yocto Project `meta-qt5` Layer from the 
+* Yocto Project `meta-qt5` Layer from the
   [OpenEmbedded Layer Index](https://layers.openembedded.org/layerindex/branch/master/layers/):
 
   - URI: https://github.com/meta-qt5/meta-qt5.git
   - Branch:   "rocko"
-  - Tested Revision: TBD
 
 ### Hardware Dependencies
 
@@ -56,63 +51,44 @@ supported Renesas board, these dependencies exist:
 * AGL's `meta-renesas` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
-  - Branch: "agl-1.0-bsp-1.8.0"
-  - Tested Revision: 82611ccadef36ab0b8a6fd6fb1cf055e115f1ef5 (or later)
 
 ### Feature Dependencies
 
-**The `agl-appfw-smack` Feature:**
-
-<!--
-* Yocto Project `meta-intel-iot-security` Layer from the OpenEmbedded Layer Index:
-
-  - URI: https://github.com/01org/meta-intel-iot-security
-  - Branch: "rocko"
-  - Tested Revision: TBD
--->
+The `meta-agl-demo` layer has the following AGL
+[feature](../getting_started/reference/getting-started/image-workflow-initialize-build-environment.html#agl-features)
+dependencies:
 
 * Yocto Project `meta-security` Layer:
 
   - URI: https://git.yoctoproject.org/cgit/cgit.cgi/meta-security
-  - Branch: "rocko"
-  - Tested Revision: TBD
+  - Branch: "rocko"<br/><br/>
 
-* AGL's `meta-app-framework` Layer Within the `meta-agl-extra` Layer:
+* AGL's `meta-app-framework` Layer Within the `meta-agl` Layer:
 
-  - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-  - Branch: "master"
+  - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
+  - Branch: "guppy"
 
 **The `agl-sota` Feature:**
 
 * AGL's `meta-sota` Layer Within the `meta-agl-extra` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-  - Branch: "master"
+  - Branch: "guppy"<br/><br/>
 
 * OpenEmbedded's `meta-openembedded` Layer:
 
   - URI: https://github.com/openembedded/meta-openembedded
   - Branch: "rocko"
-  - Tested Version: TBD
 
-    In particular, the `meta-openembedded` layer depends on the following
-    sub-layers:
-
-      - `meta-filesystems`
-      - `meta-ruby`
-
-* OpenEmbedded's `meta-rust` Layer:
-
-  - URI: https://github.com/meta-rust/meta-rust
-  - Branch: "rocko"
-  - Tested Revision: TBE
+    In particular, the `meta-openembedded` layer depends on the
+    `meta-filesystems` sub-layer.
 
 **The `agl-netboot` Feature:**
 
 * AGL's `meta-netboot` Layer Within the `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
-  - Branch: "master"
+  - Branch: "guppy"
 
 
 ## Packagegroups
@@ -136,7 +112,6 @@ only `packagegroup-agl-demo-platform` and the packages of the DEMO applications.
 
   * `packagegroup-agl-image-minimal`
   * `packagegroup-agl-image-ivi`
-  * `packagegroup-ivi-common-core`
   * `packagegroup-agl-demo-platform`
 
 ### packagegroup-agl-appfw*
