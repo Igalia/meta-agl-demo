@@ -22,12 +22,16 @@ AUDIO-OLD = "audiomanager"
 # packages from new 4A framework
 AUDIO-NEW = "packagegroup-agl-audio"
 
+PIPEWIRE = "${@bb.utils.contains('DISTRO_FEATURES', 'pipewire', \
+    'packagegroup-pipewire', '', d)}"
+
 RDEPENDS_${PN} += "\
     libqtappfw \
     ${HOMESCREEN} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '${AUDIO-NEW}', '${AUDIO-OLD}', d)} \
     udisks \
     ${SMARTDEVICELINK} \
+    ${PIPEWIRE} \
     "
 #    packagegroup-agl-appfw \
 #
