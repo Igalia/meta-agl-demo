@@ -1,3 +1,3 @@
-BBLAYERS =+ "${METADIR}/meta-sdl \
-	${METADIR}/meta-openembedded/meta-gnome \
+BBLAYERS =+ "${METADIR}/external/meta-sdl \
+	${METADIR}/external/meta-openembedded/meta-gnome \
 	"
