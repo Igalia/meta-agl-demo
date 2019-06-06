@@ -45,7 +45,7 @@ The `meta-agl-demo` layer has the following base dependencies:
 ### Hardware Dependencies
 
 Aside from the previously listed base dependencies, if you are using a
-[supported Renesas board](../../../../getting_started/en/dev/reference/machines/renesas.html)
+[supported Renesas board](../getting_started/reference/getting-started/machines/renesas.html)
 supported Renesas board, these dependencies exist:
 
 * AGL's `meta-renesas` Layer:
