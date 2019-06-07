@@ -14,10 +14,8 @@ ALLOW_EMPTY_${PN} = "1"
 SMARTDEVICELINK = "${@bb.utils.contains('DISTRO_FEATURES', 'agl-sdl', \
     'packagegroup-agl-smartdevicelink', '', d)}"
 
-# old homescreen package
-HOMESCREEN-OLD = "homescreen"
 # packages from hmi-framework aka homescreen-2017
-HOMESCREEN-NEW = "packagegroup-hmi-framework packagegroup-hmi-framework-dev"
+HOMESCREEN = "packagegroup-hmi-framework"
 
 # old audio package
 AUDIO-OLD = "audiomanager"
@@ -26,7 +24,7 @@ AUDIO-NEW = "packagegroup-agl-audio"
 
 RDEPENDS_${PN} += "\
     libqtappfw \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-hmi-framework', '${HOMESCREEN-NEW}', '${HOMESCREEN-OLD}', d)} \
+    ${HOMESCREEN} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '${AUDIO-NEW}', '${AUDIO-OLD}', d)} \
     udisks \
     ${SMARTDEVICELINK} \
