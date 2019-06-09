@@ -1,3 +1,0 @@
-.ifexists module-router.so
-load-module module-router
-.endif

@@ -34,7 +34,6 @@ TOOLCHAIN_HOST_TASK += " \
 TOOLCHAIN_TARGET_TASK += " \
     pciutils-dev \
     ${@bb.utils.contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio-dev' , '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', 'libavirt-staticdev' , '', d)} \
     cairo-dev \
     nss-dev \
     cups-dev \

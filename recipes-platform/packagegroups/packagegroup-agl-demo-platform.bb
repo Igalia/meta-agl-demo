@@ -41,7 +41,6 @@ AGL_APPS = " \
     dashboard \
     hvac \
     mediaplayer \
-    virtual/mixer  \
     virtual/navigation \
     phone \
     poiapp \
@@ -51,6 +50,10 @@ AGL_APPS = " \
     agl-service-signal-composer \
     low-can-demo \
     "
+#
+# TODO: fix mixer for pipewire    virtual/mixer  \
+#
+
 
 AGL_APIS = " \
     libnaviapi-agl \

@@ -16,8 +16,12 @@ RDEPENDS_${PN} += "\
     lightmediascanner-meta \
     "
 
+# for now: enable here for the AGL IVI demo (image-ivi and demo-platform)
+# tbd: change based on usage in profiles
+PIPEWIRE = "\
+    ${@bb.utils.contains('DISTRO_FEATURES', 'pipewire', 'packagegroup-pipewire', '', d)}\
+    "
+
 RDEPENDS_${PN} += "\
-    ${@bb.utils.contains('DISTRO_FEATURES', 'pipewire', '', \
-        bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '' , \
-            bb.utils.contains('DISTRO_FEATURES','pulseaudio','virtual/pulseaudio-config','',d), d), d)} \
+    ${PIPEWIRE} \
     "
