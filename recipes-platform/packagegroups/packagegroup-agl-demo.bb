@@ -19,24 +19,16 @@ HOMESCREEN-OLD = "homescreen"
 # packages from hmi-framework aka homescreen-2017
 HOMESCREEN-NEW = "packagegroup-hmi-framework packagegroup-hmi-framework-dev"
 
+# removed: now all enablers are in meta-agl-devel/meta-audio-soundmanager-framework
 # old audio package
-AUDIO-OLD = "audiomanager"
-# packages from new 4A framework
-AUDIO-NEW = "packagegroup-agl-audio"
-
-PIPEWIRE = "${@bb.utils.contains('DISTRO_FEATURES', 'pipewire', \
-    'packagegroup-pipewire', '', d)}"
+# AUDIO-OLD = "audiomanager"
 
 RDEPENDS_${PN} += "\
     libqtappfw \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-hmi-framework', '${HOMESCREEN-NEW}', '${HOMESCREEN-OLD}', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-audio-4a-framework', '${AUDIO-NEW}', '${AUDIO-OLD}', d)} \
     udisks \
     ${SMARTDEVICELINK} \
-    ${PIPEWIRE} \
     "
-#    packagegroup-agl-appfw \
-#
 
 # fonts
 TTF_FONTS = " \
