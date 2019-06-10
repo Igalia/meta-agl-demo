@@ -15,7 +15,9 @@ DEPENDS = " \
 RDEPENDS_${PN} = " navigation "
 
 SRCREV="2dfef5e9141ccb11f83d141c6a7dcbe0ecd49e84"
-SRC_URI="git://github.com/AGLExport/mapviwer.git"
+SRC_URI="git://github.com/AGLExport/mapviwer.git \
+         file://0002-openssl-1.1-fixes.patch \
+"
 
 # To avoid C++ library link failure
 SECURITY_CFLAGS = ""
