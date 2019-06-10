@@ -8,23 +8,15 @@ SECTION     = "apps"
 inherit systemd
 
 SRC_URI = " \
-        file://weston-mapviewer-demo.ini \
-        file://weston-mapviewer-demo.conf \
         file://weston-ready.conf \
         file://mapviewer-demo-network-conf.service \
 "
 
 do_install() {
-    # Install tweaked weston configuration
-    install -d ${D}${sysconfdir}/xdg/weston
-    install -m 0644 ${WORKDIR}/weston-${PN}.ini ${D}${sysconfdir}/xdg/weston/weston-${PN}.ini
-
-    # Install weston service unit configuration over-ride drop-in
-    install -d ${D}${systemd_system_unitdir}/weston.service.d
-    install -m 0644 ${WORKDIR}/weston-mapviewer-demo.conf ${D}${systemd_system_unitdir}/weston.service.d
-
     # Install cluster demo network configuration service unit
+    install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/mapviewer-demo-network-conf.service ${D}${systemd_system_unitdir}
+
     # Add symlink to network.target.wants
     install -d ${D}${sysconfdir}/systemd/system/network.target.wants
     ln -s ${systemd_system_unitdir}/mapviewer-demo-network-conf.service ${D}${sysconfdir}/systemd/system/network.target.wants/
