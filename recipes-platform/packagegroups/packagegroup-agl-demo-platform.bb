@@ -46,6 +46,7 @@ AGL_APPS = " \
     poiapp \
     radio \
     settings \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'taskmanager' , '', d)} \
     high-level-viwi-service \
     agl-service-signal-composer \
     low-can-demo \
