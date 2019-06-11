@@ -49,11 +49,8 @@ AGL_APPS = " \
     high-level-viwi-service \
     agl-service-signal-composer \
     low-can-demo \
+    virtual/mixer \
     "
-#
-# TODO: fix mixer for pipewire    virtual/mixer  \
-#
-
 
 AGL_APIS = " \
     libnaviapi-agl \
