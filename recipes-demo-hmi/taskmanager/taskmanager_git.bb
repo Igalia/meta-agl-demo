@@ -15,6 +15,7 @@ S  = "${WORKDIR}/git"
 # build-time dependencies
 DEPENDS += "qtquickcontrols2 \
             qtwebsockets \
+            qtcharts \
             libqtappfw \
             libhomescreen \
             qlibwindowmanager \
