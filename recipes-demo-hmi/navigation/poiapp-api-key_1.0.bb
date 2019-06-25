@@ -5,6 +5,8 @@ SECTION = "apps"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM="file://${COMMON_LICENSE_DIR}/Proprietary;md5=0557f9d92cf58f2ccdd50f62f8ac0b28"
 
+inherit allarch
+
 do_fetch[noexec] = "1"
 do_unpack[noexec] = "1"
 do_compile[noexec] = "1"
@@ -17,5 +19,3 @@ do_install () {
     echo "${POIAPP_CLIENT_ID}" > ${D}${sysconfdir}/poikey
     echo "${POIAPP_API_KEY}" >> ${D}${sysconfdir}/poikey
 }
-
-PACKAGE_ARCH = "all"
