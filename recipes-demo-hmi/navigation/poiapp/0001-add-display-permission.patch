@@ -1,0 +1,21 @@
+Add display permission
+
+Add display permission required to work with the running as non-root
+change for applications.
+
+Upstream-Status: pending
+
+Signed-off-by: Scott Murray <scott.murray@konsulko.com>
+
+diff --git a/config.xml.in b/config.xml.in
+index b8cfccd..bec206d 100755
+--- a/config.xml.in
++++ b/config.xml.in
+@@ -13,6 +13,7 @@
+   <feature name="urn:AGL:widget:required-permission">
+     <param name="urn:AGL:permission::public:no-htdocs" value="required" />
+     <param name="http://tizen.org/privilege/internal/dbus" value="required" />
++    <param name="urn:AGL:permission::public:display" value="required" />
+   </feature>
+   <license>GPL</license>
+ </widget>
