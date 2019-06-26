@@ -13,14 +13,15 @@ DEPENDS = " \
           "
 
 RDEPENDS_${PN} = " flite openjtalk glib-2.0 freetype sqlite3 wayland zlib expat openssl \
-                   wayland libdbus-c++ af-main "
+                   wayland libdbus-c++ af-main gstreamer1.0"
 
 RDEPENDS_${PN} += " agl-service-navigation "
 
 SRCREV="89dc0052aced411ef09f8e0034fb5cf2c96ee637"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
-         file://0001-add-4A-playback-support.patch \
+         file://0001-switch-to-alsa-output.patch \
          file://0002-openssl-1.1-fixes.patch \
+         file://0003-update-permissions.patch \
          file://download_mapdata_jp.sh \
          file://download_mapdata_uk.sh \
          file://org.agl.naviapi.conf \

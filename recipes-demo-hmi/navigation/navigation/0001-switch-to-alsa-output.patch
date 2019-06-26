@@ -1,0 +1,35 @@
+gpsnavi: Switch to ALSA output
+
+Update the talk scripts to use ALSA output via gst-launch-1.0 instead
+of PulseAudio's paplay.  gstreamer is used since it is likely that a
+further revision will change to a pipewire output sink and add back
+setting a role property.
+
+Upstream-Status: Inappropriate [no upstream]
+
+Signed-off-by: Scott Murray <scott.murray@konsulko.com>
+
+diff --git a/flite_agl.in b/flite_agl.in
+index 28b512c..67a09e5 100644
+--- a/flite_agl.in
++++ b/flite_agl.in
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ TMP=/tmp/navi.wav
+ echo "$1" | flite_hts_engine -m  @datadir@/Voice/us/cmu_us_arctic_slt.htsvoice -o $TMP
+-paplay --property='media.role=Navi' $TMP
++gst-launch-1.0 filesrc location=$TMP ! decodebin ! audioconvert ! audioresample ! alsasink
+ rm -f $TMP
+ 
+diff --git a/jtalk_agl.in b/jtalk_agl.in
+index 76900f4..73c87e5 100644
+--- a/jtalk_agl.in
++++ b/jtalk_agl.in
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ TMP=/tmp/navi.wav
+ echo "$1" | open_jtalk -ow $TMP -m @exec_prefix@/share/Voice/mei/mei_normal.htsvoice -x @exec_prefix@/share/dic/
+-paplay --property='media.role=Navi' $TMP
++gst-launch-1.0 filesrc location=$TMP ! decodebin ! audioconvert ! audioresample ! alsasink
+ rm -f $TMP
+ 
