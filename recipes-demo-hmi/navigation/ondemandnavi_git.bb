@@ -9,6 +9,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 inherit qmake5 aglwgt pkgconfig
 
 SRC_URI = "git://github.com/YoshitoMomiyama/aglqtnavigation.git;branch=master \
+           file://0001-switch-to-alsa-output.patch \
+           file://0002-update-permissions.patch \
            file://org.agl.naviapi.conf \
            "
 SRCREV  = "a6930c2dff988e45e18f91a2368d829c08942b30"
@@ -20,7 +22,9 @@ DEPENDS += " qtbase qtquickcontrols2 \
            "
 
 RDEPENDS_${PN} += " qtlocation \
-                    flite openjtalk \
+                    flite \
+                    openjtalk \
+                    gstreamer1.0 \
                     ondemandnavi-config \
                   "
 
