@@ -1,0 +1,4 @@
+# OS81118 devices for Microchip UNICENS
+KERNEL=="inic-usb-crx", SUBSYSTEM=="most_cdev_aim", GROUP="audio", SECLABEL{smack}="*"
+KERNEL=="inic-usb-ctx", SUBSYSTEM=="most_cdev_aim", GROUP="audio", SECLABEL{smack}="*"
+KERNEL=="inic-usb-itx1", SUBSYSTEM=="most_cdev_aim", GROUP="audio", SECLABEL{smack}="*"
