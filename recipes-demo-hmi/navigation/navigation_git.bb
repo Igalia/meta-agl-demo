@@ -19,7 +19,7 @@ RDEPENDS_${PN} += " agl-service-navigation "
 
 SRCREV="89dc0052aced411ef09f8e0034fb5cf2c96ee637"
 SRC_URI="git://github.com/AGLExport/gpsnavi.git;branch=agl \
-         file://0001-switch-to-alsa-output.patch \
+         file://0001-switch-to-pipewire-output.patch \
          file://0002-openssl-1.1-fixes.patch \
          file://0003-update-permissions.patch \
          file://download_mapdata_jp.sh \
