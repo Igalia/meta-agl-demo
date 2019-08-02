@@ -14,14 +14,14 @@ DEPENDS = "\
         agl-service-weather \
         libqtappfw \
         qlibwindowmanager \
-        libhomescreen \
-	libafb-helpers-qt \
+        qlibhomescreen \
+        libafb-helpers-qt \
 "
 
 inherit qmake5 systemd pkgconfig aglwgt
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/homescreen;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "${AGL_APP_REVISION}"
+SRC_URI = "gitsm://gerrit.automotivelinux.org/gerrit/apps/homescreen;protocol=https;branch=sandbox/zheng_wenlong/als2019_8.0"
+SRCREV  = "${AUTOREV}"
 
 PV      = "1.0+git${SRCPV}"
 S       = "${WORKDIR}/git/"

@@ -16,8 +16,8 @@ DEPENDS = "\
 
 inherit qmake5 systemd pkgconfig aglwgt
 
-SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/launcher;protocol=https;branch=${AGL_BRANCH}"
-SRCREV  = "${AGL_APP_REVISION}"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/launcher;protocol=https;branch=sandbox/zheng_wenlong/als2019_vertical"
+SRCREV  = "${AUTOREV}"
 
 PV      = "1.0+git${SRCPV}"
 S       = "${WORKDIR}/git/"
