@@ -31,6 +31,7 @@ MOST_HVAC_append = " \
     ${MOST_DRIVERS} \
     unicens-config \
     agl-service-unicens \
+    agl-service-unicens-controller \
     "
 
 # @Chris: This needs to be checked!
