@@ -60,12 +60,17 @@ AGL_APIS = " \
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
-# mapviewer and mapviewer-demo are required for AGL cluster demo
-MAPVIEWER = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", " mapviewer mapviewer-demo", "",d)}"
+# Cluster demo support.
+# ATM mapviewer is required for navigation map viewing when doing cluster
+# demos with the older navigation application.
+MAPVIEWER = "${@bb.utils.contains("PREFERRED_PROVIDER_virtual/navigation", "navigation", "mapviewer", "",d)}"
+CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${MAPVIEWER} cluster-demo-network-config", "",d)}"
 
-# Preload navigation maps and poi API key for demo if requested
+# Preload poi API key for demo if requested, and potentially maps for older
+# navigation application if it is configured.
 DEMO_MAPS_LOCALE ?= "uk"
-DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " navigation-maps-${DEMO_MAPS_LOCALE} poiapp-api-key", "",d)}"
+DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_PROVIDER_virtual/navigation", "navigation", " navigation-maps-${DEMO_MAPS_LOCALE}", "",d)}"
+DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} poiapp-api-key", "",d)}"
 
 # Hook for demo platform configuration
 # ATM, only used to disable btwilink module on M3ULCB + Kingfisher by default,
@@ -82,7 +87,7 @@ RDEPENDS_${PN}_append = " \
     ${AGL_APPS} \
     ${AGL_APIS} \
     ${QTAGLEXTRAS} \
-    ${MAPVIEWER} \
+    ${CLUSTER_SUPPORT} \
     ${DEMO_PRELOAD} \
     ${DEMO_PLATFORM_CONF} \
     "
