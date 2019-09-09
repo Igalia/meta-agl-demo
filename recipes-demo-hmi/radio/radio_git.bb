@@ -25,18 +25,14 @@ inherit qmake5 aglwgt
 
 # ALS, CES, FOSDEM available
 AGL_RADIO_PRESETS_LOCALE ?= "CES"
-
 do_install_append() {
-    install -d ${D}${ROOT_HOME}/app-data/radio
-    install -m 0644 ${WORKDIR}/presets-CES.conf ${D}${ROOT_HOME}/app-data/radio/
-    install -m 0644 ${WORKDIR}/presets-ALS.conf ${D}${ROOT_HOME}/app-data/radio/
-    install -m 0644 ${WORKDIR}/presets-FOSDEM.conf ${D}${ROOT_HOME}/app-data/radio/
-    install -m 0644 ${WORKDIR}/presets-${AGL_RADIO_PRESETS_LOCALE}.conf ${D}${ROOT_HOME}/app-data/radio/presets.conf
+    install -d ${D}${sysconfdir}/xdg/AGL
+    install -m 0644 ${WORKDIR}/presets-CES.conf ${D}${sysconfdir}/xdg/AGL/radio-presets-CES.conf
+    install -m 0644 ${WORKDIR}/presets-ALS.conf ${D}${sysconfdir}/xdg/AGL/radio-presets-ALS.conf
+    install -m 0644 ${WORKDIR}/presets-FOSDEM.conf ${D}${sysconfdir}/xdg/AGL/radio-presets-FOSDEM.conf
+    install -m 0644 ${WORKDIR}/presets-${AGL_RADIO_PRESETS_LOCALE}.conf ${D}${sysconfdir}/xdg/AGL/radio-presets.conf
 }
 
-FILES_${PN} += " \
-	${ROOT_HOME}/app-data/radio/presets-*.conf \
-	${ROOT_HOME}/app-data/radio/presets.conf \
-"
+FILES_${PN} += "${sysconfdir}/xdg/AGL/*"
 
 RDEPENDS_${PN} += "agl-service-radio"
