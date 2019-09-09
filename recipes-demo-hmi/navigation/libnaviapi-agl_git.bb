@@ -10,8 +10,8 @@ DEPENDS = "af-binder json-c libdbus-c++ af-main-native"
 
 inherit cmake
 
-SRC_URI = "git://github.com/AGLExport/agl-service-navigation;protocol=git;branch=master"
-SRCREV  = "1f1ffc92fcc882aa5e885badbc91a3384f5d77b1"
+SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/agl-service-navigation;protocol=https;branch=${AGL_BRANCH}"
+SRCREV = "${AGL_APP_REVISION}"
 S = "${WORKDIR}/git"
 
 # FIXME: Remove once CMake+ninja issues are resolved
