@@ -2,8 +2,8 @@ SUMMARY     = "Google noto emoji font pack"
 HOMEPAGE    = "https://github.com/googlefonts/noto-emoji"
 SECTION     = "fonts"
 
-LICENSE     = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
+LICENSE     = "OFL-1.1"
+LIC_FILES_CHKSUM = "file://${S}/fonts/LICENSE;md5=55719faa0112708e946b820b24b14097"
 
 SRC_URI = "git://github.com/googlefonts/noto-emoji;protocol=https;branch=master"
 SRCREV = "833a43d03246a9325e748a2d783006454d76ff66"
