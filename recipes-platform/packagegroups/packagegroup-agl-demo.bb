@@ -37,6 +37,7 @@ TTF_FONTS = " \
     source-han-sans-cn-fonts \
     source-han-sans-jp-fonts \
     source-han-sans-tw-fonts \
+    noto-emoji \
     "
 
 #EXTRA_APPS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'qtwebengine', '', d)}"
