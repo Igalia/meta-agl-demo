@@ -22,6 +22,10 @@ SRCREV = "${AGL_APP_REVISION}"
 
 S = "${WORKDIR}/git"
 
+# Use OSM tiles by default.
+# For mapbox tiles, just comment this out and set an api key.
+EXTRA_QMAKEVARS_CONFIGURE += "ENABLE_OSM=1"
+
 inherit qmake5 aglwgt pkgconfig
 
 do_install_append() {
