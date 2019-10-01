@@ -20,22 +20,29 @@ RDEPENDS_${PN} += "\
     packagegroup-agl-demo \
     "
 
-MOST_DRIVERS = " \
+# MOST out-of-tree kernel drivers
+#################################
+MOST_DRIVERS ??= " \
     most \
     "
-MOST_DRIVERS_append_m3ulcb = " sllin"
+# These boards use different kernels - needs to be checked
+MOST_DRIVERS_dra7xx-evm ?= ""
+MOST_DRIVERS_dragonboard-410c ?= ""
 
-# HVAC dependencies depend on drivers above
-MOST_HVAC = " "
-MOST_HVAC_append = " \
-    ${MOST_DRIVERS} \
+
+# HVAC dependencies
+###################
+LIN_DRIVERS ??= " sllin"
+# These boards use different kernels - needs to be checked
+LIN_DRIVERS_dra7xx-evm ?= ""
+LIN_DRIVERS_dragonboard-410c ?= ""
+
+# UNICENS service
+UNICENS ?= " \
     unicens-config \
     agl-service-unicens \
     "
 
-# @Chris: This needs to be checked!
-MOST_HVAC_dra7xx-evm = ""
-MOST_HVAC_dragonboard-410c = ""
 
 AGL_APPS = " \
     dashboard \
@@ -82,7 +89,9 @@ RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
     linux-firmware-ralink \
-    ${MOST_HVAC} \
+    ${UNICENS} \
+    ${MOST_DRIVERS} \
+    ${LIN_DRIVERS} \
     ${AGL_APPS} \
     ${AGL_APIS} \
     ${QTAGLEXTRAS} \
