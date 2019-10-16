@@ -63,3 +63,9 @@ TOOLCHAIN_HOST_TASK_append = " nativesdk-perl-modules "
 # meeting to discuss the path forward (separate versus superset SDKs), this
 # should be reviewed after that.
 TOOLCHAIN_TARGET_TASK += "mosquitto-dev"
+
+# Add nlohmann-json to support building the speech services.
+# Required until either the agl-speech-framework feature is added as a
+# dependency of agl-demo, or the speech services are migrated into the
+# core profile.
+TOOLCHAIN_TARGET_TASK += "nlohmann-json-dev"
