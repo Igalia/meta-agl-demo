@@ -33,6 +33,7 @@ do_install_append() {
 
 RDEPENDS_${PN} += "qtlocation \
                    flite \
+                   libqtappfw \
                    openjtalk \
                    gstreamer1.0 \
                    ondemandnavi-config \
