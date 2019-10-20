@@ -69,3 +69,8 @@ TOOLCHAIN_TARGET_TASK += "mosquitto-dev"
 # dependency of agl-demo, or the speech services are migrated into the
 # core profile.
 TOOLCHAIN_TARGET_TASK += "nlohmann-json-dev"
+
+# Add libstdc++-staticdev to support building agl-service-voice-high or
+# other users of the C++17 filesystem standard library feature.
+# Can be removed upon upgrade to gcc 9.x, as it will no longer be necessary.
+TOOLCHAIN_TARGET_TASK += "libstdc++-staticdev"
