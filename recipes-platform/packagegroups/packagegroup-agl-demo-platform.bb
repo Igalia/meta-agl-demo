@@ -61,15 +61,14 @@ AGL_APIS = " \
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
 # Cluster demo support.
-# ATM mapviewer is required for navigation map viewing when doing cluster
-# demos with the older navigation application.
-MAPVIEWER = "${@bb.utils.contains("PREFERRED_PROVIDER_virtual/navigation", "navigation", "mapviewer", "",d)}"
+# ATM no cluster map viewer is supported with the older navigation application.
+MAPVIEWER = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "ondemandnavi", "tbtnavi", "",d)}"
 CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${MAPVIEWER} cluster-demo-network-config", "",d)}"
 
 # Preload poi API key for demo if requested, and potentially maps for older
 # navigation application if it is configured.
 DEMO_MAPS_LOCALE ?= "uk"
-DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_PROVIDER_virtual/navigation", "navigation", " navigation-maps-${DEMO_MAPS_LOCALE}", "",d)}"
+DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "navigation", " navigation-maps-${DEMO_MAPS_LOCALE}", "",d)}"
 DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} poiapp-api-key", "",d)}"
 
 # Hook for demo platform configuration
