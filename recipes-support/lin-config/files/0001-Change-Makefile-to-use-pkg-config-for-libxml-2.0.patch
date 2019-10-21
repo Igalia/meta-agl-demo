@@ -1,0 +1,33 @@
+From 59acd73ba3bd6cc4151b890d135c6d690a83374d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jan-Simon=20M=C3=B6ller?= <jsmoeller@linuxfoundation.org>
+Date: Tue, 1 Oct 2019 15:24:07 +0000
+Subject: [PATCH] Change Makefile to use pkg-config for libxml-2.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+instead of xml2-config.
+
+Upstream-Status: Pending
+
+Signed-off-by: Jan-Simon Möller <jsmoeller@linuxfoundation.org>
+---
+ lin_config/src/Makefile | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index cf5c515..3fc4df1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,5 @@
+-CC=gcc
+-CFLAGS=-std=gnu99 -Wall -pedantic $(DEBUG) `xml2-config --cflags` `pkg-config --cflags libnl-route-3.0` -I$(INCLUDE)
+-LIBS=`xml2-config --libs` `pkg-config --libs libnl-route-3.0`
++CFLAGS=-std=gnu99 -Wall -pedantic $(DEBUG) `pkg-config --cflags libxml-2.0` `pkg-config --cflags libnl-route-3.0` -I$(INCLUDE)
++LIBS=`pkg-config --libs libxml-2.0` `pkg-config --libs libnl-route-3.0`
+ INCLUDE=../../sllin
+ DEBUG=-ggdb
+ 
+-- 
+2.16.4
+
