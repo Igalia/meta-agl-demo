@@ -47,6 +47,7 @@ AGL_APPS = " \
     radio \
     settings \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'taskmanager' , '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'unzip' , '', d)} \
     high-level-viwi-service \
     agl-service-signal-composer \
     low-can-demo \
