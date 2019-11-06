@@ -19,6 +19,7 @@ SRC_URI_append = " \
 	file://0001-Disable-sllin-driver-debug-log.patch;pnum=2 \
 	file://sllin-demo.service \
 	file://start_lin_demo.sh \
+	file://lin_config.conf \
 "
 
 KERNEL_MODULE_AUTOLOAD_append = " sllin"
@@ -34,6 +35,10 @@ do_install_append () {
 	install -m 755 ${WORKDIR}/start_lin_demo.sh ${D}/${bindir}/start_lin_demo.sh
 	install -d ${D}${systemd_system_unitdir}
 	install -m 0644 ${WORKDIR}/sllin-demo.service ${D}${systemd_system_unitdir}/
+	install -d ${D}${sysconfdir}
+	install -m 0644 ${WORKDIR}/lin_config.conf ${D}${sysconfdir}/
 }
 
-FILES_${PN}_append = " ${bindir}/start_lin_demo.sh"
+FILES_${PN} += "${bindir}/start_lin_demo.sh ${sysconfdir}/lin_config.conf"
+
+RDEPENDS_${PN} += "lin-config"

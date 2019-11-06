@@ -1,10 +1,13 @@
 #!/bin/sh
 
+# Attach serial LIN->CAN bridge and set up LIN polling
 sleep 1
-ldattach 25 /dev/ttySC3
-pidof ldattach > /var/run/lin_ldattach
+/usr/bin/lin_config -c /etc/lin_config.conf -a sllin:/dev/ttyUSB0
+pidof lin_config > /var/run/lin_config.pid
 sleep 1
 ip link set sllin0 up
+
+# Initialize HVAC controller
 usleep 100000
 cansend sllin0 030#
 usleep 100000

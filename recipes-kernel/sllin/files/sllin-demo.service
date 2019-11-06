@@ -1,13 +1,13 @@
 [Unit]
-Description = LIN DEMO startup
+Description=LIN demo configuration
+ConditionPathExists=/dev/ttyUSB0
 After=afm-system-daemon.service
  
 [Service]
 Type=forking
-PIDFile=/var/run/lin_ldattach
+PIDFile=/var/run/lin_config.pid
 ExecStart=/usr/bin/start_lin_demo.sh
 RemainAfterExit=yes
-
  
 [Install]
 WantedBy=multi-user.target
