@@ -1,0 +1,20 @@
+Use LDFLAGS when linking
+
+Use LDFLAGS when linking the output binary to quiet QA warnings due to
+missing link flags.
+
+Upstream-Status: Pending
+
+Signed-off-by: Scott Murray <scott.murray@konsulko.com>
+
+--- a/Makefile	2019-11-05 11:08:11.060565285 +0000
++++ b/Makefile	2019-11-05 11:09:38.663570084 +0000
+@@ -6,7 +6,7 @@
+ objects = linc_parse_xml.o pcl_config.o sllin_config.o lin_config.o
+ 
+ lin_config: $(objects)
+-	$(CC) $(objects) $(LIBS) -o lin_config
++	$(CC) $(LDFLAGS) $(objects) $(LIBS) -o lin_config
+ 
+ %.o : %.c %.h
+ 	$(CC) $(CFLAGS) $(LIBS) -c $< -o $@
