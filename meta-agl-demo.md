@@ -63,29 +63,36 @@ dependencies:
   - URI: https://git.yoctoproject.org/cgit/cgit.cgi/meta-security
   - Branch: "rocko"<br/><br/>
 
-* AGL's `meta-app-framework` Layer Within the `meta-agl` Layer:
+* AGL's `meta-app-framework` Layer within the `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
   - Branch: "flounder"
 
 **The `agl-sota` Feature:**
 
-* AGL's `meta-sota` Layer Within the `meta-agl-extra` Layer:
+* Here Technologies' `meta-updater` Layer:
 
-  - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-  - Branch: "flounder"<br/><br/>
+  - URI: https://github.com/advancedtelematic/meta-updater/
+  - Branch: "rocko"<br/><br/>
+
+* Here Technologies' `meta-updater-qemux86-64` Layer:
+
+  - URI: https://github.com/advancedtelematic/meta-updater-qemux86-64/
+  - Branch: "rocko"<br/><br/>
 
 * OpenEmbedded's `meta-openembedded` Layer:
 
   - URI: https://github.com/openembedded/meta-openembedded
   - Branch: "rocko"
 
-    In particular, the `meta-openembedded` layer depends on the
-    `meta-filesystems` sub-layer.
+    Specifically, out of `meta-openembedded`, these sub-layers are used:
+
+    - `meta-filesystems`
+    - `meta-oe`<br/><br/>
 
 **The `agl-netboot` Feature:**
 
-* AGL's `meta-netboot` Layer Within the `meta-agl` Layer:
+* AGL's `meta-netboot` Layer within the `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
   - Branch: "flounder"
