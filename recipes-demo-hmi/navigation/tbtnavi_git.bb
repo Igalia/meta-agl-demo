@@ -16,6 +16,7 @@ DEPENDS += "qtbase \
             qlibhomescreen \
             qlibwindowmanager \
             qtlocation \
+            libqtappfw \
 "
 
 PV = "1.0+git${SRCPV}"
@@ -30,4 +31,6 @@ inherit qmake5 aglwgt pkgconfig
 
 RDEPENDS_${PN} += "qtlocation \
                    ondemandnavi-config \
+                   agl-service-navigation \
+                   libqtappfw \
 "
