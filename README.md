@@ -84,24 +84,25 @@ URI: https://gerrit.automotivelinux.org/gerrit/AGL/meta-renesas
 		> branch            : master
 
  * The feature `agl-sota` has these dependencies:
-		* `meta-agl-extra/meta-sota`
-		> URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-		> branch            : master
+		* `meta-updater`
+		> URI: https://github.com/advancedtelematic/meta-updater/
+		> branch            : thud
+		> tested revision: e4dd74565f429b576e84972d12cc1ae2048be119
+
+		* `meta-updater-qemux86-64`
+		> URI: https://github.com/advancedtelematic/meta-updater-qemux86-64/
+		> branch            : thud
+		> tested revision: 214e14c4c45625842e542eebd696f903060d488f
 
 		* `meta-openembedded`
 		> layer          : meta-openembedded
-		> branch         : jethro
-		> tested revision: 8ab04afbffb4bc5184cfe0655049de6f44269990
+		> branch         : thud
+		> tested revision: 9b3b907f30b0d5b92d58c7e68289184fda733d3e
 
 			* specifically:
 				* `meta-openembedded/meta-filesystems`
-				* `meta-openembedded/meta-ruby`
-
-
-		* `meta-rust`
-		> URI: https://github.com/konsulko/meta-rust
-		> branch            : jethro
-		> tested revision: 395cde581938d862abb6a9219c0118c81cf01da2
+				* `meta-openembedded/meta-oe`
+				* `meta-openembedded/meta-python`
 
 	* The feature `agl-netboot` has these dependenies:
 		* `meta-agl/meta-netboot`

@@ -75,17 +75,22 @@ dependencies:
     manifest file for the `AGL-repo` repository for revision
     information.<br/><br/>
 
-* AGL's `meta-app-framework` Layer Within the `meta-agl` Layer:
+* AGL's `meta-app-framework` Layer within the `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
   - Branch: "master"<br/><br/>
 
 **The `agl-sota` Feature:**
 
-* AGL's `meta-sota` Layer Within the `meta-agl-extra` Layer:
+* Here Technologies' `meta-updater` Layer:
 
-  - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl-extra.git
-  - Branch: "master"<br/><br/>
+  - URI: https://github.com/advancedtelematic/meta-updater/
+  - Branch: "thud"<br/><br/>
+
+* Here Technologies' `meta-updater-qemux86-64` Layer:
+
+  - URI: https://github.com/advancedtelematic/meta-updater-qemux86-64/
+  - Branch: "thud"<br/><br/>
 
 * OpenEmbedded's `meta-openembedded` Layer:
 
@@ -95,12 +100,15 @@ dependencies:
     manifest file for the `AGL-repo` repository for revision
     information.
 
-    In particular, the `meta-openembedded` layer depends on the
-    `meta-filesystems` sub-layer.<br/><br/>
+    Specifically, out of `meta-openembedded`, these sub-layers are used:
+
+    - `meta-filesystems`
+    - `meta-oe`
+    - `meta-python`<br/><br/>
 
 **The `agl-netboot` Feature:**
 
-* AGL's `meta-netboot` Layer Within the `meta-agl` Layer:
+* AGL's `meta-netboot` Layer within the `meta-agl` Layer:
 
   - URI: https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git
   - Branch: "master"
