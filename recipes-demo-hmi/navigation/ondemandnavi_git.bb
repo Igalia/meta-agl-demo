@@ -11,6 +11,7 @@ DEPENDS += "qtquickcontrols2 \
             qlibwindowmanager \
             qtlocation \
             qtaglextras \
+            libqtappfw \
 "
 
 PV = "1.0+git${SRCPV}"
