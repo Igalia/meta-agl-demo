@@ -6,7 +6,7 @@ SECTION     = "apps"
 LICENSE          = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=947b2d60ca3872e172034438e9801200"
 
-DEPENDS += "qtbase json-c libnaviapi-agl \
+DEPENDS += "qtbase json-c \
             qlibwindowmanager libhomescreen \
             libqtappfw \
            "
