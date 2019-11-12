@@ -63,10 +63,6 @@ AGL_APPS = " \
     virtual/mixer \
     "
 
-AGL_APIS = " \
-    libnaviapi-agl \
-    "
-
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
 
 # Cluster demo support.
@@ -95,7 +91,6 @@ RDEPENDS_${PN}_append = " \
     ${MOST_DRIVERS} \
     ${LIN_DRIVERS} \
     ${AGL_APPS} \
-    ${AGL_APIS} \
     ${QTAGLEXTRAS} \
     ${CLUSTER_SUPPORT} \
     ${DEMO_PRELOAD} \
