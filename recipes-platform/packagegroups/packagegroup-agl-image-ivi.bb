@@ -18,14 +18,9 @@ RDEPENDS_${PN} += "\
     packagegroup-agl-ivi-connectivity \
     packagegroup-agl-ivi-graphics \
     packagegroup-agl-ivi-multimedia \
+    packagegroup-agl-ivi-navigation \
+    packagegroup-agl-ivi-services \
     "
-#    packagegroup-agl-ivi-automotive \
-#    packagegroup-agl-ivi-speech-services \
-#    packagegroup-agl-ivi-navi-lbs \
-#    packagegroup-agl-ivi-security \
-#    packagegroup-agl-ivi-os-commonlibs \
-#    packagegroup-agl-ivi-kernel \
-#
 
 RDEPENDS_${PN} += "\
     agl-login-manager \
