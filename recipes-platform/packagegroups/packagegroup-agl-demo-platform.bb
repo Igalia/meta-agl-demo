@@ -20,30 +20,6 @@ RDEPENDS_${PN} += "\
     packagegroup-agl-demo \
     "
 
-# MOST out-of-tree kernel drivers
-#################################
-MOST_DRIVERS ??= " \
-    most \
-    "
-# These boards use different kernels - needs to be checked
-MOST_DRIVERS_dra7xx-evm ?= ""
-MOST_DRIVERS_dragonboard-410c ?= ""
-
-
-# HVAC dependencies
-###################
-LIN_DRIVERS ??= " sllin"
-# These boards use different kernels - needs to be checked
-LIN_DRIVERS_dra7xx-evm ?= ""
-LIN_DRIVERS_dragonboard-410c ?= ""
-
-# UNICENS service
-UNICENS ?= " \
-    unicens-config \
-    agl-service-unicens \
-    agl-service-unicens-controller \
-    "
-
 
 AGL_APPS = " \
     dashboard \
@@ -64,6 +40,18 @@ AGL_APPS = " \
     "
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
+QTAGLEXTRAS_append = " libqtappfw"
+
+# add support for websocket in Qt and QML
+QTAGLEXTRAS_append = " qtwebsockets qtwebsockets-qmlplugins"
+PREFERRED_PROVIDER_virtual/webruntime = "web-runtime"
+
+#QTAGLEXTRAS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'qtwebengine', '', d)}"
+#QTAGLEXTRAS_append = " qtsmarthome cinematicexperience qt5everywheredemo qt5-demo-extrafiles"
+#IMAGE_INSTALL_append = " qtwebengine-examples"
+
+# packages from hmi-framework aka homescreen-2017
+HOMESCREEN = "packagegroup-hmi-framework"
 
 # Cluster demo support.
 # ATM no cluster map viewer is supported with the older navigation application.
@@ -76,23 +64,12 @@ DEMO_MAPS_LOCALE ?= "uk"
 DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "navigation", " navigation-maps-${DEMO_MAPS_LOCALE}", "",d)}"
 DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} poiapp-api-key", "",d)}"
 
-# Hook for demo platform configuration
-# ATM, only used to disable btwilink module on M3ULCB + Kingfisher by default,
-# setting DEMO_ENABLE_BTWILINK to "true" in local.conf / site.conf re-enables.
-DEMO_ENABLE_BTWILINK ?= ""
-DEMO_PLATFORM_CONF = ""
-DEMO_PLATFORM_CONF_append_m3ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
-
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
-    linux-firmware-ralink \
-    ${UNICENS} \
-    ${MOST_DRIVERS} \
-    ${LIN_DRIVERS} \
     ${AGL_APPS} \
     ${QTAGLEXTRAS} \
     ${CLUSTER_SUPPORT} \
     ${DEMO_PRELOAD} \
-    ${DEMO_PLATFORM_CONF} \
+    ${HOMESCREEN} \
     "
