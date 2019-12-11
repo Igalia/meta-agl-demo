@@ -74,3 +74,8 @@ TOOLCHAIN_TARGET_TASK += "nlohmann-json-dev"
 # other users of the C++17 filesystem standard library feature.
 # Can be removed upon upgrade to gcc 9.x, as it will no longer be necessary.
 TOOLCHAIN_TARGET_TASK += "libstdc++-staticdev"
+
+# Add gcc-sanitizers to support building applications using the SDK with
+# AddressSanitizer support to detect use-after-frees along with other
+# memory issue.
+TOOLCHAIN_TARGET_TASK += "gcc-sanitizers"
