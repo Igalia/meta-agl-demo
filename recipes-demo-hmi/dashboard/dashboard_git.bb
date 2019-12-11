@@ -13,6 +13,11 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS += "qtquickcontrols2 qttools-native qtaglextras"
+DEPENDS += "qtquickcontrols2 qttools-native qtaglextras libqtappfw"
 
 inherit qmake5 aglwgt
+
+RDEPENDS_${PN} += " \
+	libqtappfw \
+	agl-service-signal-composer \
+"
