@@ -75,11 +75,11 @@ DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigatio
 DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} poiapp-api-key", "",d)}"
 
 # Hook for demo platform configuration
-# ATM, only used to disable btwilink module on M3ULCB + Kingfisher by default,
+# ATM, only used to disable btwilink module on [MH]3ULCB + Kingfisher by default,
 # setting DEMO_ENABLE_BTWILINK to "true" in local.conf / site.conf re-enables.
 DEMO_ENABLE_BTWILINK ?= ""
 DEMO_PLATFORM_CONF = ""
-DEMO_PLATFORM_CONF_append_m3ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
+DEMO_PLATFORM_CONF_append_ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
 
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
