@@ -36,11 +36,11 @@ UNICENS ?= " \
     "
 
 # Hook for demo platform configuration
-# ATM, only used to disable btwilink module on M3ULCB + Kingfisher by default,
+# ATM, only used to disable btwilink module on [MH]3ULCB + Kingfisher by default,
 # setting DEMO_ENABLE_BTWILINK to "true" in local.conf / site.conf re-enables.
 DEMO_ENABLE_BTWILINK ?= ""
 DEMO_PLATFORM_CONF = ""
-DEMO_PLATFORM_CONF_append_m3ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
+DEMO_PLATFORM_CONF_append_ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
 
 SMARTDEVICELINK = "${@bb.utils.contains('DISTRO_FEATURES', 'agl-sdl', \
     'packagegroup-agl-smartdevicelink', '', d)}"
