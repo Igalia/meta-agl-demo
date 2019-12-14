@@ -1,0 +1,7 @@
+{
+    "ledtemp": {
+	"red": "/sys/class/leds/blinkm-@DEVICE@-red/brightness",
+	"green": "/sys/class/leds/blinkm-@DEVICE@-green/brightness",
+	"blue": "/sys/class/leds/blinkm-@DEVICE@-blue/brightness"
+    }
+}
