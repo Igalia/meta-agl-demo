@@ -1,0 +1,8 @@
+[Unit]
+Description=AGL hvac LED write /etc/hvac.json
+#Before= todo: add dependency of hvac service ?
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/logger '#hvac i2c device has been attached - %i'
+ExecStart=/usr/sbin/hvac-json-in-rewrite.sh %i

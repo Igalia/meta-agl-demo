@@ -58,11 +58,20 @@ HOMESCREEN = "packagegroup-hmi-framework"
 MAPVIEWER = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "ondemandnavi", "tbtnavi", "",d)}"
 CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${MAPVIEWER} cluster-demo-network-config", "",d)}"
 
+# Hook for demo platform configuration
+# ATM used for:
+# 1) Adding udev configuration and scripts for supporting USB attached
+#    I2C devices for RTC and HVAC LED support.
+DEMO_PLATFORM_CONF = " demo-i2c-udev-conf "
+
 # Preload poi API key for demo if requested, and potentially maps for older
 # navigation application if it is configured.
 DEMO_MAPS_LOCALE ?= "uk"
 DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "navigation", " navigation-maps-${DEMO_MAPS_LOCALE}", "",d)}"
-DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} poiapp-api-key", "",d)}"
+
+# Preload only if agl-demo-preload is set
+DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} ${DEMO_PLATFORM_CONF} poiapp-api-key", "",d)}"
+
 
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \

@@ -1,0 +1,20 @@
+# skip instantiation of rtc in this processing
+ACTION=="add", SUBSYSTEM=="i2c", DRIVER=="rtc-ds1307", GOTO="hwclock_end"
+
+# load the required drivers (if not already present) - your job to make sure they are there !
+ACTION=="add", ENV{DEVTYPE}=="usb_interface", ENV{DRIVER}=="i2c-tiny-usb", RUN+="/usr/bin/logger 'Loading leds-blinkm'", RUN+="/sbin/modprobe leds-blinkm"
+ACTION=="add", ENV{DEVTYPE}=="usb_interface", ENV{DRIVER}=="i2c-tiny-usb", RUN+="/usr/bin/logger 'Loading rtc driver'", RUN+="/sbin/modprobe rtc-ds1307"
+
+# %k is the blinkm i2c device e.g. 6-0009
+ACTION=="add", ENV{DRIVER}=="blinkm", SUBSYSTEM=="i2c", RUN+="/usr/bin/logger 'the blinkm device is %k'", TAG+="systemd", ENV{SYSTEMD_WANTS}="hvac-json-in-rewrite@%k.service", GOTO="very_end"
+# FIXME: We do not exclude the blinkm on the next lines, yet. The rule is too broad, but that is all we know already. Above is actually later in time.
+#        For now this is not critical as the rtc init will just fail and we're done.
+
+# %k is the i2c bus e.g. i2c-6
+ACTION=="add", SUBSYSTEM=="i2c", ATTRS{idProduct}=="c631", TAG+="systemd", ENV{SYSTEMD_WANTS}="rtc-i2c-attach@%k.service"
+
+# GOTO EXIT
+LABEL="hwclock_end"
+ACTION=="add", SUBSYSTEM=="rtc", RUN+="/bin/sleep 1", RUN+="/sbin/hwclock -f /dev/%k --hctosys --utc", TAG+="systemd"
+
+LABEL="very_end"
