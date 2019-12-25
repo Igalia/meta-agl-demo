@@ -32,7 +32,7 @@ MOST_DRIVERS_dragonboard-410c ?= ""
 
 # HVAC dependencies
 ###################
-LIN_DRIVERS ??= " sllin"
+LIN_DRIVERS ??= " sllin lin-init"
 # These boards use different kernels - needs to be checked
 LIN_DRIVERS_dra7xx-evm ?= ""
 LIN_DRIVERS_dragonboard-410c ?= ""
