@@ -13,12 +13,14 @@ PV = "1.0+git${SRCPV}"
 S  = "${WORKDIR}/git"
 
 # build-time dependencies
-DEPENDS += "libqtappfw qtquickcontrols2 qtwebsockets"
+DEPENDS += "libqtappfw qtquickcontrols2 qt-qrcode"
 DEPENDS += "libhomescreen qlibwindowmanager qtvirtualkeyboard"
 
 # runtime dependencies
 RDEPENDS_${PN} += " \
-            agl-service-bluetooth \
-            agl-service-network"
+	qt-qrcode \
+	agl-service-bluetooth \
+	agl-service-network \
+"
 
 inherit qmake5 aglwgt

@@ -1,0 +1,181 @@
+Rework library build
+
+Rework qmake files to build libraries out of the quickitem and widget
+code instead of sample programs. This allows using the associated
+classes without copying the source and running afoul of the LGPL
+licensing. Also add pkgconfig file generation to simplify usage, fix
+header installation, and use pkgconfig to pull in libqrencode instead
+of having to clone a copy in-tree and building it.
+
+Upstream-Status: inappropriate [embedded-specific]
+
+Signed-off-by: Scott Murray <scott.murray@konsulko.com>
+
+diff --git a/lib/lib.pro b/lib/lib.pro
+index d046bc4..6b6c199 100644
+--- a/lib/lib.pro
++++ b/lib/lib.pro
+@@ -1,6 +1,9 @@
+ TARGET = qtqrcode
+ TEMPLATE = lib
+ 
++CONFIG += link_pkgconfig create_pc create_prl no_install_prl
++PKGCONFIG += libqrencode
++
+ DEFINES += \
+     QTQRCODE_LIBRARY \
+     QTQRCODE_PLUS_FEATURES
+@@ -12,7 +15,8 @@ contains(DEFINES, QTQRCODE_PLUS_FEATURES) {
+         qtqrcodepainter.cpp
+ 
+     HEADERS +=\
+-        qtqrcodepainter.h
++        qtqrcodepainter.h \
++        QtQrCodePainter
+ 
+ } else {
+     QT      -= gui
+@@ -23,16 +27,29 @@ SOURCES += \
+ 
+ HEADERS +=\
+     qtqrcode_global.h \
+-    qtqrcode.h
++    qtqrcode.h \
++    QtQrCode
+ 
+ INCLUDEPATH += $$PWD
+ 
+ include(../defaults.pri)
+-include(libqrencode.pri)
+ # Default rules for deployment.
+ include(deployment.pri)
+ 
+ unix {
++    headers.path = /usr/include
+     target.path = /usr/lib
+-    INSTALLS += target
+ }
++
++headers.files = $$HEADERS
++
++INSTALLS += headers
++
++QMAKE_PKGCONFIG_NAME = qtqrcode
++QMAKE_PKGCONFIG_FILE = $${QMAKE_PKGCONFIG_NAME}
++QMAKE_PKGCONFIG_VERSION = $${VERSION}
++QMAKE_PKGCONFIG_DESCRIPTION = A wrapper interface for qrencode for Qt
++QMAKE_PKGCONFIG_LIBDIR = ${prefix}/lib
++QMAKE_PKGCONFIG_INCDIR = ${prefix}/include
++QMAKE_PKGCONFIG_REQUIRES = libqrencode
++QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+diff --git a/lib/qtqrcode.h b/lib/qtqrcode.h
+index 2a7a1ff..0830826 100644
+--- a/lib/qtqrcode.h
++++ b/lib/qtqrcode.h
+@@ -31,7 +31,7 @@
+ #include <QByteArray>
+ #include <QSharedDataPointer>
+ 
+-#include "libqrencode/qrencode.h"
++#include <qrencode.h>
+ 
+ class QtQrCodeData;
+ 
+diff --git a/quickitem/quickitem.pro b/quickitem/quickitem.pro
+index ecfef1b..067dc46 100644
+--- a/quickitem/quickitem.pro
++++ b/quickitem/quickitem.pro
+@@ -1,5 +1,7 @@
+-TEMPLATE = app
+-TARGET = QuickItem
++TEMPLATE = lib
++TARGET = qtqrcode-quickitem
++
++CONFIG += create_pc create_prl no_install_prl
+ 
+ QT       += qml quick widgets
+ 
+@@ -7,7 +9,7 @@ LIBS += -L../lib -lqtqrcode
+ 
+ DEFINES +=
+ 
+-SOURCES += main.cpp \
++SOURCES += \
+     QtQrCodeQuickItem.cpp
+ 
+ HEADERS += \
+@@ -21,3 +23,21 @@ QML_IMPORT_PATH =
+ include(../defaults.pri)
+ # Default rules for deployment.
+ include(deployment.pri)
++
++unix {
++    headers.path = /usr/include
++    target.path = /usr/lib
++}
++
++headers.files = $$HEADERS
++
++INSTALLS += headers
++
++QMAKE_PKGCONFIG_NAME = qtqrcode-quickitem
++QMAKE_PKGCONFIG_FILE = $${QMAKE_PKGCONFIG_NAME}
++QMAKE_PKGCONFIG_VERSION = $${VERSION}
++QMAKE_PKGCONFIG_DESCRIPTION = Qt QuickItem wrapper for qt-qrcode library
++QMAKE_PKGCONFIG_LIBDIR = ${prefix}/lib
++QMAKE_PKGCONFIG_INCDIR = ${prefix}/include
++QMAKE_PKGCONFIG_REQUIRES = qtqrcode
++QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+diff --git a/widget/widget.pro b/widget/widget.pro
+index 2e26a8c..63add50 100644
+--- a/widget/widget.pro
++++ b/widget/widget.pro
+@@ -1,5 +1,7 @@
+-TEMPLATE = app
+-TARGET = Widget
++TEMPLATE = lib
++TARGET = qtqrcode-widget
++
++CONFIG += create_pc create_prl no_install_prl
+ 
+ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+ 
+@@ -9,18 +11,28 @@ LIBS += -L../lib -lqtqrcode
+ 
+ DEFINES +=
+ 
+-SOURCES += main.cpp\
+-        MainWindow.cpp \
+-    QtQrCodeWidget.cpp
+-
+-HEADERS  += MainWindow.hpp \
+-    QtQrCodeWidget.hpp
++SOURCES += QtQrCodeWidget.cpp
+ 
+-FORMS    += MainWindow.ui
+-
+-CONFIG += mobility
+-MOBILITY = 
++HEADERS  += QtQrCodeWidget.hpp
+ 
+ include(../defaults.pri)
+ # Default rules for deployment.
+ include(deployment.pri)
++
++unix {
++    headers.path = /usr/include
++    target.path = /usr/lib
++}
++
++headers.files = $$HEADERS
++
++INSTALLS += headers
++
++QMAKE_PKGCONFIG_NAME = qtqrcode-widget
++QMAKE_PKGCONFIG_FILE = $${QMAKE_PKGCONFIG_NAME}
++QMAKE_PKGCONFIG_VERSION = $${VERSION}
++QMAKE_PKGCONFIG_DESCRIPTION = Qt widget wrapper for qt-qrcode library
++QMAKE_PKGCONFIG_LIBDIR = ${prefix}/lib
++QMAKE_PKGCONFIG_INCDIR = ${prefix}/include
++QMAKE_PKGCONFIG_REQUIRES = qtqrcode
++QMAKE_PKGCONFIG_DESTDIR = pkgconfig
