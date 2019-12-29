@@ -1,1 +1,2 @@
-DISTRO_FEATURES_append = " agl-demo-preload"
+#see meta-agl-demo/conf/include/agl-demo-preload.inc
+require conf/include/agl-demo-preload.inc
