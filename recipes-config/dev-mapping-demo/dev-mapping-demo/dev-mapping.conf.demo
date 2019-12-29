@@ -1,0 +1,6 @@
+; Default CAN device mapping
+; Format has to follow ini rules key="value", notice " around value.
+
+[CANbus-mapping]
+hs="can0"
+ls="sllin0"
