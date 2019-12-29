@@ -32,10 +32,10 @@ MOST_DRIVERS_dragonboard-410c ?= ""
 
 # HVAC dependencies
 ###################
-LIN_DRIVERS ??= " sllin"
+LIN_DRIVERS ??= " sllin sllin-virtual"
 # These boards use different kernels - needs to be checked
-LIN_DRIVERS_dra7xx-evm ?= ""
-LIN_DRIVERS_dragonboard-410c ?= ""
+LIN_DRIVERS_dra7xx-evm ?= "sllin-virtual"
+LIN_DRIVERS_dragonboard-410c ?= "sllin-virtual"
 
 # UNICENS service
 UNICENS ?= " \
@@ -66,7 +66,12 @@ QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qt
 # Cluster demo support.
 # ATM no cluster map viewer is supported with the older navigation application.
 MAPVIEWER = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "ondemandnavi", "tbtnavi", "",d)}"
-CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${MAPVIEWER} cluster-demo-network-config", "",d)}"
+CLUSTER_SUPPORT_PACKAGES = " \
+	${MAPVIEWER} \
+	cluster-demo-network-config \
+	cluster-lin-bridging-config \
+"
+CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${CLUSTER_SUPPORT_PACKAGES}", "",d)}"
 
 # Hook for demo platform configuration
 # ATM used for:

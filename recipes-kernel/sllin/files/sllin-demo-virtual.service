@@ -1,0 +1,12 @@
+[Unit]
+Description=LIN demo configuration (virtual)
+ConditionPathExists=!/dev/ttyUSB0
+After=afm-system-daemon.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/start_lin_demo.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
