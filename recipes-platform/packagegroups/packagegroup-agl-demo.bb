@@ -23,10 +23,10 @@ MOST_DRIVERS_dragonboard-410c ?= ""
 
 # HVAC dependencies
 ###################
-LIN_DRIVERS ??= " sllin"
+LIN_DRIVERS ??= " sllin sllin-virtual"
 # These boards use different kernels - needs to be checked
-LIN_DRIVERS_dra7xx-evm ?= ""
-LIN_DRIVERS_dragonboard-410c ?= ""
+LIN_DRIVERS_dra7xx-evm ?= "sllin-virtual"
+LIN_DRIVERS_dragonboard-410c ?= "sllin-virtual"
 
 # UNICENS service
 UNICENS ?= " \

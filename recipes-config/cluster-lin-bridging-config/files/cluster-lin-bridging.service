@@ -1,0 +1,11 @@
+[Unit]
+Description=LIN to CAN bridging
+After=sllin-demo.service sllin-demo-virtual.service
+Requires=sllin-demo.service sllin-demo-virtual.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/candump -s 2 -B can0 sllin0
+
+[Install]
+WantedBy=multi-user.target

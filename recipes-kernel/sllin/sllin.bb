@@ -18,6 +18,7 @@ SRC_URI_append = " \
 	file://0003-Allow-recent-kernels-newer-4.11.x-to-build.patch;pnum=2 \
 	file://0001-Disable-sllin-driver-debug-log.patch;pnum=2 \
 	file://sllin-demo.service \
+	file://sllin-demo-virtual.service \
 	file://start_lin_demo.sh \
 	file://lin_config.conf \
 "
@@ -29,16 +30,22 @@ SLLINBAUDRATE ??= "9600"
 module_conf_sllin = "options sllin baudrate=${SLLINBAUDRATE}"
 
 SYSTEMD_SERVICE_${PN} = "sllin-demo.service"
+SYSTEMD_SERVICE_${PN}-virtual = "sllin-demo-virtual.service"
 
 do_install_append () {
 	install -d 644 ${D}/${bindir}
 	install -m 755 ${WORKDIR}/start_lin_demo.sh ${D}/${bindir}/start_lin_demo.sh
 	install -d ${D}${systemd_system_unitdir}
 	install -m 0644 ${WORKDIR}/sllin-demo.service ${D}${systemd_system_unitdir}/
+	install -m 0644 ${WORKDIR}/sllin-demo-virtual.service ${D}${systemd_system_unitdir}/
 	install -d ${D}${sysconfdir}
 	install -m 0644 ${WORKDIR}/lin_config.conf ${D}${sysconfdir}/
 }
 
+PACKAGES =+ "${PN}-virtual"
+
 FILES_${PN} += "${bindir}/start_lin_demo.sh ${sysconfdir}/lin_config.conf"
+
+FILES_${PN}-virtual = "${systemd_system_unitdir}/sllin-demo-virtual.service"
 
 RDEPENDS_${PN} += "lin-config"

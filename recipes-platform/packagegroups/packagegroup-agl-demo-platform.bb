@@ -56,7 +56,12 @@ HOMESCREEN = "packagegroup-hmi-framework"
 # Cluster demo support.
 # ATM no cluster map viewer is supported with the older navigation application.
 MAPVIEWER = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigation", "ondemandnavi", "tbtnavi", "",d)}"
-CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${MAPVIEWER} cluster-demo-network-config", "",d)}"
+CLUSTER_SUPPORT_PACKAGES = " \
+	${MAPVIEWER} \
+	cluster-demo-network-config \
+	cluster-lin-bridging-config \
+"
+CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${CLUSTER_SUPPORT_PACKAGES}", "",d)}"
 
 # Hook for demo platform configuration
 # ATM used for:
