@@ -59,6 +59,7 @@ CLUSTER_SUPPORT_PACKAGES = " \
 	${MAPVIEWER} \
 	cluster-demo-network-config \
 	cluster-lin-bridging-config \
+	cluster-demo-simulator \
 "
 CLUSTER_SUPPORT = "${@bb.utils.contains("DISTRO_FEATURES", "agl-cluster-demo-support", "${CLUSTER_SUPPORT_PACKAGES}", "",d)}"
 
