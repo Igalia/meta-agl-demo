@@ -1,0 +1,13 @@
+[Unit]
+Description=Cluster demo driving simulator
+After=sllin-demo.service sllin-demo-virtual.service cluster-lin-bridging.service
+Requires=sllin-demo.service sllin-demo-virtual.service cluster-lin-bridging.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/python3 /usr/sbin/simple_can_simulator.py
+
+[Install]
+WantedBy=multi-user.target
