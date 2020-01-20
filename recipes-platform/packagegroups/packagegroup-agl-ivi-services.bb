@@ -13,6 +13,7 @@ RDEPENDS_${PN} += "\
 agl-service-bluetooth \
 agl-service-bluetooth-map \
 agl-service-bluetooth-pbap \
+agl-service-can-high-level-viwi \
 agl-service-can-low-level \
 agl-service-geoclue \
 agl-service-geofence \
@@ -26,5 +27,4 @@ agl-service-signal-composer \
 agl-service-steering-wheel \
 agl-service-unicens \
 agl-service-weather \
-high-level-viwi-service \
     "
