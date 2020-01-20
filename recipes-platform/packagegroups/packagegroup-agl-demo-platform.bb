@@ -59,6 +59,7 @@ AGL_APPS = " \
     agl-service-signal-composer \
     low-can-demo \
     virtual/mixer \
+    ${@bb.utils.contains('IMAGE_FEATURES', 'agl-voiceagent-alexa', 'alexa-viewer' , '', d)} \
     "
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
