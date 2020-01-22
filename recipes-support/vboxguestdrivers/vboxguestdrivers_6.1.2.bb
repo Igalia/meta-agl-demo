@@ -13,18 +13,21 @@ VBOX_NAME = "VirtualBox-${PV}"
 
 SRC_URI = "http://download.virtualbox.org/virtualbox/${PV}/${VBOX_NAME}.tar.bz2 \
     file://Makefile.utils \
-    "
-SRC_URI[md5sum] = "8428f7e27b244803df180213bc5d4a68"
-SRC_URI[sha256sum] = "5236148a93267478fb6d306f6343aa9587d3f90f437f54c7b3485bd9d538d2f8"
+"
+SRC_URI[md5sum] = "f4f42fd09857556b04b803fb99cc6905"
+SRC_URI[sha256sum] = "4326576e8428ea3626194fc82646347576e94c61f11d412a669fc8a10c2a1e67"
 
 S = "${WORKDIR}/vbox_module"
 
 export BUILD_TARGET_ARCH="${ARCH}"
 export BUILD_TARGET_ARCH_x86-64="amd64"
 
-EXTRA_OEMAKE += "KERN_DIR='${WORKDIR}/${KERNEL_VERSION}/build' all"
+EXTRA_OEMAKE += "KERN_DIR='${WORKDIR}/${KERNEL_VERSION}/build' KBUILD_VERBOSE=1"
 
-addtask export_sources before do_patch after do_unpack
+# otherwise 5.2.22 builds just vboxguest
+MAKE_TARGETS = "all"
+
+addtask export_sources after do_patch before do_configure
 
 do_export_sources() {
     mkdir -p "${S}"
@@ -40,12 +43,15 @@ do_export_sources() {
 }
 
 do_configure_prepend() {
+    # vboxguestdrivers/5.2.6-r0/vbox_module/vboxguest/Makefile.include.header:99: *** The variable KERN_DIR must be a kernel build folder and end with /build without a trailing slash, or KERN_VER must be set.  Stop.
+    # vboxguestdrivers/5.2.6-r0/vbox_module/vboxguest/Makefile.include.header:108: *** The kernel build folder path must end in <version>/build, or the variable KERN_VER must be set.  Stop.
     mkdir -p ${WORKDIR}/${KERNEL_VERSION}
     ln -snf ${STAGING_KERNEL_DIR} ${WORKDIR}/${KERNEL_VERSION}/build
 }
 
 # compile and install mount utility
-do_compile_append() {
+do_compile() {
+    oe_runmake all
     oe_runmake 'LD=${CC}' 'LDFLAGS=${LDFLAGS}' -C ${S}/utils
     if ! [ -e vboxguest.ko -a -e vboxsf.ko -a -e vboxvideo.ko ] ; then
         echo "ERROR: One of vbox*.ko modules wasn't built"
