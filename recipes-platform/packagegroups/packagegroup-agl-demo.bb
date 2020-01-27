@@ -50,7 +50,7 @@ SMARTDEVICELINK = "${@bb.utils.contains('DISTRO_FEATURES', 'agl-sdl', \
 # AUDIO-OLD = "audiomanager"
 
 RDEPENDS_${PN} += "\
-    udisks \
+    udisks2 \
     ${SMARTDEVICELINK} \
     "
 
