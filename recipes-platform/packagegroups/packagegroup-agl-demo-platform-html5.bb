@@ -20,6 +20,7 @@ RDEPENDS_${PN} += "\
 AGL_APPS = " \
     html5-launcher \
     html5-hvac \
+    html5-settings \
     "
 
 RDEPENDS_${PN}_append = " \
