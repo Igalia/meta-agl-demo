@@ -22,6 +22,7 @@ AGL_APPS = " \
     html5-launcher \
     html5-hvac \
     html5-settings \
+    html5-mixer \
     "
 
 RDEPENDS_${PN}_append = " \
