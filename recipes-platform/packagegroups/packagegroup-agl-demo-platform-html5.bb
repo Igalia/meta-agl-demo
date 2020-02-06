@@ -24,6 +24,7 @@ AGL_APPS = " \
     html5-settings \
     html5-mixer \
     html5-mediaplayer \
+    html5-dashboard \
     "
 
 RDEPENDS_${PN}_append = " \
