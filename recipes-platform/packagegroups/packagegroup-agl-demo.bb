@@ -60,10 +60,10 @@ TTF_FONTS = " \
     ttf-dejavu-sans \
     ttf-dejavu-sans-mono \
     ttf-dejavu-serif \
+    ttf-noto-emoji-color \
     source-han-sans-cn-fonts \
     source-han-sans-jp-fonts \
     source-han-sans-tw-fonts \
-    noto-emoji \
     "
 
 
