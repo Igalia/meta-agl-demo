@@ -131,7 +131,7 @@ the `packagegroup-agl-demo-platform` packagegroup
 As meta-agl's design of packagegroups, the `agl-demo-platform.bb` recipe installs
 only `packagegroup-agl-demo-platform` and the packages of the DEMO applications.
 
-``agl-demo-platform`` contains the following four packagegroups:
+``agl-demo-platform`` contains the following three packagegroups:
 
   * `packagegroup-agl-image-minimal`
   * `packagegroup-agl-image-ivi`
