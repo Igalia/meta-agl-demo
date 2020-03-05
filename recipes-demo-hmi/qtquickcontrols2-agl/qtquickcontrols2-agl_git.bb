@@ -8,7 +8,7 @@ DEPENDS = "qtquickcontrols2"
 PV = "1.0+git${SRCPV}"
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/src/qtquickcontrols2-agl;protocol=https;branch=${AGL_BRANCH}"
-SRCREV = "1261ac1f1f1f2e4d659159f4ce51322f1d585128"
+SRCREV = "22b538aae1f69de5273f1e42a854cfab23a32b60"
 
 S = "${WORKDIR}/git/"
 
