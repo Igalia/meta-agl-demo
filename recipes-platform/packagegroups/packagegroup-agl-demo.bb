@@ -17,7 +17,6 @@ MOST_DRIVERS ??= " \
     most \
     "
 # These boards use different kernels - needs to be checked
-MOST_DRIVERS_dra7xx-evm ?= ""
 MOST_DRIVERS_dragonboard-410c ?= ""
 
 
