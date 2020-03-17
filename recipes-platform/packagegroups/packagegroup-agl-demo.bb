@@ -18,6 +18,7 @@ MOST_DRIVERS ??= " \
     "
 # These boards use different kernels - needs to be checked
 MOST_DRIVERS_dragonboard-410c ?= ""
+MOST_DRIVERS_cyclone5 ?= ""
 
 
 # HVAC dependencies
