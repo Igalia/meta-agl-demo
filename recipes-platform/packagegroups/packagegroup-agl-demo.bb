@@ -72,7 +72,6 @@ RDEPENDS_${PN} += " \
     linux-firmware-ralink \
     can-utils \
     iproute2 \
-    python-curses \
     dhcp-client \
     ${UNICENS} \
     ${MOST_DRIVERS} \
