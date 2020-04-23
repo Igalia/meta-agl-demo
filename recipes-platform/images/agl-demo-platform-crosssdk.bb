@@ -20,7 +20,6 @@ addtask do_populate_sdk after do_rootfs
 
 # native tools to support Chromium build inside SDK (SPEC-942)
 TOOLCHAIN_HOST_TASK += " \
-    nativesdk-gn \
     nativesdk-ninja \
     nativesdk-gperf \
     nativesdk-zlib \

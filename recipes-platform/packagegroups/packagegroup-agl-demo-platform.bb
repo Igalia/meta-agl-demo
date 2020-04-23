@@ -31,11 +31,11 @@ AGL_APPS = " \
     radio \
     settings \
     messaging \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'taskmanager' , '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'unzip' , '', d)} \
     low-can-demo \
     virtual/mixer \
     ${@bb.utils.contains('IMAGE_FEATURES', 'agl-voiceagent-alexa', 'alexa-viewer' , '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'taskmanager' , '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'unzip' , '', d)} \
     "
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
@@ -43,11 +43,7 @@ QTAGLEXTRAS_append = " libqtappfw"
 
 # add support for websocket in Qt and QML
 QTAGLEXTRAS_append = " qtwebsockets qtwebsockets-qmlplugins"
-PREFERRED_PROVIDER_virtual/webruntime = "web-runtime"
-
-#QTAGLEXTRAS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'qtwebengine', '', d)}"
-#QTAGLEXTRAS_append = " qtsmarthome cinematicexperience qt5everywheredemo qt5-demo-extrafiles"
-#IMAGE_INSTALL_append = " qtwebengine-examples"
+#PREFERRED_PROVIDER_virtual/webruntime = "web-runtime"
 
 # packages from hmi-framework aka homescreen-2017
 HOMESCREEN = "packagegroup-hmi-framework"
