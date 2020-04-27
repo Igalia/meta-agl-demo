@@ -18,37 +18,6 @@ inherit populate_sdk populate_sdk_qt5
 # can failed (randomly).
 addtask do_populate_sdk after do_rootfs
 
-# native tools to support Chromium build inside SDK (SPEC-942)
-TOOLCHAIN_HOST_TASK += " \
-    nativesdk-gn \
-    nativesdk-ninja \
-    nativesdk-gperf \
-    nativesdk-zlib \
-    nativesdk-xz \
-    nativesdk-nspr-dev \
-    nativesdk-nss-dev \
-    nativesdk-lua \
-    "
-
-# required dependencies for Chromium build inside SDK (SPEC-942)
-TOOLCHAIN_TARGET_TASK += " \
-    pciutils-dev \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio-dev' , '', d)} \
-    cairo-dev \
-    nss-dev \
-    cups-dev \
-    gconf-dev \
-    libexif-dev \
-    pango-dev \
-    libdrm-dev  \
-    lua-dev \
-    lua-staticdev \
-    libafb-helpers-staticdev \
-    libafb-helpers-qt-staticdev \
-    libappcontroller-staticdev \
-    ${@bb.utils.contains('LICENSE_FLAGS_WHITELIST', 'commercial', 'ffmpeg-dev', '', d)} \
-    "
-
 # Add wayland-scanner to SDK (SPEC-945)
 # Use TOOLCHAIN_HOST_TASK instead of adding to the packagegroup
 # wayland-scanner is in nativesdk-wayland-dev !
