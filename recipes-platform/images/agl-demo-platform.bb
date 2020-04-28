@@ -5,8 +5,8 @@ require agl-demo-platform.inc
 
 LICENSE = "MIT"
 
-IMAGE_FEATURES_append = " \
-    "
+# Always include the test widgets
+IMAGE_FEATURES_append = " agl-test-wgt"
 
 # add packages for demo platform (include demo apps) here
 IMAGE_INSTALL_append = " \

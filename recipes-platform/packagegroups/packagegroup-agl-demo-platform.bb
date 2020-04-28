@@ -5,8 +5,10 @@ LICENSE = "MIT"
 
 inherit packagegroup
 
+PROVIDES = "${PACKAGES}"
 PACKAGES = "\
     packagegroup-agl-demo-platform \
+    packagegroup-agl-demo-platform-devel \
     "
 
 ALLOW_EMPTY_${PN} = "1"
@@ -17,9 +19,9 @@ RDEPENDS_${PN} += "\
 
 RDEPENDS_${PN} += "\
     packagegroup-agl-profile-graphical-qt5 \
+    packagegroup-hmi-framework \
     packagegroup-agl-demo \
     "
-
 
 AGL_APPS = " \
     dashboard \
@@ -32,10 +34,8 @@ AGL_APPS = " \
     settings \
     messaging \
     low-can-demo \
-    virtual/mixer \
-    ${@bb.utils.contains('IMAGE_FEATURES', 'agl-voiceagent-alexa', 'alexa-viewer' , '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'taskmanager' , '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'unzip' , '', d)} \
+    virtual/mixer \
     "
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
@@ -44,9 +44,6 @@ QTAGLEXTRAS_append = " libqtappfw"
 # add support for websocket in Qt and QML
 QTAGLEXTRAS_append = " qtwebsockets qtwebsockets-qmlplugins"
 #PREFERRED_PROVIDER_virtual/webruntime = "web-runtime"
-
-# packages from hmi-framework aka homescreen-2017
-HOMESCREEN = "packagegroup-hmi-framework"
 
 # Cluster demo support.
 # ATM no cluster map viewer is supported with the older navigation application.
@@ -74,13 +71,32 @@ DEMO_PRELOAD_MAPS = "${@bb.utils.contains("PREFERRED_RPROVIDER_virtual/navigatio
 # Preload only if agl-demo-preload is set
 DEMO_PRELOAD = "${@bb.utils.contains("DISTRO_FEATURES", "agl-demo-preload", " ${DEMO_PRELOAD_MAPS} ${DEMO_UNIT_CONF} poiapp-api-key", "",d)}"
 
-
 RDEPENDS_${PN}_append = " \
     qtquickcontrols2-agl \
     qtquickcontrols2-agl-style \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'unzip' , '', d)} \
     ${AGL_APPS} \
     ${QTAGLEXTRAS} \
     ${CLUSTER_SUPPORT} \
     ${DEMO_PRELOAD} \
-    ${HOMESCREEN} \
+    "
+
+# NOTE: Currently no coverage versions for the application widgets,
+#       they should be added here when available.
+#       Also, the navigation and mixer debug widgets are currently
+#       specified explicitly, as there's no simple way to derive their
+#       names from the virtual/ RPROVIDES at present.
+RDEPENDS_${PN}-devel = " \
+    packagegroup-hmi-framework-devel \
+    dashboard-dbg \
+    hvac-dbg \
+    mediaplayer-dbg \
+    mixer-dbg \
+    phone-dbg \
+    ondemandnavi-dbg \
+    poiapp-dbg \
+    radio-dbg \
+    settings-dbg \
+    messaging-dbg \
+    taskmanager-dbg \
     "
