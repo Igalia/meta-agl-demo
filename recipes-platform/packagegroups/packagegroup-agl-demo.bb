@@ -45,10 +45,6 @@ DEMO_PLATFORM_CONF_append_ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "
 SMARTDEVICELINK = "${@bb.utils.contains('DISTRO_FEATURES', 'agl-sdl', \
     'packagegroup-agl-smartdevicelink', '', d)}"
 
-# removed: now all enablers are in meta-agl-devel/meta-audio-soundmanager-framework
-# old audio package
-# AUDIO-OLD = "audiomanager"
-
 RDEPENDS_${PN} += "\
     udisks2 \
     ${SMARTDEVICELINK} \
@@ -80,5 +76,3 @@ RDEPENDS_${PN} += " \
     ${TTF_FONTS} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'webruntime', 'virtual/webruntime', '', d)} \
     "
-
-
