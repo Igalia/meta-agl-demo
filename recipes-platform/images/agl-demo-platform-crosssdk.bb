@@ -48,3 +48,7 @@ TOOLCHAIN_TARGET_TASK += "libstdc++-staticdev"
 # AddressSanitizer support to detect use-after-frees along with other
 # memory issue.
 TOOLCHAIN_TARGET_TASK += "gcc-sanitizers"
+
+# Add azure-iot-sdk-c to support building agl-service-cloudproxy and
+# other users of Azure sdk.
+TOOLCHAIN_TARGET_TASK += "azure-iot-sdk-c"
