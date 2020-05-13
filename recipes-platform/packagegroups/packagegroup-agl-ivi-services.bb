@@ -3,11 +3,8 @@ LICENSE = "MIT"
 
 inherit packagegroup
 
-PROVIDES = "${PACKAGES}"
 PACKAGES = "\
     packagegroup-agl-ivi-services \
-    packagegroup-agl-ivi-services-test \
-    packagegroup-agl-ivi-services-devel \
     "
 
 RDEPENDS_${PN} += "\
@@ -31,13 +28,4 @@ RDEPENDS_${PN} += "\
     agl-service-unicens-controller \
     agl-service-weather \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'agl-service-taskmanager', '', d)} \
-    "
-
-RDEPENDS_${PN}-test = "\
-    ${@' '.join([x + '-test' for x in str.split(d.getVar('RDEPENDS_${PN}'))])} \
-    "
-
-RDEPENDS_${PN}-devel = "\
-    ${@' '.join([x + '-dbg' for x in str.split(d.getVar('RDEPENDS_${PN}'))])} \
-    ${@' '.join([x + '-coverage' for x in str.split(d.getVar('RDEPENDS_${PN}'))])} \
     "

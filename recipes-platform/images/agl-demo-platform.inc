@@ -1,3 +1,2 @@
 # Base image
-require recipes-platform/images/agl-image-ivi.inc
-
+require agl-image-ivi.inc
