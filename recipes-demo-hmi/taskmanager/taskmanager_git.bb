@@ -18,7 +18,6 @@ DEPENDS += "qtquickcontrols2 \
             qtcharts \
             libqtappfw \
             libhomescreen \
-            qlibwindowmanager \
 "
 
 inherit qmake5 aglwgt

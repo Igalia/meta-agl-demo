@@ -14,7 +14,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984 \
 DEPENDS += "qtbase \
             qtquickcontrols2 \
             qlibhomescreen \
-            qlibwindowmanager \
             qtlocation \
             libqtappfw \
 "
