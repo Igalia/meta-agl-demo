@@ -17,7 +17,6 @@ DEPENDS += "qtquickcontrols2 \
             qtwebsockets \
             libqtappfw \
             libhomescreen \
-            qlibwindowmanager \
 "
 
 inherit qmake5 aglwgt

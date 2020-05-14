@@ -8,7 +8,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ae6497158920d9524cf208c09cc4c984"
 
 DEPENDS = " \
 	qtquickcontrols2 \
-	qlibwindowmanager \
 	qlibhomescreen \
 	af-binder \
 	libqtappfw \
@@ -27,7 +26,6 @@ OECMAKE_CXX_FLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel'
 RDEPENDS_${PN} = " \
 	libqtappfw \
 	libafbwsc \
-	qlibwindowmanager \
 	qlibhomescreen \
 	agl-service-voice-high-capabilities \
 "

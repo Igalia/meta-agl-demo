@@ -10,7 +10,6 @@ DEPENDS = "\
         qtdeclarative \
         qtquickcontrols2 \
         qtwebsockets \
-        qlibwindowmanager \
         qlibhomescreen \
 "
 

@@ -15,7 +15,6 @@ S  = "${WORKDIR}/git"
 # build-time dependencies
 DEPENDS += "qtquickcontrols2 \
             qtwebsockets \
-            qtaglextras \
             libafb-helpers-qt \
 "
 
