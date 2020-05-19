@@ -1,0 +1,25 @@
+From 5fc5a92e3568674a08a6e7594d050e963d0d854b Mon Sep 17 00:00:00 2001
+From: Raquel Medina <raquel.medina@konsulko.com>
+Date: Mon, 18 May 2020 19:18:00 +0200
+Subject: [PATCH] fix dangling pointer
+
+Bug-AGL: SPEC-3664
+Signed-off-by: Raquel Medina <raquel.medina@konsulko.com>
+---
+ lib/qtqrcode.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/lib/qtqrcode.cpp b/lib/qtqrcode.cpp
+index a7000f0..825c354 100644
+--- a/lib/qtqrcode.cpp
++++ b/lib/qtqrcode.cpp
+@@ -116,8 +116,7 @@ void QtQrCode::setBaseQrCodeData(QRcode *qrCode)
+ {
+     d->width = qrCode->width;
+     d->data.clear();
+-    // TODO: Beware it here
+-    d->data = (const char *) qrCode->data;
++    d->data = QByteArray(reinterpret_cast<const char *>(qrCode->data), d->width*d->width);
+     QRcode_free(qrCode);
+ }
+ 
