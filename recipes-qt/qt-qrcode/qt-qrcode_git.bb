@@ -9,7 +9,8 @@ DEPENDS = "qtbase qtdeclarative qtquickcontrols2 qtsvg qrencode"
 
 SRC_URI = "git://github.com/danielsanfr/qt-qrcode.git;protocol=https \
            file://0001-rework-library-build.patch \
-"
+           file://0002-fix-dangling-pointer.patch \
+           "
 SRCREV = "2d57d9c6e2341689d10f9360a16a08831a4a820b"
 
 PV = "git${SRCPV}"
