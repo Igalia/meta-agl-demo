@@ -42,4 +42,4 @@ TOOLCHAIN_TARGET_TASK += "gcc-sanitizers"
 
 # Add azure-iot-sdk-c to support building agl-service-cloudproxy and
 # other users of Azure sdk.
-TOOLCHAIN_TARGET_TASK += "azure-iot-sdk-c"
+TOOLCHAIN_TARGET_TASK += "azure-iot-sdk-c umock-c"
