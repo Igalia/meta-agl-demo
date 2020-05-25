@@ -1,0 +1,12 @@
+[Unit]
+Description=Configure dedicated link for cluster demo network
+After=sys-subsystem-net-devices-%i.device
+Requires=sys-subsystem-net-devices-%i.device
+Before=network.target
+
+[Service]
+ExecStart=/usr/sbin/cluster-demo-network-conf.sh %i
+Type=oneshot
+
+[Install]
+WantedBy=network.target
