@@ -3,10 +3,7 @@ DEPENDS += "fontforge-native"
 
 # From the orginal work located at https://aur.archlinux.org/packages/ttf-dejavu-emojiless/
 
-SRC_URI_append = "\
-    file://cleaner.py \
-    file://emoji.json \
-    "
+SRC_URI_append = " file://cleaner.py"
 
 do_install_prepend() {
     for TTF in ${S}/*.ttf; do
