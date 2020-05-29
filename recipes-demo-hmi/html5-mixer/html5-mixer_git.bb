@@ -13,13 +13,3 @@ SRCREV = "${AGL_APP_REVISION}"
 DEPENDS += " nodejs-native"
 
 inherit aglwgt
-
-do_configure() {
-  cd ${B}
-  npm install
-}
-
-do_aglwgt_package()  {
-  cd ${B}
-  npm run build
-}
