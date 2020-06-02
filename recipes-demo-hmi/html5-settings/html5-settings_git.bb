@@ -10,16 +10,6 @@ S       = "${WORKDIR}/git/"
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/html5-settings;protocol=https;branch=${AGL_BRANCH}"
 SRCREV = "${AGL_APP_REVISION}"
 
-DEPENDS += " nodejs-native"
+DEPENDS = "nodejs-native"
 
 inherit aglwgt
-
-do_configure() {
-  cd ${B}
-  npm install
-}
-
-do_aglwgt_package()  {
-  cd ${B}
-  npm run build
-}
