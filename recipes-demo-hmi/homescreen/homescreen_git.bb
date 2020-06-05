@@ -15,7 +15,7 @@ DEPENDS = "\
         libqtappfw \
         qlibwindowmanager \
         libhomescreen \
-	libafb-helpers-qt \
+        libafb-helpers-qt \
 "
 
 inherit qmake5 systemd pkgconfig aglwgt
@@ -29,3 +29,7 @@ S       = "${WORKDIR}/git/"
 PATH_prepend = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_QT_BINS}:"
 
 OE_QMAKE_CXXFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', '' , '-DQT_NO_DEBUG_OUTPUT', d)}"
+
+RDEPENDS_${PN} += " \
+        libqtappfw \
+"

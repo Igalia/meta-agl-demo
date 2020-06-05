@@ -23,4 +23,4 @@ DEPENDS += "qtquickcontrols2 \
 
 inherit qmake5 aglwgt
 
-RDEPENDS_${PN} += "agl-service-taskmanager"
+RDEPENDS_${PN} += "agl-service-taskmanager libqtappfw"

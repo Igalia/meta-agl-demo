@@ -21,4 +21,4 @@ DEPENDS += "qtquickcontrols2 \
 
 inherit qmake5 aglwgt
 
-RDEPENDS_${PN} += "agl-service-bluetooth-map"
+RDEPENDS_${PN} += "agl-service-bluetooth-map libqtappfw"

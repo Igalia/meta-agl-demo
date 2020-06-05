@@ -21,6 +21,7 @@ RDEPENDS_${PN} += " \
 	qt-qrcode \
 	agl-service-bluetooth \
 	agl-service-network \
+	libqtappfw \
 "
 
 inherit qmake5 aglwgt

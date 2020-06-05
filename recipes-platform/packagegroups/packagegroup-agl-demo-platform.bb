@@ -38,7 +38,8 @@ AGL_APPS = " \
     "
 
 QTAGLEXTRAS = "${@bb.utils.contains("DISTRO_FEATURES", "agl-hmi-framework", " qtaglextras", "",d)}"
-QTAGLEXTRAS_append = " libqtappfw"
+#NOTE: removed libqtappfw from QTAGLEXTRAS as it is no longer
+#      necessary due to replacement by individual recipe RDEPENDS.
 
 # add support for websocket in Qt and QML
 QTAGLEXTRAS_append = " qtwebsockets qtwebsockets-qmlplugins"

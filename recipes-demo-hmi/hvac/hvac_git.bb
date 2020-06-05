@@ -16,6 +16,6 @@ S  = "${WORKDIR}/git"
 DEPENDS += "qtquickcontrols2 libhomescreen \
             qlibwindowmanager qttools-native \
             qtaglextras libqtappfw"
-RDEPENDS_${PN} = "agl-service-hvac"
+RDEPENDS_${PN} = "agl-service-hvac libqtappfw"
 
 inherit qmake5 aglwgt

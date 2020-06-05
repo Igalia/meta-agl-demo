@@ -22,4 +22,4 @@ DEPENDS += "qtquickcontrols2 \
 
 inherit qmake5 aglwgt
 
-RDEPENDS_${PN} += "agl-service-mediaplayer"
+RDEPENDS_${PN} += "agl-service-mediaplayer libqtappfw"

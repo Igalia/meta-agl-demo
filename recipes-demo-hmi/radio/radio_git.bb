@@ -35,4 +35,4 @@ do_install_append() {
 
 FILES_${PN} += "${sysconfdir}/xdg/AGL/*"
 
-RDEPENDS_${PN} += "agl-service-radio"
+RDEPENDS_${PN} += "agl-service-radio libqtappfw"
