@@ -33,7 +33,6 @@ AGL_APPS = " \
     radio \
     settings \
     messaging \
-    low-can-demo \
     ${@bb.utils.contains('DISTRO_FEATURES', 'agl-devel', 'taskmanager' , '', d)} \
     virtual/mixer \
     "
