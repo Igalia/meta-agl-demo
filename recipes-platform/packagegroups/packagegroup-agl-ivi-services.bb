@@ -22,7 +22,6 @@ RDEPENDS_${PN} += "\
     agl-service-navigation \
     agl-service-nfc \
     agl-service-signal-composer \
-    agl-service-steering-wheel \
     agl-service-telephony \
     agl-service-unicens \
     agl-service-unicens-controller \
