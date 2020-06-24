@@ -42,12 +42,8 @@ DEMO_ENABLE_BTWILINK ?= ""
 DEMO_PLATFORM_CONF = ""
 DEMO_PLATFORM_CONF_append_ulcb = "${@bb.utils.contains("DEMO_ENABLE_BTWILINK", "true", "", " btwilink-disable-conf", d)}"
 
-SMARTDEVICELINK = "${@bb.utils.contains('DISTRO_FEATURES', 'agl-sdl', \
-    'packagegroup-agl-smartdevicelink', '', d)}"
-
 RDEPENDS_${PN} += "\
     udisks2 \
-    ${SMARTDEVICELINK} \
     "
 
 # fonts
