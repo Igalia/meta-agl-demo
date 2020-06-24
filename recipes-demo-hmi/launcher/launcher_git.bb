@@ -11,6 +11,10 @@ DEPENDS = "\
         qtquickcontrols2 \
         qtwebsockets \
         qlibhomescreen \
+        wayland-native \
+        wayland \
+        qtwayland \
+        qtwayland-native \
 "
 
 inherit qmake5 systemd pkgconfig aglwgt

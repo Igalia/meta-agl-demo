@@ -14,6 +14,10 @@ DEPENDS = "\
         libqtappfw \
         libhomescreen \
         libafb-helpers-qt \
+        wayland-native \
+        wayland \
+        qtwayland \
+        qtwayland-native
 "
 
 inherit qmake5 systemd pkgconfig aglwgt

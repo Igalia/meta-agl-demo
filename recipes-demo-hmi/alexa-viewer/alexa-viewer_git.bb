@@ -11,6 +11,10 @@ DEPENDS = " \
 	qlibhomescreen \
 	af-binder \
 	libqtappfw \
+	wayland-native \
+	wayland \
+	qtwayland \
+	qtwayland-native \
 "
 
 SRC_URI = "git://gerrit.automotivelinux.org/gerrit/apps/alexa-viewer;protocol=https;branch=${AGL_BRANCH}"
