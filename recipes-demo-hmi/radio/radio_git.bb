@@ -18,7 +18,7 @@ S  = "${WORKDIR}/git"
 
 # build-time dependencies
 DEPENDS = "qtquickcontrols2 rtl-sdr"
-DEPENDS += "libhomescreen qlibwindowmanager libqtappfw"
+DEPENDS += "libhomescreen libqtappfw"
 
 inherit qmake5 aglwgt
 

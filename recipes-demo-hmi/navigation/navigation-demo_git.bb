@@ -17,7 +17,6 @@ RPROVIDES_${PN} = "virtual/navigation"
 
 DEPENDS  += "qtquickcontrols2 \
              libhomescreen \
-             qlibwindowmanager \
              qtvirtualkeyboard \
              qtlocation \
             "

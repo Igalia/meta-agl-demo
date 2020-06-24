@@ -16,7 +16,6 @@ S  = "${WORKDIR}/git"
 DEPENDS += "qtquickcontrols2 \
             libqtappfw \
             libhomescreen \
-            qlibwindowmanager \
 "
 
 inherit qmake5 aglwgt

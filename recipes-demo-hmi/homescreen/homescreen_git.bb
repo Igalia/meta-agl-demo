@@ -10,12 +10,14 @@ DEPENDS = "\
         qtdeclarative \
         qtquickcontrols2 \
         agl-service-homescreen \
-        agl-service-windowmanager \
         agl-service-weather \
         libqtappfw \
-        qlibwindowmanager \
         libhomescreen \
         libafb-helpers-qt \
+        wayland-native \
+        wayland \
+        qtwayland \
+        qtwayland-native
 "
 
 inherit qmake5 systemd pkgconfig aglwgt

@@ -16,22 +16,16 @@ PACKAGES = "\
     "
 
 RDEPENDS_${PN} = " \
-  agl-service-windowmanager \
   agl-service-homescreen \
   homescreen \
-  libwindowmanager \
-  qlibwindowmanager \
   libhomescreen \
   qlibhomescreen \
-  runxdg \
   hmi-debug \
   launcher \
 "
-
 # NOTE: Currently no coverage versions of these widgets, they should
 #       be added here when available.
 RDEPENDS_${PN}-devel = " \
-  agl-service-windowmanager-dbg \
   agl-service-homescreen-dbg \
   homescreen-dbg \
   launcher-dbg \
