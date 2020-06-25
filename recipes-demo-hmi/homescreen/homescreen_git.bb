@@ -17,7 +17,7 @@ DEPENDS = "\
         wayland-native \
         wayland \
         qtwayland \
-        qtwayland-native
+        qtwayland-native \
 "
 
 inherit qmake5 systemd pkgconfig aglwgt
