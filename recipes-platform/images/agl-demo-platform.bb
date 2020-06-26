@@ -11,5 +11,6 @@ IMAGE_FEATURES_append = " agl-test-wgt"
 # add packages for demo platform (include demo apps) here
 IMAGE_INSTALL_append = " \
     packagegroup-agl-demo-platform \
+    distro-build-manifest \
     "
 
