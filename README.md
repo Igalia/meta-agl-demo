@@ -18,7 +18,7 @@ documentation just as much as code. Please join the irc conversation
 at the #automotive channel on irc.freenode.net and our mailing list.
 
 For infomation for subscribing to the mailing list
-    [automotive-discussions](http://lists.linuxfoundation.org/mailman/listinfo/automotive-discussions)
+    [agl-dev-community](https://lists.automotivelinux.org/g/agl-dev-community)
 For information about AGL Distribution, see the
     [AGL Distribution](https://wiki.automotivelinux.org/agl-distro)
 For information abount Getting started with AGL
